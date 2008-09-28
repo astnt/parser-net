@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Parser;
+using Parser.Model;
+using Parser.Util;
+
+namespace Parser.NETTest
+{
+	/// <summary>
+	/// Summary description for SourceBuilderTest
+	/// </summary>
+	[TestFixture]
+	public class SourceBuilderTest : AbstractParserTest
+	{
+
+		[Test]
+		public void FuncDecTest()
+		{
+			string source = @"
+@main[]
+	Launch this func ^test[]
+
+@test[]
+	Some text for <html/>
+";
+			SourceBuilder builder = new SourceBuilder();
+			builder.Parse(source);
+			// создаем объект для дампа
+			Dumper d = new Dumper();
+			// выводим результат дампа
+			Model(d.Dump((RootNode) builder.RootNode));
+			// создаем исполнитель
+			Executor exec = new Executor();
+			// TODO проверить структуру Asseta'ми
+			// запускаем выполнение ноды
+			exec.Run((RootNode)builder.RootNode);
+			// полученые строковый результат
+			string actual = exec.Output.ToString();
+			// выводим результат
+			Result(actual);
+			Assert.AreEqual(@"
+	Launch this func 
+	Some text for <html/>
+
+
+", actual);
+		}
+
+		[Test]
+		public void ParamsAndVarsTest()
+		{
+			SourceBuilder builder = new SourceBuilder();
+			builder.Parse(@"
+@main[]
+	$myvar[xxx]
+	test is ^test[what;777]
+
+@test[word;number]
+	tested $word $number $myvar
+
+");
+			Dumper d = new Dumper();
+			Model(d.Dump((RootNode) builder.RootNode));
+			// TODO Assert для структуры
+			Executor exec = new Executor();
+			exec.Run((RootNode) builder.RootNode);
+			string actual = exec.Output.ToString();
+			Result(actual);
+			Assert.AreEqual(@"
+	
+	test is 
+	tested what 777 xxx
+
+
+
+", actual);
+		}
+
+		[Test]
+		public void EvalSimpleTest()
+		{
+			SourceBuilder builder = new SourceBuilder();
+			builder.Parse(@"
+@main[]
+	2 + 2 = ^eval(2+2)
+");
+			Dumper d = new Dumper();
+			Model(d.Dump((RootNode)builder.RootNode));
+
+			Executor exec = new Executor();
+			exec.Run((RootNode)builder.RootNode);
+			string actual = exec.Output.ToString();
+			Result(actual);
+			Assert.AreEqual(@"
+	2 + 2 = 4
+", actual);
+		}
+	}
+}
