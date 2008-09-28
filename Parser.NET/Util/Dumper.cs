@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Parser.Model;
+
+namespace Parser.Util
+{
+	/// <summary>
+	/// Визуальное отображение объектов.
+	/// </summary>
+	public class Dumper
+	{
+
+		#region vars
+		
+		private StringBuilder dumpResult;
+		private StringBuilder tabs;
+
+		private const string spaces = "  ";
+
+		private Boolean isRemoveSpaces = true;
+
+		/// <summary>
+		/// При выдаче текстовой ноды убираеть пробелы?
+		/// По-молчанию - да.
+		/// </summary>
+		public bool IsRemoveSpaces
+		{
+			get { return isRemoveSpaces; }
+			set { isRemoveSpaces = value; }
+		}
+
+		#endregion
+
+		public StringBuilder Dump(RootNode rootNode)
+		{
+			dumpResult = new StringBuilder();
+			tabs = new StringBuilder();
+			DumpChilds(rootNode.Childs);
+			return dumpResult;
+		}
+
+		/// <summary>
+		/// Перебирает детей, и добаляет их в строковый результат.
+		/// </summary>
+		/// <param name="childs">Дети ноды.</param>
+		private void DumpChilds(IEnumerable<AbstractNode> childs)
+		{
+			foreach (AbstractNode node in childs)
+			{
+				dumpResult.Append(tabs);
+				Function function = node as Function;
+				if (function != null)
+				{
+					dumpResult.AppendFormat("({0})@{1}[{2}]",function.GetType(),function.Name,function.Parameters.Names.Length/*,function.Childs.Count*/);
+					if (function.Childs != null)
+					{
+						dumpResult.Append('\n');
+						tabs.Append(spaces);
+						DumpChilds(function.Childs);
+						tabs.Remove(tabs.Length - spaces.Length, spaces.Length);
+					}
+				}
+				Text text = node as Text;
+				if (text != null)
+				{
+					dumpResult.AppendFormat("({0}){{{1}}}",text.GetType(),DumpText(text.Body));
+				}
+				Caller caller = node as Caller;
+				if (caller != null)
+				{
+					dumpResult.AppendFormat("({0})^{1}[{2}]",caller.GetType(),caller.FuncName,caller.Parameters.Names.Length);
+				}
+				Variable variable = node as Variable;
+				if(variable != null)
+				{
+					if (variable.Value != null)
+					{
+						dumpResult.AppendFormat("({0})${1}[{2}]", variable.GetType(), variable.Name, variable.Value);
+					}
+					else
+					{
+						dumpResult.AppendFormat("({0})${1}", variable.GetType(), variable.Name);
+					}
+				}
+				dumpResult.Append('\n');
+			}
+		}
+
+		/// <summary>
+		/// Добавляет текст, удаляет пробельные символы если это указано в свойстве <see cref="isRemoveSpaces"/>.
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
+		private string DumpText(string text)
+		{
+			if(isRemoveSpaces && text != null)
+			{
+				return text.Replace("\r\n", "");
+			}
+			return text;
+		}
+
+	}
+}
