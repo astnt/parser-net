@@ -34,9 +34,16 @@ namespace ParserGUI
 			string dump = d.Dump((RootNode)builder.RootNode).ToString();
 
 			Executor exec = new Executor();
-			exec.Run((RootNode)builder.RootNode);
-			string actual = exec.Output.ToString();
-
+			string actual;
+			try
+			{
+				exec.Run((RootNode) builder.RootNode);
+				actual = exec.Output.ToString();
+			}
+			catch(Exception ex)
+			{
+				actual = ex.StackTrace;
+			}
 			// System.Windows.Forms.WebBrowser
 			webBrowserOutPut.DocumentText =
 				String.Format("{0}<hr/><pre>{1}</pre>", actual, dump);
