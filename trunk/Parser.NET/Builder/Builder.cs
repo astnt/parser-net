@@ -29,12 +29,12 @@ namespace Parser.Builder
 		/// </summary>
 		/// <param name="c">Символ.</param>
 		/// <returns>Не пробельный ли символ?</returns>
-		internal bool IsObjectNameChar(char c)
+		internal bool IsInNewLineOrTabChar(char c)
 		{
 			if (
-						 c == (char)32
-					|| c == (char)160
-					|| c == '\r'
+					//   c == (char)32
+					//|| c == (char)160
+					/*||*/ c == '\r'
 					|| c == '\n'
 					|| c == '\t'
 				)
@@ -42,6 +42,10 @@ namespace Parser.Builder
 				return false;
 			}
 			return true;
+		}
+		internal bool IsInWhiteSpaceChar(char c)
+		{
+			return !(c == (char) 32 || c == (char) 160);
 		}
 
 		/// <summary>
@@ -62,7 +66,7 @@ namespace Parser.Builder
 
 				// ищем говно в опредении, если нашли — это не функция
 				if (
-						!IsObjectNameChar(c)
+						!IsInNewLineOrTabChar(c)
 					)
 				{
 					// if has not name — not valid
