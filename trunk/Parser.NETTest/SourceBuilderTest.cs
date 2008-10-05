@@ -96,5 +96,31 @@ namespace Parser.NETTest
 	2 + 2 = 4
 ", actual);
 		}
+
+		[Test]
+		public void forEachTest()
+		{
+			string actual = Parse(@"
+@main[]
+	$table[^table::excel[select * from list1$A$1:$H$1]]
+	^table.menu{
+		<cell>$table.0</cell>
+	}
+");
+
+
+		}
+
+		private string Parse(string source)
+		{
+			SourceBuilder builder = new SourceBuilder();
+			builder.Parse(source);
+			Dumper d = new Dumper();
+			Model(d.Dump((RootNode)builder.RootNode));
+
+			Executor exec = new Executor();
+			exec.Run((RootNode)builder.RootNode);
+			return exec.Output.ToString();			
+		}
 	}
 }
