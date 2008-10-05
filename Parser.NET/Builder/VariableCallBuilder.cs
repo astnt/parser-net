@@ -30,7 +30,8 @@ namespace Parser.Builder
 
 				// ищем говно в опредении, если нашли — это не функция
 				if (
-						!IsObjectNameChar(c)
+						   !IsInNewLineOrTabChar(c)
+					  || !IsInWhiteSpaceChar(c)
 					)
 				{
 					// if has not name — not valid

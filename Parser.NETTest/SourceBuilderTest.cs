@@ -107,8 +107,20 @@ namespace Parser.NETTest
 		<cell>$table.0</cell>
 	}
 ");
+		}
 
+		[Test]
+		public void WhiteSpaceInParamsTest()
+		{
+			string actual = Parse(@"
+@main[]
+	^test[param is; good]
 
+@test[test;add]
+	some $test $add
+");
+			Result(actual);
+			Assert.IsTrue(actual.Contains("some param is  good"));
 		}
 
 		private string Parse(string source)
