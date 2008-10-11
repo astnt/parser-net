@@ -98,7 +98,7 @@ namespace Parser.NETTest
 		}
 
 		[Test]
-		public void forEachTest()
+		public void ExcelTableMenuTest()
 		{
 			string actual = Parse(@"
 @main[]

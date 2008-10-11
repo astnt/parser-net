@@ -31,23 +31,33 @@ namespace Parser
 		}
 
 		/// <summary>
-		/// Добавить встроенные функции.
+		/// Добавляет встроенные функции.
 		/// </summary>
 		private void AddBuiltInMembers()
 		{
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			AddBuiltInMember("Parser.BuiltIn.Function.Eval", assembly);
+		}
+
+		private void AddBuiltInMember(string namespaceName, Assembly assembly){
 			// TODO ниже временная запись
 			// будет добавлено добавление статичных объектов по неймспейсу
 			Function builtInFunc = new Function();
-			builtInFunc.SetName("eval");
 			builtInFunc.Parent = rootNode;
 			builtInFunc.Parameters = new Params();
-			builtInFunc.Parameters.Names = new string[]{"0"}; // ?
+			builtInFunc.Parameters.Names = new string[]{"0"}; // TODO ?
 			
-			Type parserType = Assembly.GetExecutingAssembly()
-				.GetType(String.Format("Parser.BuiltIn.Function.Eval")); // перебрать Assembly
-			ConstructorInfo ci = parserType.GetConstructor(new Type[0]);
-			builtInFunc.RefObject = ci;
+			Type parserType = assembly
+				.GetType(String.Format(namespaceName)); // берем нужный тип Assembly
 
+			ConstructorInfo ci = parserType.GetConstructor(new Type[0]);
+
+			// TODO в теории ParserNameAttribute может быть не нулевым и аттрибута вообще может не быть
+			ParserNameAttribute pna = (ParserNameAttribute)parserType.GetCustomAttributes(false)[0];
+
+			builtInFunc.SetName(pna.Name);
+			builtInFunc.RefObject = ci;
+			// добавляем в дерево
 			rootNode.Add(builtInFunc);
 		}
 

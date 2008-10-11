@@ -11,21 +11,28 @@ namespace Parser.Model
 		#region vars
 
 		private string name;
-
+		/// <summary>
+		/// Имя (возможно path.to.var?)
+		/// </summary>
 		public string Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
+		private object value;
+		/// <summary>
+		/// Некий обощенный хранимый объект.
+		/// </summary>
 		public object Value
 		{
 			get { return value; }
 			set { this.value = value; }
 		}
 
-		private object value;
-
+		/// <summary>
+		/// Параметр типа: $var[parametrs]
+		/// </summary>
 		private Params parameters;
 
 		#endregion
@@ -53,5 +60,6 @@ namespace Parser.Model
 		{
 			parameters = param;
 		}
+
 	}
 }
