@@ -26,14 +26,14 @@ namespace Parser.Model
 		private ConstructorInfo refObject;
 		/// <summary>
 		/// Ссылка на объект, который будет осуществлять вычисления параметров.
+		/// Или делать какие-то еще действия.
+		/// TODO возможно не самый лучший способ и стоит переделать.
 		/// </summary>
 		public ConstructorInfo RefObject
 		{
 			get { return refObject; }
 			set { refObject = value; }
 		}
-
-		
 
 		#endregion
 
@@ -55,8 +55,6 @@ namespace Parser.Model
 		}
 
 		#endregion
-
-		
 
 	}
 }
