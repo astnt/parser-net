@@ -104,7 +104,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Parser.NET\Parser.csproj">
+    <ProjectReference Include="..\Parser\Parser.csproj">
       <Project>{02EE715B-C8B1-40C0-9085-2D325F53081F}</Project>
       <Name>Parser</Name>
     </ProjectReference>
