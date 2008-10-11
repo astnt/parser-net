@@ -99,6 +99,7 @@ namespace Parser.Builder
 					buildedObject.SetStart(from + 1); // skip '@'
 					// указываем новый индекс
 					sb.CurrentIndex = from;
+					break;
 				}
 			}
 

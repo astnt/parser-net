@@ -123,6 +123,14 @@ namespace Parser.NETTest
 			Assert.IsTrue(actual.Contains("some param is  good"));
 		}
 
+		[Test]
+		public void EvalCallsTest()
+		{
+			string actual = Parse(@"@main[] 2+2=^eval(2+2) 3*9=^eval(3 * 9)");
+			Result(actual);
+			Assert.AreEqual(" 2+2=4 3*9=27", actual);
+		}
+
 		private string Parse(string source)
 		{
 			SourceBuilder builder = new SourceBuilder();
@@ -134,5 +142,6 @@ namespace Parser.NETTest
 			exec.Run((RootNode)builder.RootNode);
 			return exec.Output.ToString();			
 		}
+
 	}
 }

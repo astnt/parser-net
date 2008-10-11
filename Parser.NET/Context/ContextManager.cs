@@ -84,7 +84,8 @@ namespace Parser.Context
 				}
 				else
 				{
-					throw new ArgumentException(String.Format(@"Variable with name ""{0}"" already exist in function ""{1}"".", variable.Name, func.Name));
+					contexts[func.Name][variable.Name] = variable;
+					//throw new ArgumentException(String.Format(@"Variable with name ""{0}"" already exist in function ""{1}"".", variable.Name, func.Name));
 				}
 			}
 		}
