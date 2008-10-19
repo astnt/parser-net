@@ -18,6 +18,7 @@ namespace Parser.Model
 		public void Add(AbstractNode node)
 		{
 			Childs.Add(node);
+			node.Parent = this;
 		}
 
 		public virtual void Close(int? indexOfEnd)
