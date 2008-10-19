@@ -70,6 +70,11 @@ namespace Parser.Context
 			{
 				contexts[func.Name] = new Dictionary<string, Variable>();
 			}
+			if(parameters == null)
+			{
+				Console.WriteLine("Parameters in {0} is null.", func.Name);
+				return;
+			}
 			for (int position = 0; position < parameters.Names.Length; position += 1)
 			{
 				Variable variable = new Variable();
