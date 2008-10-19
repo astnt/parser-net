@@ -102,7 +102,7 @@ namespace Parser.NETTest
 		{
 			string actual = Parse(@"
 @main[]
-	$table[^table::excel[select * from list1$A$1:$H$1]]
+	$table[^table::excel[select * from list1$A1:H1]]
 	^table.menu{
 		<cell>$table.0</cell>
 	}
