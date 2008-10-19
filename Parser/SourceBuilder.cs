@@ -92,7 +92,7 @@ namespace Parser
 					{
 						// новая нода создана, закрываем текст
 						CloseCurrentText(index);
-						
+						isInTextNode = false;
 						// смещаем на отпарсенный позицию
 						index = CurrentIndex.Value;
 						Function func = createdNode as Function;
@@ -112,22 +112,23 @@ namespace Parser
 					}
 				}
 
-				if(
+				if (
 						 c == CharsInfo.ParamsEnd
 					|| c == CharsInfo.ParamsEvalEnd
 					|| c == CharsInfo.ParamsCodeEnd
 					)
 				{
 					// TODO спускаемся на ноду ниже
-					isInTextNode = false;
+					//isInTextNode = false;
+					//continue; // TODO ?
+					index += 1;
+					CurrentIndex = index;
 				}
-
 				if (!isInTextNode)
 				{
 					CreateText(node);
 				}
-
-				// Подошли к концу файла
+				// Подошли к концу строки
 				if (index == lastCharIndex)
 				{
 					currentText.Body = source.Substring(currentText.Start.Value);
@@ -279,7 +280,6 @@ namespace Parser
 				// то есть первую попавшуюся
 				AbstractNode builded = (AbstractNode) builder.BuildedObject;
 				node.Add(builded); // TODO поправить
-				builded.Parent = node;
 				// если обнаружили функцию и создали ее, то закончили предыдущую текстовую ноду.
 				isInTextNode = false;
 				return builded;

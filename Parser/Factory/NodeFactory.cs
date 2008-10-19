@@ -86,8 +86,7 @@ namespace Parser.Factory
 		/// <returns></returns>
 		private bool CreateName(char c, out string name)
 		{
-			name = String.Empty;
-			bool isCreated = false;
+			bool isCreated;
 
 			int index = sb.CurrentIndex.Value;
 			int defIndex = sb.CurrentIndex.Value;
@@ -119,6 +118,8 @@ namespace Parser.Factory
 					// + обрезаем лишнее
 					name = GetName(index, defIndex);
 					isCreated = true;
+					// сдвигаем обработку парсера
+					sb.CurrentIndex = index + 1; // + 1 '['
 					break;
 				}
 				index += 1;
