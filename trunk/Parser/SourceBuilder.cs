@@ -2,6 +2,7 @@
 using System.Reflection;
 using Parser.Builder;
 using Parser.BuiltIn.Function;
+using Parser.Factory;
 using Parser.Model;
 using Parser.Syntax;
 
@@ -25,6 +26,8 @@ namespace Parser
 			rootNode = new RootNode();
 			// задаем начало строки
 			CurrentIndex = 0;
+			// чтобы не передавить параметром укажем SourceBuilder
+			factory.Sb = this;
 			Parse(rootNode);
 
 			AddBuiltInMembers();
@@ -37,6 +40,7 @@ namespace Parser
 		{
 			Assembly assembly = Assembly.GetExecutingAssembly();
 			AddBuiltInMember("Parser.BuiltIn.Function.Eval", assembly);
+			AddBuiltInMember("Parser.BuiltIn.Function.ExcelTableCreate", assembly);
 		}
 
 		private void AddBuiltInMember(string namespaceName, Assembly assembly){
@@ -68,6 +72,46 @@ namespace Parser
 		/// <param name="node">Функция, текстовая нода или что-то еще.</param>
 		public void Parse(Node node)
 		{
+			for (int index = CurrentIndex.Value; index < source.Length; index += 1)
+			{
+				// задаем индексы и char
+				char c = source[index];
+				CurrentIndex = index;
+				// собираем синтаксические данные из строк
+				if(
+					   c == CharsInfo.FuncDeclarationStart
+					|| c == CharsInfo.CallerDeclarationStart
+					|| c == CharsInfo.VariableDeclarationStart
+				)
+				{
+					AbstractNode createdNode;
+					// создаем ноды
+					if(factory.CreateNode(c, node, out createdNode))
+					{
+						
+						Function func = createdNode as Function;
+						if(func != null)
+						{
+							// если объявление функции (@something[...][...])
+							// перемещаем указатель парсинга на нее
+							node = (Node) createdNode;
+							// добавляем в корневую ноду
+							rootNode.Add(node);
+						}
+						else
+						{
+							// для остальных добавляем в текущую ноду.
+							node.Add(createdNode);
+						}
+					}
+				}
+			}
+		}
+
+		#region старый вариант
+		/*
+		public void Parse(Node node)
+		{
 			int lastCharIndex = source.Length - 1;
 			// перебор строки исходника
 			for (int index = CurrentIndex.Value; index < source.Length; index+=1)
@@ -79,7 +123,12 @@ namespace Parser
 				// если старт функции - создаем ее
 				if (c == CharsInfo.FuncDeclarationStart)
 				{
-					Node nodeOf = GetNodeToParseNext(index, node);
+					bool isCloseTextNode;
+					Node nodeOf = GetNodeToParseNext(node, out isCloseTextNode);
+					if(isCloseTextNode)
+					{
+						CloseCurrentText(index);
+					}
 					CurrentIndex = index + 1;
 					Parse((Function)Declaration(nodeOf, new FunctionBuilder()));
 					break;
@@ -90,7 +139,7 @@ namespace Parser
 				{
 					CloseCurrentText(index);
 					CurrentIndex = index + 1;
-					/*Caller caller = (Caller)*/ Declaration(node, new CallerBuilder());
+					/Caller caller = (Caller)/ Declaration(node, new CallerBuilder());
 				}
 
 				// создаем/выполняем переменную
@@ -134,26 +183,28 @@ namespace Parser
 				}
 			}
 		}
+		*/
+		#endregion
 
 		/// <summary>
 		/// Выбираем ноду для обработки, как основную.
 		/// </summary>
-		/// <param name="index"></param>
 		/// <param name="node"></param>
 		/// <returns></returns>
-		private Node GetNodeToParseNext(int index, Node node)
+		private Node GetNodeToParseNext(Node node, out bool isCloseTextNode)
 		{
 			Node nodeOf;
 			if (node.Parent != null)
 			{
 				// Если есть родитель, то передаем управление ему
 				nodeOf = node.Parent;
-				CloseCurrentText(index);
+				isCloseTextNode = true;
 			}
 			else
 			{
 				// Если родителя нет, то это корневая нода
 				nodeOf = node;
+				isCloseTextNode = false;
 			}
 			return nodeOf;
 		}
@@ -207,7 +258,9 @@ namespace Parser
 		private Boolean isInTextNode = false;
 
 		public int? CurrentIndex;
-		private string source;
+		public string source;
+
+		private NodeFactory factory = new NodeFactory();
 
 		public Node RootNode
 		{

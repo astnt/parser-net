@@ -52,7 +52,8 @@ namespace Parser.Util
 				Function function = node as Function;
 				if (function != null)
 				{
-					dumpResult.AppendFormat("({0})@{1}[{2}]",function.GetType(),function.Name,function.Parameters.Names.Length/*,function.Childs.Count*/);
+					// TODO параметры
+					dumpResult.AppendFormat("({0})@{1}[]", function.GetType(), function.Name /*,function.Parameters.Names.Length,function.Childs.Count*/);
 					if (function.Childs != null)
 					{
 						dumpResult.Append('\n');
@@ -69,7 +70,8 @@ namespace Parser.Util
 				Caller caller = node as Caller;
 				if (caller != null)
 				{
-					dumpResult.AppendFormat("({0})^{1}[{2}]",caller.GetType(),caller.FuncName,caller.Parameters.Names.Length);
+					// TODO параметры
+					dumpResult.AppendFormat("({0})^{1}[]",caller.GetType(),caller.FuncName /*,caller.Parameters.Names.Length*/);
 				}
 				Variable variable = node as Variable;
 				if(variable != null)
