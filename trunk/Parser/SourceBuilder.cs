@@ -72,6 +72,8 @@ namespace Parser
 		/// <param name="node">Функция, текстовая нода или что-то еще.</param>
 		public void Parse(Node node)
 		{
+			int lastCharIndex = source.Length - 1;
+
 			for (int index = CurrentIndex.Value; index < source.Length; index += 1)
 			{
 				// задаем индексы и char
@@ -88,7 +90,11 @@ namespace Parser
 					// создаем ноды
 					if(factory.CreateNode(c, node, out createdNode))
 					{
+						// новая нода создана, закрываем текст
+						CloseCurrentText(index);
 						
+						// смещаем на отпарсенный позицию
+						index = CurrentIndex.Value;
 						Function func = createdNode as Function;
 						if(func != null)
 						{
@@ -105,7 +111,39 @@ namespace Parser
 						}
 					}
 				}
+
+				if(
+						 c == CharsInfo.ParamsEnd
+					|| c == CharsInfo.ParamsEvalEnd
+					|| c == CharsInfo.ParamsCodeEnd
+					)
+				{
+					// TODO спускаемся на ноду ниже
+					isInTextNode = false;
+				}
+
+				if (!isInTextNode)
+				{
+					CreateText(node);
+				}
+
+				// Подошли к концу файла
+				if (index == lastCharIndex)
+				{
+					currentText.Body = source.Substring(currentText.Start.Value);
+					// TODO прерывание
+				}
+
 			}
+		}
+
+		private void CreateText(Node node)
+		{
+			currentText = new Text();
+			currentText.Start = CurrentIndex + 1;
+			currentText.Parent = node;
+			node.Add(currentText);
+			isInTextNode = true;
 		}
 
 		#region старый вариант
@@ -183,13 +221,12 @@ namespace Parser
 				}
 			}
 		}
-		*/
-		#endregion
 
 		/// <summary>
 		/// Выбираем ноду для обработки, как основную.
 		/// </summary>
 		/// <param name="node"></param>
+		/// <param name="isCloseTextNode"></param>
 		/// <returns></returns>
 		private Node GetNodeToParseNext(Node node, out bool isCloseTextNode)
 		{
@@ -208,6 +245,8 @@ namespace Parser
 			}
 			return nodeOf;
 		}
+		*/
+		#endregion
 
 		/// <summary>
 		/// Закрываем текущую текстовую ноду.
