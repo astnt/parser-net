@@ -9,6 +9,8 @@ namespace Parser.Syntax
 		public static Char ParamsEnd = ']';
 		public static Char ParamsEvalStart = '(';
 		public static Char ParamsEvalEnd = ')';
+		public static Char ParamsCodeStart = '{';
+		public static Char ParamsCodeEnd = '}';
 		public static Char CallerDeclarationStart = '^';
 		public static Char VariableDeclarationStart = '$';
 	}

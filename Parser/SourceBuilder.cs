@@ -53,7 +53,8 @@ namespace Parser
 			ConstructorInfo ci = parserType.GetConstructor(new Type[0]);
 
 			// TODO в теории ParserNameAttribute может быть не нулевым и аттрибута вообще может не быть
-			ParserNameAttribute pna = (ParserNameAttribute)parserType.GetCustomAttributes(false)[0];
+			ParserNameAttribute pna = 
+				(ParserNameAttribute)parserType.GetCustomAttributes(false)[0];
 
 			builtInFunc.SetName(pna.Name);
 			builtInFunc.RefObject = ci;
