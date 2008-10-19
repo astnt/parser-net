@@ -95,6 +95,8 @@ namespace Parser
 						isInTextNode = false;
 						// смещаем на отпарсенный позицию
 						index = CurrentIndex.Value;
+						c = source[index]; // update
+						// выбираем, куда переместить по дереву созданную ноду
 						Function func = createdNode as Function;
 						if(func != null)
 						{
@@ -111,19 +113,20 @@ namespace Parser
 						}
 					}
 				}
-
+				c = source[index];
 				if (
 						 c == CharsInfo.ParamsEnd
 					|| c == CharsInfo.ParamsEvalEnd
 					|| c == CharsInfo.ParamsCodeEnd
 					)
 				{
+					CloseCurrentText(index);
+					isInTextNode = false;
 					// TODO спускаемся на ноду ниже
-					//isInTextNode = false;
-					//continue; // TODO ?
 					index += 1;
 					CurrentIndex = index;
 				}
+				//Console.WriteLine("{1} char '{0}'", source[CurrentIndex.Value], isInTextNode);
 				if (!isInTextNode)
 				{
 					CreateText(node);
@@ -140,8 +143,16 @@ namespace Parser
 
 		private void CreateText(Node node)
 		{
+			//Console.WriteLine("create text char '{0}' index of {1}",
+			//  source[CurrentIndex.Value + 1],
+			//  CurrentIndex.Value + 1);
+
 			currentText = new Text();
 			currentText.Start = CurrentIndex + 1;
+			if (source[currentText.Start.Value] == ']')
+			{
+				currentText.Start += 1; // HACK TODO разобраться
+			}
 			currentText.Parent = node;
 			node.Add(currentText);
 			isInTextNode = true;
