@@ -53,7 +53,7 @@ namespace Parser.NETTest
 			SourceBuilder builder = new SourceBuilder();
 			builder.Parse(@"
 @main[]
-	$myvar[xxx]
+	$myvar[abc]
 	test is ^test[what;777]
 
 @test[word;number]
@@ -70,7 +70,7 @@ namespace Parser.NETTest
 			Assert.AreEqual(@"
 	
 	test is 
-	tested what 777 xxx
+	tested what 777 abc
 
 
 

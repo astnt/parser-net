@@ -119,7 +119,7 @@ namespace Parser.Factory
 					name = GetName(index, defIndex);
 					isCreated = true;
 					// сдвигаем обработку парсера
-					sb.CurrentIndex = index + 1; // + 1 '['
+					sb.CurrentIndex = index; // + 1 ']'
 					break;
 				}
 				index += 1;
@@ -136,6 +136,7 @@ namespace Parser.Factory
 				name = GetName(index, defIndex);
 				isCreated = true;
 			}
+			sb.CurrentIndex = index;
 			return isCreated;
 		}
 
