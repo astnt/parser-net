@@ -44,8 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder\CallerBuilder.cs" />
-    <Compile Include="Builder\VariableBuilder.cs" />
-    <Compile Include="Builder\VariableCallBuilder.cs" />
     <Compile Include="BuiltIn\Function\Eval.cs" />
     <Compile Include="BuiltIn\Function\ExcelTableCreate.cs" />
     <Compile Include="BuiltIn\Function\ICompute.cs" />

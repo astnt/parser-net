@@ -19,15 +19,15 @@ namespace Parser
 		/// <summary>
 		/// Текстовы результат.
 		/// </summary>
-		private StringBuilder output = new StringBuilder();
+		private StringBuilder defaultOutput = new StringBuilder();
 
 		/// <summary>
-		/// Текстовы результат.
+		/// Текстовый результат.
 		/// </summary>
 		public StringBuilder Output
 		{
-			get { return output; }
-			set { output = value; }
+			get { return defaultOutput; }
+			set { defaultOutput = value; }
 		}
 
 		private RootNode root;
@@ -72,7 +72,7 @@ namespace Parser
 			string result = something as String;
 			if(result != null)
 			{
-				output.Append(result);
+				Output.Append(result);
 			}
 		}
 
@@ -87,7 +87,7 @@ namespace Parser
 				Text text = node as Text;
 				if(text != null)
 				{
-					output.Append(text.Body);
+					Output.Append(text.Body);
 				}
 				Caller caller = node as Caller;
 				if(caller != null)
@@ -115,24 +115,31 @@ namespace Parser
 		private void Run(Variable variable)
 		{
 			// если есть значение переменной - это объявление
-			if (variable.Value != null)
+			if (variable.Childs.Count > 0)
 			{
 				// пишем в контекст
-				contextManager.AddVar(variable);
+				Variable contextVariable = new Variable();
+				contextVariable.Name = variable.Name;
+				StringBuilder variableOutput = new StringBuilder();
+				Output = variableOutput; // меняем "поток" вывода
+				Run(variable.Childs); // пишется в "поток" переменной
+				contextVariable.Value = variableOutput;
+				Output = defaultOutput; // возвращаем дефолтный поток вывода
+				contextManager.AddVar(contextVariable); // добавляем в контекст
 			}
-			else // вызов
-			{
-				Variable contextVar = contextManager.GetVar(variable);
-				if (contextVar != null)
-				{
-					string value = contextVar.Value as String;
-					if (value != null)
-					{
-						// пишем в вывод
-						output.Append(value);
-					}
-				}
-			}
+//			else // вызов
+//			{
+//				Variable contextVar = contextManager.GetVar(variable);
+//				if (contextVar != null)
+//				{
+//					string value = contextVar.Value as String;
+//					if (value != null)
+//					{
+//						// пишем в вывод
+//						Output.Append(value);
+//					}
+//				}
+//			}
 		}
 
 		/// <summary>
