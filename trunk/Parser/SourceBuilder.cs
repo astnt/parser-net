@@ -98,6 +98,8 @@ namespace Parser
 						c = source[index]; // update
 						// выбираем, куда переместить по дереву созданную ноду
 						Function func = createdNode as Function;
+						Variable var = createdNode as Variable;
+						bool isAdded = false;
 						if(func != null)
 						{
 							// если объявление функции (@something[...][...])
@@ -105,8 +107,15 @@ namespace Parser
 							node = (Node) createdNode;
 							// добавляем в корневую ноду
 							rootNode.Add(node);
+							isAdded = true;
 						}
-						else
+						if(var != null)
+						{
+							node.Add(createdNode);
+							node = (Node)createdNode;
+							isAdded = true;
+						}
+						if(!isAdded)
 						{
 							// для остальных добавляем в текущую ноду.
 							node.Add(createdNode);
@@ -122,9 +131,13 @@ namespace Parser
 				{
 					CloseCurrentText(index);
 					isInTextNode = false;
-					// TODO спускаемся на ноду ниже
-					index += 1;
-					CurrentIndex = index;
+					// если не корень, спускаемся на ноду ниже
+					if (node.Parent as RootNode == null)
+					{
+						node = node.Parent;
+					}
+					//index += 1;
+					//CurrentIndex = index;
 				}
 				//Console.WriteLine("{1} char '{0}'", source[CurrentIndex.Value], isInTextNode);
 				if (!isInTextNode)
@@ -266,6 +279,10 @@ namespace Parser
 		/// <param name="index"></param>
 		private void CloseCurrentText(int index)
 		{
+			if(currentText == null)
+			{
+				return; // HACK
+			}
 			int length = index - currentText.Start.Value;
 			if (length < 0)
 			{
