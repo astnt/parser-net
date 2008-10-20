@@ -62,6 +62,7 @@
     <Compile Include="Model\Table.cs" />
     <Compile Include="Model\Text.cs" />
     <Compile Include="Model\Variable.cs" />
+    <Compile Include="Model\VariableCall.cs" />
     <Compile Include="SourceBuilder.cs" />
     <Compile Include="Builder\FunctionBuilder.cs" />
     <Compile Include="Builder\Builder.cs" />

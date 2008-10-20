@@ -17,8 +17,7 @@ namespace Parser.NETTest
 		[Test]
 		public void FuncDecTest()
 		{
-			string source = @"
-@main[]
+			string source = @"@main[]
 	Launch this func ^test[]
 
 @test[]

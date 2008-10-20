@@ -23,6 +23,8 @@ namespace Parser.Factory
 			set { sb = value; }
 		}
 
+		private bool hasParams = false;
+
 		#endregion
 
 		/// <summary>
@@ -53,11 +55,24 @@ namespace Parser.Factory
 				if(c == CharsInfo.VariableDeclarationStart)
 				{
 					// $var[something] | $var[ ^if(false){}{ ... }] | $var 
-					createdNode = CreateNode(new Variable(), name);
+					if (hasParams)
+					{
+						createdNode = CreateNode(new Variable(), name);
+					}
+					else
+					{
+						createdNode = CreateNode(new VariableCall(), name);
+					}
 				}
 				IsNodeCreated = true;
 			}
 			return IsNodeCreated;
+		}
+
+		private AbstractNode CreateNode(VariableCall varCall, string name)
+		{
+			varCall.Name = name.Split('.');
+			return varCall;
 		}
 
 		private AbstractNode CreateNode(Variable variable, string name)
@@ -86,6 +101,7 @@ namespace Parser.Factory
 		/// <returns></returns>
 		private bool CreateName(char c, out string name)
 		{
+			hasParams = true;
 			bool isCreated;
 
 			int index = sb.CurrentIndex.Value;
@@ -95,6 +111,7 @@ namespace Parser.Factory
 				// если за границами строки
 				if(sb.source.Length <= index)
 				{
+					hasParams = false;
 					isCreated = IfVarThenCreate(index, c, defIndex, out name);
 					break;
 				}
@@ -106,6 +123,7 @@ namespace Parser.Factory
 					|| current == (char)160
 					)
 				{
+					hasParams = false;
 					isCreated = IfVarThenCreate(index, c, defIndex, out name);
 					break;
 				}
@@ -136,7 +154,7 @@ namespace Parser.Factory
 				name = GetName(index, defIndex);
 				isCreated = true;
 			}
-			sb.CurrentIndex = index;
+			sb.CurrentIndex = index - 1; // HACK ?
 			return isCreated;
 		}
 

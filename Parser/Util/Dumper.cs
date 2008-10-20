@@ -53,14 +53,8 @@ namespace Parser.Util
 				if (function != null)
 				{
 					// TODO параметры
-					dumpResult.AppendFormat("({0})@{1}[]", function.GetType(), function.Name /*,function.Parameters.Names.Length,function.Childs.Count*/);
-					if (function.Childs != null)
-					{
-						dumpResult.Append('\n');
-						tabs.Append(spaces);
-						DumpChilds(function.Childs);
-						tabs.Remove(tabs.Length - spaces.Length, spaces.Length);
-					}
+					dumpResult.AppendFormat("({0})@{1}[](Childs-{2})", function.GetType(), function.Name /*,function.Parameters.Names.Length*/,function.Childs.Count);
+					DumpChilds(function);
 				}
 				Text text = node as Text;
 				if (text != null)
@@ -76,6 +70,7 @@ namespace Parser.Util
 				Variable variable = node as Variable;
 				if(variable != null)
 				{
+					// TODO if не нужен, т.к. вызов переменной - varCall
 					if (variable.Value != null)
 					{
 						dumpResult.AppendFormat("({0})${1}[{2}]", variable.GetType(), variable.Name, variable.Value);
@@ -84,8 +79,35 @@ namespace Parser.Util
 					{
 						dumpResult.AppendFormat("({0})${1}", variable.GetType(), variable.Name);
 					}
+					DumpChilds(variable);
+				}
+				VariableCall varCall = node as VariableCall;
+				if(varCall != null)
+				{
+					dumpResult.AppendFormat("({0})${1}", varCall.GetType(), Dump(varCall.Name));
 				}
 				dumpResult.Append('\n');
+			}
+		}
+
+		private object Dump(string[] names)
+		{
+			StringBuilder result = new StringBuilder();
+			foreach (string name in names)
+			{
+				result.AppendFormat(".{0}",name);
+			}
+			return result;
+		}
+
+		private void DumpChilds(Node function)
+		{
+			if (function.Childs != null)
+			{
+				dumpResult.Append('\n');
+				tabs.Append(spaces);
+				DumpChilds(function.Childs);
+				tabs.Remove(tabs.Length - spaces.Length, spaces.Length);
 			}
 		}
 
@@ -98,7 +120,10 @@ namespace Parser.Util
 		{
 			if(isRemoveSpaces && text != null)
 			{
-				return text.Replace("\r\n", "");
+				return text
+					.Replace("\r", "")
+					.Replace("\n", "")
+					;
 			}
 			return text;
 		}
