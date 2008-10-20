@@ -5,7 +5,7 @@ namespace Parser.Model
 	/// <summary>
 	/// Описание переменной.
 	/// </summary>
-	public class Variable : Node, IName
+	public class Variable : Node
 	{
 
 		#region vars
@@ -36,30 +36,6 @@ namespace Parser.Model
 		private Params parameters;
 
 		#endregion
-
-		public void SetName(string setName)
-		{
-			name = setName;
-		}
-
-		public void SetStart(int? start)
-		{
-			// TODO ?
-			// преравнивается к объекту
-			if (parameters.Names.Length > 0)
-			{
-				value = parameters.Names[0];
-			}
-			else
-			{
-				value = String.Empty;
-			}
-		}
-
-		public void SetParams(Params param)
-		{
-			parameters = param;
-		}
 
 	}
 }
