@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Parser.NETTest.Builder
+namespace ParserTest.Builder
 {
 	[TestFixture]
 	public class BuilderTest

@@ -1,9 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
+using Parser;
 using Parser.Factory;
 using Parser.Model;
 
-namespace Parser.NETTest.Factory
+namespace ParserTest.Factory
 {
 	[TestFixture]
 	public class NodeFactoryTest

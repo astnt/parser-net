@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Parser.Model;
 
-namespace Parser.NETTest.Model
+namespace ParserTest.Model
 {
 	[TestFixture]
 	public class TableTest

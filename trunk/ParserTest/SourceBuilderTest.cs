@@ -5,7 +5,7 @@ using Parser;
 using Parser.Model;
 using Parser.Util;
 
-namespace Parser.NETTest
+namespace ParserTest
 {
 	/// <summary>
 	/// Summary description for SourceBuilderTest
