@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Parser.BuiltIn.Function;
 using Parser.Model;
 
-namespace Parser.NETTest.BuiltIn.Function
+namespace ParserTest.BuiltIn.Function
 {
 	[TestFixture]
 	public class EvalTest

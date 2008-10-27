@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Parser.NETTest
+namespace ParserTest
 {
 	public abstract class AbstractParserTest
 	{
