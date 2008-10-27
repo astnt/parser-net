@@ -144,6 +144,7 @@ namespace Parser
 					}
 					//index += 1;
 					//CurrentIndex = index;
+					IsInParametr = false;
 				}
 				//Console.WriteLine("{1} char '{0}'", source[CurrentIndex.Value], isInTextNode);
 				if (!isInTextNode)
