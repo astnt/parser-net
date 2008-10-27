@@ -99,6 +99,7 @@ namespace Parser
 						// выбираем, куда переместить по дереву созданную ноду
 						Function func = createdNode as Function;
 						Variable var = createdNode as Variable;
+						Caller caller = createdNode as Caller;
 						bool isAdded = false;
 						if(func != null)
 						{
@@ -109,7 +110,7 @@ namespace Parser
 							rootNode.Add(node);
 							isAdded = true;
 						}
-						if(var != null)
+						if(var != null || caller != null)
 						{
 							node.Add(createdNode);
 							node = (Node)createdNode;

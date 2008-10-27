@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Информация о вызове.
 	/// </summary>
-	public class Caller : AbstractNode, IName
+	public class Caller : Node, IName
 	{
 
 		#region vars
