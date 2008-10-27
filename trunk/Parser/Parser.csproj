@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builder\CallerBuilder.cs" />
     <Compile Include="BuiltIn\Function\Eval.cs" />
     <Compile Include="BuiltIn\Function\ExcelTableCreate.cs" />
     <Compile Include="BuiltIn\Function\ICompute.cs" />
@@ -62,7 +61,6 @@
     <Compile Include="Model\Variable.cs" />
     <Compile Include="Model\VariableCall.cs" />
     <Compile Include="SourceBuilder.cs" />
-    <Compile Include="Builder\FunctionBuilder.cs" />
     <Compile Include="Builder\Builder.cs" />
     <Compile Include="Model\Function.cs" />
     <Compile Include="Model\AbstractNode.cs" />

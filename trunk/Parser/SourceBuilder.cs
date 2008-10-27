@@ -296,27 +296,6 @@ namespace Parser
 			}
 		}
 
-		/// <summary>
-		/// Создание объекта (функции, коллера и т.п.), переключение текста и добавление в ноду.
-		/// </summary>
-		/// <param name="node">Текущая нода куда будет добавляться созданная функция.</param>
-		/// <param name="builder"></param>
-		private AbstractNode Declaration(Node node, Builder.Builder builder)
-		{
-			if (builder.Build(this, source))
-			{
-				// добавляем в исполнение (поток), если нет предыдущей (@main[]?)
-				// то есть первую попавшуюся
-				AbstractNode builded = (AbstractNode) builder.BuildedObject;
-				node.Add(builded); // TODO поправить
-				// если обнаружили функцию и создали ее, то закончили предыдущую текстовую ноду.
-				isInTextNode = false;
-				return builded;
-			}
-			// функция не создалась (это не обявление функции)
-			return null;
-		}
-
 		#region Vars
 
 		private Text currentText;
