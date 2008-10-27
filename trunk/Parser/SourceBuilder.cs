@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Parser.Builder;
 using Parser.BuiltIn.Function;
 using Parser.Factory;
 using Parser.Model;
@@ -13,6 +12,11 @@ namespace Parser
 	/// </summary>
 	public class SourceBuilder
 	{
+
+		/// <summary>
+		/// В параметре или нет.
+		/// </summary>
+		public bool IsInParametr = false;
 
 		/// <summary>
 		/// Start of building source code.
@@ -79,6 +83,7 @@ namespace Parser
 				// задаем индексы и char
 				char c = source[index];
 				CurrentIndex = index;
+				Console.WriteLine("{0} - char", c);
 				// собираем синтаксические данные из строк
 				if(
 					   c == CharsInfo.FuncDeclarationStart

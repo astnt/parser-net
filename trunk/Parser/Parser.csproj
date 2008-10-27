@@ -54,6 +54,7 @@
     <Compile Include="Model\IName.cs" />
     <Compile Include="Model\MathElement.cs" />
     <Compile Include="Model\MathExpression.cs" />
+    <Compile Include="Model\Parametr.cs" />
     <Compile Include="Model\Params.cs" />
     <Compile Include="Model\RootNode.cs" />
     <Compile Include="Model\Table.cs" />
@@ -61,7 +62,6 @@
     <Compile Include="Model\Variable.cs" />
     <Compile Include="Model\VariableCall.cs" />
     <Compile Include="SourceBuilder.cs" />
-    <Compile Include="Builder\Builder.cs" />
     <Compile Include="Model\Function.cs" />
     <Compile Include="Model\AbstractNode.cs" />
     <Compile Include="Model\Node.cs" />
@@ -72,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Builder\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
