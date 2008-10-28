@@ -87,6 +87,12 @@ namespace Parser.Util
 				{
 					dumpResult.AppendFormat("({0})${1}", varCall.GetType(), Dump(varCall.Name));
 				}
+				Parametr parametr = node as Parametr;
+				if (parametr != null)
+				{
+					dumpResult.AppendFormat("({0})", parametr.GetType());
+					DumpChilds(parametr);
+				}
 				dumpResult.Append('\n');
 			}
 		}
