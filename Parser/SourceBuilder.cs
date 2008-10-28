@@ -113,6 +113,8 @@ namespace Parser
 							node = (Node) createdNode;
 							// добавляем в корневую ноду
 							rootNode.Add(node);
+							node = InParametr(node); // дальше, вплоть до ']' идут параметры
+
 							isAdded = true;
 						}
 						if(var != null || caller != null)
@@ -120,12 +122,8 @@ namespace Parser
 							node.Add(createdNode);
 							// чтобы не каствать два раза
 							node = (Node)createdNode;
-							Node parametr = new Parametr();
-							node.Add(parametr);
-							// передаем управление параметру
-							node = parametr;
+							node = InParametr(node);
 							isAdded = true;
-							IsInParametr = true;
 						}
 						if(!isAdded)
 						{
@@ -181,6 +179,16 @@ namespace Parser
 				}
 
 			}
+		}
+
+		private Node InParametr(Node node)
+		{
+			Node parametr = new Parametr();
+			node.Add(parametr);
+			// передаем управление параметру
+			node = parametr;
+			IsInParametr = true;
+			return node;
 		}
 
 		private void CreateText(Node node)
