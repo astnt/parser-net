@@ -13,5 +13,6 @@ namespace Parser.Syntax
 		public static Char ParamsCodeEnd = '}';
 		public static Char CallerDeclarationStart = '^';
 		public static Char VariableDeclarationStart = '$';
+		public static Char ParametrSeparator = ';';
 	}
 }

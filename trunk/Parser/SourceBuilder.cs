@@ -83,7 +83,7 @@ namespace Parser
 				// задаем индексы и char
 				char c = source[index];
 				CurrentIndex = index;
-				Console.WriteLine("{0} - char", c);
+//				Console.WriteLine("{0} - char", c);
 				// собираем синтаксические данные из строк
 				if(
 					   c == CharsInfo.FuncDeclarationStart
@@ -118,8 +118,14 @@ namespace Parser
 						if(var != null || caller != null)
 						{
 							node.Add(createdNode);
+							// чтобы не каствать два раза
 							node = (Node)createdNode;
+							Node parametr = new Parametr();
+							node.Add(parametr);
+							// передаем управление параметру
+							node = parametr;
 							isAdded = true;
+							IsInParametr = true;
 						}
 						if(!isAdded)
 						{
@@ -137,6 +143,11 @@ namespace Parser
 				{
 					CloseCurrentText(index);
 					isInTextNode = false;
+					if(IsInParametr)
+					{
+						node = node.Parent; // спускаемся из параметра
+						IsInParametr = false; // закрываем параметр
+					}
 					// если не корень, спускаемся на ноду ниже
 					if (node.Parent as RootNode == null)
 					{
@@ -144,7 +155,18 @@ namespace Parser
 					}
 					//index += 1;
 					//CurrentIndex = index;
-					IsInParametr = false;
+				}
+				if(IsInParametr && c == CharsInfo.ParametrSeparator)
+				{
+					CloseCurrentText(index); // закрываем текущую текстовую ноду
+					node = node.Parent; // спускаемся вниз
+					Node parametr = new Parametr();
+					node.Add(parametr); // добавляем новый
+					node = parametr; // перемещаем указатель на него
+//					index += 1;
+//					CurrentIndex = index; // update
+//					c = source[index];
+					isInTextNode = false; // подготовим открытие текстовой ноды
 				}
 				//Console.WriteLine("{1} char '{0}'", source[CurrentIndex.Value], isInTextNode);
 				if (!isInTextNode)
@@ -177,108 +199,6 @@ namespace Parser
 			node.Add(currentText);
 			isInTextNode = true;
 		}
-
-		#region старый вариант
-		/*
-		public void Parse(Node node)
-		{
-			int lastCharIndex = source.Length - 1;
-			// перебор строки исходника
-			for (int index = CurrentIndex.Value; index < source.Length; index+=1)
-			{
-				// задаем индексы и char
-				char c = source[index];
-				CurrentIndex = index;
-
-				// если старт функции - создаем ее
-				if (c == CharsInfo.FuncDeclarationStart)
-				{
-					bool isCloseTextNode;
-					Node nodeOf = GetNodeToParseNext(node, out isCloseTextNode);
-					if(isCloseTextNode)
-					{
-						CloseCurrentText(index);
-					}
-					CurrentIndex = index + 1;
-					Parse((Function)Declaration(nodeOf, new FunctionBuilder()));
-					break;
-				}
-
-				// создаем Caller
-				if(c == CharsInfo.CallerDeclarationStart)
-				{
-					CloseCurrentText(index);
-					CurrentIndex = index + 1;
-					/Caller caller = (Caller)/ Declaration(node, new CallerBuilder());
-				}
-
-				// создаем/выполняем переменную
-				if(c == CharsInfo.VariableDeclarationStart)
-				{
-					CloseCurrentText(index);
-					CurrentIndex = index + 1;
-					AbstractNode abstractNode = Declaration(node, new VariableBuilder());
-					
-					if (abstractNode != null) // TODO не явное  соощение о том, что переменная была создана
-					{
-						//continue;
-						c = source[CurrentIndex.Value]; // char update
-					}
-				}
-
-				// добавить вызов переменной
-				if(c == CharsInfo.VariableDeclarationStart)
-				{
-					CloseCurrentText(index);
-					CurrentIndex = index + 1;
-					Declaration(node, new VariableCallBuilder());
-					// TODO вызов переменной
-				}
-
-				// если не в текстовой ноде и ничего не прервало процесс - создаем ее
-				if(!isInTextNode)
-				{
-					currentText = new Text(); // TODO наверно нужен для красивости TextBuilder?
-					currentText.Start = CurrentIndex + 1;
-					currentText.Parent = node;
-					node.Add(currentText);
-					isInTextNode = true;
-				}
-
-				// Подошли к концу файла
-				if(index == lastCharIndex)
-				{
-					currentText.Body = source.Substring(currentText.Start.Value);
-					// TODO прерывание
-				}
-			}
-		}
-
-		/// <summary>
-		/// Выбираем ноду для обработки, как основную.
-		/// </summary>
-		/// <param name="node"></param>
-		/// <param name="isCloseTextNode"></param>
-		/// <returns></returns>
-		private Node GetNodeToParseNext(Node node, out bool isCloseTextNode)
-		{
-			Node nodeOf;
-			if (node.Parent != null)
-			{
-				// Если есть родитель, то передаем управление ему
-				nodeOf = node.Parent;
-				isCloseTextNode = true;
-			}
-			else
-			{
-				// Если родителя нет, то это корневая нода
-				nodeOf = node;
-				isCloseTextNode = false;
-			}
-			return nodeOf;
-		}
-		*/
-		#endregion
 
 		/// <summary>
 		/// Закрываем текущую текстовую ноду.
