@@ -15,7 +15,6 @@ namespace Parser
 	{
 
 		#region vars
-
 		/// <summary>
 		/// Текстовы результат.
 		/// </summary>
@@ -23,20 +22,14 @@ namespace Parser
 
 		/// <summary>
 		/// Текстовый результат.
+		/// TODO добавить getter и setter
 		/// </summary>
-		public StringBuilder Output
-		{
-			get { return defaultOutput; }
-			set { defaultOutput = value; }
-		}
-
+		public StringBuilder Output;
 		private RootNode root;
-
 		/// <summary>
 		/// Глобальный контекст.
 		/// </summary>
 		private ContextManager contextManager = new ContextManager();
-
 		#endregion
 
 		/// <summary>
@@ -45,6 +38,7 @@ namespace Parser
 		/// <param name="node">Корневая нода дерева.</param>
 		public void Run(RootNode node)
 		{
+			Output = defaultOutput;
 			root = node;
 			bool hasFunc = false;
 			foreach (AbstractNode child in node.Childs)
@@ -105,7 +99,23 @@ namespace Parser
 				{
 					Run(variable);
 				}
+				Parametr parametr = node as Parametr;
+				if(parametr != null)
+				{
+					// выполняем параметр TODO
+//					if (parametr.Parent as VariableCall != null)
+//					{
+//					Console.WriteLine("Run parametr childs");
+//						Run(parametr.Childs);
+//					}
+				}
 			}
+		}
+
+		private void Run(Parametr parametr)
+		{
+			Console.WriteLine("Run Parametr");
+			Run(parametr.Childs);
 		}
 
 		/// <summary>
@@ -121,25 +131,16 @@ namespace Parser
 				Variable contextVariable = new Variable();
 				contextVariable.Name = variable.Name;
 				StringBuilder variableOutput = new StringBuilder();
+				
 				Output = variableOutput; // меняем "поток" вывода
-				Run(variable.Childs); // пишется в "поток" переменной
-				contextVariable.Value = variableOutput;
+//				Run(variable.Childs); // пишется в "поток" переменной
+				Run((Parametr)variable.Childs[0]);
+				contextVariable.Value = variableOutput; // присваеваем значение пременной, кладем в контекст
+				
 				Output = defaultOutput; // возвращаем дефолтный поток вывода
 				contextManager.AddVar(contextVariable); // добавляем в контекст
+				// TODO VariableCall?
 			}
-//			else // вызов
-//			{
-//				Variable contextVar = contextManager.GetVar(variable);
-//				if (contextVar != null)
-//				{
-//					string value = contextVar.Value as String;
-//					if (value != null)
-//					{
-//						// пишем в вывод
-//						Output.Append(value);
-//					}
-//				}
-//			}
 		}
 
 		/// <summary>
@@ -172,7 +173,6 @@ namespace Parser
 				throw new NullReferenceException(
 					String.Format(@"Function with name ""{0}"" not found.", caller.FuncName));
 			}
-			
 			return func;
 		}
 
