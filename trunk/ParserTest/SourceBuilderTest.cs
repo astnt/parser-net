@@ -101,11 +101,17 @@ namespace ParserTest
 		{
 			string actual = Parse(@"
 @main[]
-	$table[^table::excel[select * from list1A1:H1]]
+	$table[^table::excel[select * from list1A1:H1;sample.xls]]
 	^table.menu{
 		<cell>$table.0</cell>
 	}
 ");
+			Result(actual);
+			Assert.AreEqual(@"
+		<cell>one<cell>
+		<cell>two<cell>
+		<cell>three<cell>
+", actual);
 		}
 
 		[Test]
@@ -142,5 +148,15 @@ namespace ParserTest
 			return exec.Output.ToString();			
 		}
 
+		[Test]
+		public void EscapingTest()
+		{
+			string actual = Parse(@"
+@main[] ^^test[] text");
+			Result(actual);
+			Assert.AreEqual(@"
+	^test[] text
+", actual);
+		}
 	}
 }
