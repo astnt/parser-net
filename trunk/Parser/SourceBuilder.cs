@@ -199,6 +199,10 @@ namespace Parser
 
 			currentText = new Text();
 			currentText.Start = CurrentIndex + 1;
+			if (source.Length <= currentText.Start.Value)
+			{
+				return;
+			}
 			if (source[currentText.Start.Value] == ']')
 			{
 				currentText.Start += 1; // HACK TODO разобраться
