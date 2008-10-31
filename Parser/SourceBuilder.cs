@@ -83,102 +83,114 @@ namespace Parser
 				// задаем индексы и char
 				char c = source[index];
 				CurrentIndex = index;
-//				Console.WriteLine("{0} - char", c);
-				// собираем синтаксические данные из строк
-				if(
-					   c == CharsInfo.FuncDeclarationStart
+				bool IsDeclarationChar =
+					(	 c == CharsInfo.FuncDeclarationStart
 					|| c == CharsInfo.CallerDeclarationStart
-					|| c == CharsInfo.VariableDeclarationStart
-				)
-				{
-					AbstractNode createdNode;
-					// создаем ноды
-					if(factory.CreateNode(c, node, out createdNode))
-					{
-						// новая нода создана, закрываем текст
-						CloseCurrentText(index);
-						isInTextNode = false;
-						// смещаем на отпарсенный позицию
-						index = CurrentIndex.Value;
-						c = source[index]; // update
-						// выбираем, куда переместить по дереву созданную ноду
-						Function func = createdNode as Function;
-						Variable var = createdNode as Variable;
-						Caller caller = createdNode as Caller;
-						bool isAdded = false;
-						if(func != null)
-						{
-							// если объявление функции (@something[...][...])
-							// перемещаем указатель парсинга на нее
-							node = (Node) createdNode;
-							// добавляем в корневую ноду
-							rootNode.Add(node);
-							node = InParametr(node); // дальше, вплоть до ']' идут параметры
+					|| c == CharsInfo.VariableDeclarationStart);
 
-							isAdded = true;
-						}
-						if(var != null || caller != null)
-						{
-							node.Add(createdNode);
-							// чтобы не каствать два раза
-							node = (Node)createdNode;
-							node = InParametr(node);
-							isAdded = true;
-						}
-						if(!isAdded)
-						{
-							// для остальных добавляем в текущую ноду.
-							node.Add(createdNode);
-						}
-					}
+				// если объявление чего-нибудь
+				if (IsDeclarationChar)
+				{
+					index = TryCreateNode(index, c, ref node);
 				}
 				c = source[index];
+				// если конец параметра
 				if (
 						 c == CharsInfo.ParamsEnd
 					|| c == CharsInfo.ParamsEvalEnd
-					|| c == CharsInfo.ParamsCodeEnd
-					)
+					|| c == CharsInfo.ParamsCodeEnd)
 				{
-					CloseCurrentText(index);
-					isInTextNode = false;
-					if(IsInParametr)
-					{
-						node = node.Parent; // спускаемся из параметра
-						IsInParametr = false; // закрываем параметр
-					}
-					// если не корень, спускаемся на ноду ниже
-					if (node.Parent as RootNode == null)
-					{
-						node = node.Parent;
-					}
-					//index += 1;
-					//CurrentIndex = index;
+					node = GoDown(index, node);
 				}
+				// если в параметре и ';'
 				if(IsInParametr && c == CharsInfo.ParametrSeparator)
 				{
-					CloseCurrentText(index); // закрываем текущую текстовую ноду
-					node = node.Parent; // спускаемся вниз
-					Node parametr = new Parametr();
-					node.Add(parametr); // добавляем новый
-					node = parametr; // перемещаем указатель на него
-//					index += 1;
-//					CurrentIndex = index; // update
-//					c = source[index];
-					isInTextNode = false; // подготовим открытие текстовой ноды
+					node = SplitParametr(index, node);
 				}
-				//Console.WriteLine("{1} char '{0}'", source[CurrentIndex.Value], isInTextNode);
+				// если не в текстовой ноде
 				if (!isInTextNode)
 				{
 					CreateText(node);
 				}
-				// Подошли к концу строки
+				// если в конце строки
 				if (index == lastCharIndex)
 				{
-					currentText.Body = source.Substring(currentText.Start.Value);
-					// TODO прерывание
+					currentText.Body = source.Substring(currentText.Start.Value); // TODO прерывание
 				}
-
 			}
+		}
+
+		private Node SplitParametr(int index, Node node)
+		{
+			CloseCurrentText(index); // закрываем текущую текстовую ноду
+			node = node.Parent; // спускаемся вниз
+			Node parametr = new Parametr();
+			node.Add(parametr); // добавляем новый
+			node = parametr; // перемещаем указатель на него
+			isInTextNode = false; // подготовим открытие текстовой ноды
+			return node;
+		}
+
+		private Node GoDown(int index, Node node)
+		{
+			CloseCurrentText(index);
+			isInTextNode = false;
+			if(IsInParametr)
+			{
+				node = node.Parent; // спускаемся из параметра
+				IsInParametr = false; // закрываем параметр
+			}
+			// если не корень, спускаемся на ноду ниже
+			if (node.Parent as RootNode == null)
+			{
+				node = node.Parent;
+			}
+			return node;
+		}
+
+		private int TryCreateNode(int index, char c, ref Node node)
+		{
+			AbstractNode createdNode;
+			// создаем ноды
+			if(factory.CreateNode(c, node, out createdNode))
+			{
+				// новая нода создана, закрываем текст
+				CloseCurrentText(index);
+				isInTextNode = false;
+				// смещаем на отпарсенный позицию
+				index = CurrentIndex.Value;
+				c = source[index]; // update
+				// выбираем, куда переместить по дереву созданную ноду
+				Function func = createdNode as Function;
+				Variable var = createdNode as Variable;
+				Caller caller = createdNode as Caller;
+				bool isAdded = false;
+				if(func != null)
+				{
+					// если объявление функции (@something[...][...])
+					// перемещаем указатель парсинга на нее
+					node = (Node) createdNode;
+					// добавляем в корневую ноду
+					rootNode.Add(node);
+					node = InParametr(node); // дальше, вплоть до ']' идут параметры
+
+					isAdded = true;
+				}
+				if(var != null || caller != null)
+				{
+					node.Add(createdNode);
+					// чтобы не каствать два раза
+					node = (Node)createdNode;
+					node = InParametr(node);
+					isAdded = true;
+				}
+				if(!isAdded)
+				{
+					// для остальных добавляем в текущую ноду.
+					node.Add(createdNode);
+				}
+			}
+			return index;
 		}
 
 		private Node InParametr(Node node)
@@ -202,10 +214,6 @@ namespace Parser
 			if (source.Length <= currentText.Start.Value)
 			{
 				return;
-			}
-			if (source[currentText.Start.Value] == ']')
-			{
-				currentText.Start += 1; // HACK TODO разобраться
 			}
 			currentText.Parent = node;
 			node.Add(currentText);
