@@ -33,7 +33,6 @@ namespace Parser
 			// чтобы не передавить параметром укажем SourceBuilder
 			factory.Sb = this;
 			Parse(rootNode);
-
 			AddBuiltInMembers();
 		}
 
@@ -120,6 +119,12 @@ namespace Parser
 			}
 		}
 
+		/// <summary>
+		/// Разбиваем параметры.
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="node"></param>
+		/// <returns></returns>
 		private Node SplitParametr(int index, Node node)
 		{
 			CloseCurrentText(index); // закрываем текущую текстовую ноду
@@ -131,6 +136,12 @@ namespace Parser
 			return node;
 		}
 
+		/// <summary>
+		/// Спускаемся ниже по дереву, если наткнулись на закрытие параметра.
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="node"></param>
+		/// <returns></returns>
 		private Node GoDown(int index, Node node)
 		{
 			CloseCurrentText(index);
@@ -148,6 +159,13 @@ namespace Parser
 			return node;
 		}
 
+		/// <summary>
+		/// Пытаемся объявить ноду, если синтаксически соответствует.
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="c"></param>
+		/// <param name="node"></param>
+		/// <returns></returns>
 		private int TryCreateNode(int index, char c, ref Node node)
 		{
 			AbstractNode createdNode;
@@ -193,6 +211,11 @@ namespace Parser
 			return index;
 		}
 
+		/// <summary>
+		/// Перемещаемся в параметр.
+		/// </summary>
+		/// <param name="node"></param>
+		/// <returns></returns>
 		private Node InParametr(Node node)
 		{
 			Node parametr = new Parametr();
@@ -203,12 +226,12 @@ namespace Parser
 			return node;
 		}
 
+		/// <summary>
+		/// Пытаемся создать текствую ноду.
+		/// </summary>
+		/// <param name="node"></param>
 		private void CreateText(Node node)
 		{
-			//Console.WriteLine("create text char '{0}' index of {1}",
-			//  source[CurrentIndex.Value + 1],
-			//  CurrentIndex.Value + 1);
-
 			currentText = new Text();
 			currentText.Start = CurrentIndex + 1;
 			if (source.Length <= currentText.Start.Value)
