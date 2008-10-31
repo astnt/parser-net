@@ -80,9 +80,9 @@ namespace ParserTest.Factory
 			RootNode root;
 			SourceBuilder sb = CreateBaseVars(out factory, out root);
 			sb.source = @"$var";
-
 			CheckName(sb, factory, root, "var");
 
+			sb = CreateBaseVars(out factory, out root);
 			sb.source = "$something ";
 			CheckName(sb, factory, root, "something");
 		}
@@ -93,7 +93,7 @@ namespace ParserTest.Factory
 			AbstractNode variable;
 			if (factory.CreateNode(sb.source[0], root, out variable))
 			{
-				string createdFuncName = ((Variable)variable).Name;
+				string createdFuncName = ((VariableCall)variable).Name[0];
 				Console.WriteLine(String.Format("[{0}]", createdFuncName));
 				Assert.AreEqual(expected, createdFuncName);
 			}
