@@ -79,6 +79,10 @@ namespace Parser.Context
 			for (int position = 0; position < vars.Count; position += 1)
 			{
 				Variable variable = new Variable();
+				if(func.Childs.Count <= position) // если детей (принемаемых значений) меньше чем передаваемых значений
+				{
+					break;
+				}
 				Text name = ((Parametr) func.Childs[position]).Childs[0] as Text;
 				if(name == null || name.Body == null) // HACK
 				{
