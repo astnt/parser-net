@@ -62,26 +62,31 @@ namespace Parser.Context
 		/// Синхронизирует передаваемые параметры с принимаемыми,
 		/// добавляет в контекст функции переменные.
 		/// </summary>
-		/// <param name="parameters"></param>
+		/// <param name="vars"></param>
 		/// <param name="func"></param>
 		/// <param name="caller"></param>
-		public void AddVars(Params parameters, Function func, Caller caller)
+		public void AddVars(List<object> vars, Function func, Caller caller)
 		{
 			if(!contexts.ContainsKey(func.Name))
 			{
 				contexts[func.Name] = new Dictionary<string, Variable>();
 			}
-			if(parameters == null)
+			if(vars == null)
 			{
 				Console.WriteLine("Parameters in {0} is null.", func.Name);
 				return;
 			}
-			for (int position = 0; position < parameters.Names.Length; position += 1)
+			for (int position = 0; position < vars.Count; position += 1)
 			{
 				Variable variable = new Variable();
-				variable.Name = func.Parameters.Names[position];
+				Text name = ((Parametr) func.Childs[position]).Childs[0] as Text;
+				if(name == null || name.Body == null) // HACK
+				{
+					break;
+				}
+				variable.Name = name.Body; // FIXME в что-то понятнее
 				// TODO value как переменная
-				variable.Value = caller.Parameters.Names[position];
+				variable.Value = vars[position];
 				variable.Parent = func;
 				IDictionary<string, Variable> variables = contexts[func.Name];
 				if (!variables.ContainsKey(variable.Name))
