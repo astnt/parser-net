@@ -59,6 +59,11 @@ namespace Parser
 			}
 		}
 
+		/// <summary>
+		/// Спорный вызов некой "исполняемой" функции типа ^eval()
+		/// </summary>
+		/// <param name="func"></param>
+		/// <param name="caller"></param>
 		private void Run(Function func, Caller caller)
 		{
 			ICompute computeFunc = (ICompute) func.RefObject.Invoke(new object[0]);
@@ -117,22 +122,35 @@ namespace Parser
 			}
 		}
 
+		/// <summary>
+		/// Вызывает переменную
+		/// UNDONE
+		/// - сделать вызов по точкам
+		/// - значение переменной не обязательно строка
+		/// </summary>
+		/// <param name="varCall"></param>
 		private void Run(VariableCall varCall)
 		{
 			Variable variable = contextManager.GetVar(varCall);
 			if (variable != null) // переменной может и не быть, в этом случае ничего не делаем
 			{
-				StringBuilder value = variable.Value as StringBuilder;
-				if (value != null)
+				StringBuilder stringBuilder = variable.Value as StringBuilder;
+				String stringValue = variable.Value as String;
+				if (stringBuilder != null || stringValue != null)
 				{
-					Output.Append(value);
+					Output.Append(variable.Value);
 				}
+				else // достаем из контекста если нет value
+				{
+					Variable contextVar = contextManager.GetVar(varCall);
+					Run(contextVar);
+				}
+				
 			}
 		}
 
 		private void Run(Parametr parametr)
 		{
-			Console.WriteLine("Run Parametr");
 			Run(parametr.Childs);
 		}
 
@@ -184,7 +202,18 @@ namespace Parser
 			{
 				// узнаем какие переменные (или строки есть в caller)
 				// добавляем в контекст функции.
-				contextManager.AddVars(caller.Parameters, func, caller);
+				List<object> vars = new List<object>();
+				foreach (AbstractNode child in caller.Childs)
+				{
+					Parametr parametr = child as Parametr;
+					// пробегаемся по детям, если параметр, то добавляем "значение"
+					if(parametr != null)
+					{
+						vars.Add(ExtractVar(parametr.Childs));
+					}
+				}
+				contextManager.AddVars(vars, func, caller);
+				
 			}
 			else
 			{
@@ -194,5 +223,17 @@ namespace Parser
 			return func;
 		}
 
+		private object ExtractVar(IList<AbstractNode> childs)
+		{
+			foreach (AbstractNode node in childs)
+			{
+				Text text = node as Text; // FIXME повторение
+				if (text != null)
+				{
+					return text.Body; // WARN возможно не правильно
+				}
+			}
+			return null;
+		}
 	}
 }
