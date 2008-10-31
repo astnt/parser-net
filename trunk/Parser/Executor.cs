@@ -67,6 +67,7 @@ namespace Parser
 		private void Run(Function func, Caller caller)
 		{
 			ICompute computeFunc = (ICompute) func.RefObject.Invoke(new object[0]);
+			// 
 			object something = computeFunc.Compute(caller.Parameters);
 			string result = something as String;
 			if(result != null)
@@ -108,16 +109,6 @@ namespace Parser
 				if (variableCall != null)
 				{
 					Run(variableCall);
-				}
-				Parametr parametr = node as Parametr;
-				if(parametr != null)
-				{
-					// выполняем параметр TODO
-//					if (parametr.Parent as VariableCall != null)
-//					{
-//					Console.WriteLine("Run parametr childs");
-//						Run(parametr.Childs);
-//					}
 				}
 			}
 		}
@@ -200,20 +191,8 @@ namespace Parser
 			}
 			if (hasFuncLikeInCaller)
 			{
-				// узнаем какие переменные (или строки есть в caller)
-				// добавляем в контекст функции.
-				List<object> vars = new List<object>();
-				foreach (AbstractNode child in caller.Childs)
-				{
-					Parametr parametr = child as Parametr;
-					// пробегаемся по детям, если параметр, то добавляем "значение"
-					if(parametr != null)
-					{
-						vars.Add(ExtractVar(parametr.Childs));
-					}
-				}
+				List<object> vars = ExtractVars(caller);
 				contextManager.AddVars(vars, func, caller);
-				
 			}
 			else
 			{
@@ -221,6 +200,23 @@ namespace Parser
 					String.Format(@"Function with name ""{0}"" not found.", caller.FuncName));
 			}
 			return func;
+		}
+
+		private List<object> ExtractVars(Caller caller)
+		{
+// узнаем какие переменные (или строки есть в caller)
+			// добавляем в контекст функции.
+			List<object> vars = new List<object>();
+			foreach (AbstractNode child in caller.Childs)
+			{
+				Parametr parametr = child as Parametr;
+				// пробегаемся по детям, если параметр, то добавляем "значение"
+				if(parametr != null)
+				{
+					vars.Add(ExtractVar(parametr.Childs));
+				}
+			}
+			return vars;
 		}
 
 		private object ExtractVar(IList<AbstractNode> childs)
