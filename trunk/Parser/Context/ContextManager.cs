@@ -37,22 +37,23 @@ namespace Parser.Context
 		/// Получить значение переменной.
 		/// </summary>
 		/// <param name="variable">Описание переменной.</param>
-		/// <returns>Объект значение переменной.</returns>
-		public Variable GetVar(Variable variable)
+		/// <returns>Переменная со значением.</returns>
+		public Variable GetVar(VariableCall variable)
 		{
+			string key = variable.Name[0]; // TODO UNDONE
 			Function func = variable.Parent as Function;
 			if(func != null)
 			{
 				// если функция (наверное всегда функция?), пытаемся найти в ее контексте
-				if(contexts[func.Name].ContainsKey(variable.Name))
+				if(contexts[func.Name].ContainsKey(key))
 				{
-					return contexts[func.Name][variable.Name];
+					return contexts[func.Name][key];
 				}
 			}
 			// если не нашли в функции, то поищем в глобальном контексте
-			if (contexts[GLOBAL].ContainsKey(variable.Name))
+			if (contexts[GLOBAL].ContainsKey(key))
 			{
-				return contexts[GLOBAL][variable.Name];
+				return contexts[GLOBAL][key];
 			}
 			return null;
 		}
