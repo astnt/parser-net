@@ -14,10 +14,15 @@ namespace Parser.BuiltIn.Function
 	[ParserName("eval")]
 	public class Eval : ICompute
 	{
-		public object Compute(Params param)
+		public object Compute(List<object> vars)
 		{
 			// param.Names[0] - это "параметр" ^eval(45-45*12), то есть "45-45*12"
-			return Compute(GetExpression(param.Names[0])).ToString();
+			string expressionInText = vars[0] as string;
+			if(expressionInText != null)
+			{
+				return Compute(GetExpression(expressionInText)).ToString();
+			}
+			return null;
 		}
 
 		public double Compute(string expression)

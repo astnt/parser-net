@@ -67,8 +67,10 @@ namespace Parser
 		private void Run(Function func, Caller caller)
 		{
 			ICompute computeFunc = (ICompute) func.RefObject.Invoke(new object[0]);
+			// получаем переменные
+			List<object> vars = ExtractVars(caller);
 			// 
-			object something = computeFunc.Compute(caller.Parameters);
+			object something = computeFunc.Compute(vars);
 			string result = something as String;
 			if(result != null)
 			{
@@ -192,6 +194,7 @@ namespace Parser
 			if (hasFuncLikeInCaller)
 			{
 				List<object> vars = ExtractVars(caller);
+				// кладем в контекст
 				contextManager.AddVars(vars, func, caller);
 			}
 			else
@@ -202,10 +205,14 @@ namespace Parser
 			return func;
 		}
 
+		/// <summary>
+		/// Узнаем какие переменные (или строки есть в caller)
+		/// Возвращаем ввиду списка значений.
+		/// </summary>
+		/// <param name="caller"></param>
+		/// <returns></returns>
 		private List<object> ExtractVars(Caller caller)
 		{
-// узнаем какие переменные (или строки есть в caller)
-			// добавляем в контекст функции.
 			List<object> vars = new List<object>();
 			foreach (AbstractNode child in caller.Childs)
 			{
