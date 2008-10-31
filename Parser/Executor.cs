@@ -99,6 +99,11 @@ namespace Parser
 				{
 					Run(variable);
 				}
+				VariableCall variableCall = node as VariableCall;
+				if (variableCall != null)
+				{
+					Run(variableCall);
+				}
 				Parametr parametr = node as Parametr;
 				if(parametr != null)
 				{
@@ -108,6 +113,19 @@ namespace Parser
 //					Console.WriteLine("Run parametr childs");
 //						Run(parametr.Childs);
 //					}
+				}
+			}
+		}
+
+		private void Run(VariableCall varCall)
+		{
+			Variable variable = contextManager.GetVar(varCall);
+			if (variable != null) // переменной может и не быть, в этом случае ничего не делаем
+			{
+				StringBuilder value = variable.Value as StringBuilder;
+				if (value != null)
+				{
+					Output.Append(value);
 				}
 			}
 		}
