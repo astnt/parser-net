@@ -51,8 +51,6 @@ namespace Parser
 			// будет добавлено добавление статичных объектов по неймспейсу
 			Function builtInFunc = new Function();
 			builtInFunc.Parent = rootNode;
-			builtInFunc.Parameters = new Params();
-			builtInFunc.Parameters.Names = new string[]{"0"}; // TODO ?
 			
 			Type parserType = assembly
 				.GetType(String.Format(namespaceName)); // берем нужный тип Assembly
@@ -63,7 +61,7 @@ namespace Parser
 			ParserNameAttribute pna = 
 				(ParserNameAttribute)parserType.GetCustomAttributes(false)[0];
 
-			builtInFunc.SetName(pna.Name);
+			builtInFunc.Name = pna.Name;
 			builtInFunc.RefObject = ci;
 			// добавляем в дерево
 			rootNode.Add(builtInFunc);
@@ -87,13 +85,13 @@ namespace Parser
 					|| c == CharsInfo.CallerDeclarationStart
 					|| c == CharsInfo.VariableDeclarationStart);
 
-				// если объявление чего-нибудь
+				// если объявление чего-нибудь, если синтаксически верно
 				if (IsDeclarationChar)
 				{
 					index = TryCreateNode(index, c, ref node);
 				}
 				c = source[index];
-				// если конец параметра
+				// если конец параметра, то спуск вниз
 				if (
 						 c == CharsInfo.ParamsEnd
 					|| c == CharsInfo.ParamsEvalEnd
@@ -101,17 +99,17 @@ namespace Parser
 				{
 					node = GoDown(index, node);
 				}
-				// если в параметре и ';'
+				// если в параметре и ';', то разбиваем на новый параметр
 				if(IsInParametr && c == CharsInfo.ParametrSeparator)
 				{
 					node = SplitParametr(index, node);
 				}
-				// если не в текстовой ноде
+				// если не в текстовой ноде, то создаем
 				if (!isInTextNode)
 				{
 					CreateText(node);
 				}
-				// если в конце строки
+				// если в конце строки "закрывам текстовую ноду"
 				if (index == lastCharIndex)
 				{
 					currentText.Body = source.Substring(currentText.Start.Value); // TODO прерывание
