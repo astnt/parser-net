@@ -30,11 +30,6 @@ namespace Parser.Model
 			set { this.value = value; }
 		}
 
-		/// <summary>
-		/// Параметр типа: $var[parametrs]
-		/// </summary>
-		private Params parameters;
-
 		#endregion
 
 	}

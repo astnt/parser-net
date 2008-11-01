@@ -51,11 +51,9 @@
     <Compile Include="Executor.cs" />
     <Compile Include="Factory\NodeFactory.cs" />
     <Compile Include="Model\Caller.cs" />
-    <Compile Include="Model\IName.cs" />
     <Compile Include="Model\MathElement.cs" />
     <Compile Include="Model\MathExpression.cs" />
     <Compile Include="Model\Parametr.cs" />
-    <Compile Include="Model\Params.cs" />
     <Compile Include="Model\RootNode.cs" />
     <Compile Include="Model\Table.cs" />
     <Compile Include="Model\Text.cs" />
