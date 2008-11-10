@@ -185,7 +185,7 @@ namespace Parser
 			foreach (AbstractNode child in node.Childs)
 			{
 				func = child as Function;
-				if(func != null && func.Name == caller.FuncName)
+				if(func != null && func.Name == caller.Name[0])
 				{
 					hasFuncLikeInCaller = true;
 					break;
@@ -200,7 +200,7 @@ namespace Parser
 			else
 			{
 				throw new NullReferenceException(
-					String.Format(@"Function with name ""{0}"" not found.", caller.FuncName));
+					String.Format(@"Function with name ""{0}"" not found.", caller.Name));
 			}
 			return func;
 		}

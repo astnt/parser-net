@@ -42,7 +42,7 @@ namespace ParserTest.Factory
 			AbstractNode caller;
 			if (factory.CreateNode(sb.source[0], root, out caller))
 			{
-				string createdFuncName = ((Caller)caller).FuncName;
+				string createdFuncName = ((Caller)caller).Name[0];
 				Console.WriteLine(createdFuncName);
 				Assert.AreEqual("callSomething", createdFuncName);
 			}

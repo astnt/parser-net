@@ -6,14 +6,16 @@
 	public class Caller : Node
 	{
 
-		private string funcName;
+		private string[] name;
 
-		public string FuncName
+		/// <summary>
+		/// .some.name.of.func
+		/// </summary>
+		public string[] Name
 		{
-			get { return funcName; }
-			set { funcName = value; }
+			get { return name; }
+			set { name = value; }
 		}
-
 
 	}
 }
