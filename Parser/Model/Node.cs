@@ -26,17 +26,10 @@ namespace Parser.Model
 
 		}
 
-		private int? start;
-		private int? end;
+		#region vars
+		// TODO вынести в Text
 
-		/// <summary>
-		/// End of node body.
-		/// </summary>
-		public int? End
-		{
-			get { return end; }
-			set { end = value; }
-		}
+		private int? start;
 
 		/// <summary>
 		/// Start of node body.
@@ -46,6 +39,8 @@ namespace Parser.Model
 			get { return start; }
 			set { start = value; }
 		}
+
+		#endregion
 
 	}
 }

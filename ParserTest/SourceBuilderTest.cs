@@ -146,14 +146,15 @@ namespace ParserTest
 
 			Executor exec = new Executor();
 			exec.Run((RootNode)builder.RootNode);
-			return exec.Output.ToString();			
+			return exec.Output.ToString();
 		}
 
 		[Test]
 		public void EscapingTest()
 		{
-			string actual = Parse(@"
-@main[] ^^test[] text");
+			string source = @"@main[] ^^test[] text";
+			Console.WriteLine(@"SOURCE{{{0}}}", source);
+			string actual = Parse(source);
 			Result(actual);
 			Assert.AreEqual(@"
 	^test[] text

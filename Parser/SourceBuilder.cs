@@ -80,10 +80,24 @@ namespace Parser
 				// задаем индексы и char
 				char c = source[index];
 				CurrentIndex = index;
+
 				bool IsDeclarationChar =
 					(	 c == CharsInfo.FuncDeclarationStart
 					|| c == CharsInfo.CallerDeclarationStart
 					|| c == CharsInfo.VariableDeclarationStart);
+
+				if(c == CharsInfo.CallerDeclarationStart && source[index+1] == CharsInfo.CallerDeclarationStart)
+				{
+//					index += 1;
+					CloseCurrentText(index);
+					continue;
+				}
+				if (c == CharsInfo.CallerDeclarationStart && source[index-1] == CharsInfo.CallerDeclarationStart)
+				{
+//					continue;
+					CloseCurrentText(index);
+					IsDeclarationChar = false;
+				}
 
 				// если объявление чего-нибудь, если синтаксически верно
 				if (IsDeclarationChar)
@@ -234,7 +248,7 @@ namespace Parser
 			currentText.Start = CurrentIndex + 1;
 			if (source.Length <= currentText.Start.Value)
 			{
-				return;
+				return; // HACK
 			}
 			currentText.Parent = node;
 			node.Add(currentText);
@@ -252,7 +266,7 @@ namespace Parser
 				return; // HACK
 			}
 			int length = index - currentText.Start.Value;
-			if (length < 0)
+			if (length <= 0)
 			{
 				//currentText.Body = String.Empty;
 				// TODO для оптимизации, такая текстовая нода должна быть удалена.
@@ -260,6 +274,7 @@ namespace Parser
 			else
 			{
 				currentText.Body = source.Substring(currentText.Start.Value, length);
+				Console.WriteLine("closed text node [{0}]", currentText.Body);
 			}
 		}
 
