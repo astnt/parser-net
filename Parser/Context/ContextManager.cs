@@ -30,7 +30,14 @@ namespace Parser.Context
 		/// <param name="variable">Описание переменной.</param>
 		public void AddVar(Variable variable)
 		{
-			contexts[GLOBAL].Add(variable.Name, variable);
+			if (contexts[GLOBAL].ContainsKey(variable.Name))
+			{
+				contexts[GLOBAL][variable.Name] = variable;
+			}
+			else
+			{
+				contexts[GLOBAL].Add(variable.Name, variable);
+			}
 		}
 
 		/// <summary>
@@ -42,7 +49,7 @@ namespace Parser.Context
 		{
 			string key = variable.Name[0]; // TODO UNDONE
 			Function func = variable.Parent as Function;
-			if(func != null)
+			if (func != null && contexts.ContainsKey(func.Name))
 			{
 				// если функция (наверное всегда функция?), пытаемся найти в ее контексте
 				if(contexts[func.Name].ContainsKey(key))

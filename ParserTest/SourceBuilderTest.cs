@@ -102,6 +102,7 @@ namespace ParserTest
 			string actual = Parse(@"
 @main[]
 	$table[^table::excel[select * from list1A1:H1;sample.xls]]
+	some text
 	^table.menu{
 		<cell>$table.0</cell>
 	}
@@ -158,5 +159,17 @@ namespace ParserTest
 	^test[] text
 ", actual);
 		}
+
+		/// <summary>
+		/// Тест переприсваивания.
+		/// </summary>
+		[Test]
+		public void VarReAssignmentTest()
+		{
+			string actual = Parse(@"@main[] $test[first] $test $test[second] $test ");
+			Result(actual);
+			Assert.AreEqual("  first  second ", actual);
+		}
+
 	}
 }
