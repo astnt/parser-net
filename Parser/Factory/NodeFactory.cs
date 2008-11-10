@@ -83,7 +83,7 @@ namespace Parser.Factory
 
 		private AbstractNode CreateNode(Caller caller, string name)
 		{
-			caller.FuncName = name;
+			caller.Name = name.Split('.');
 			return caller;
 		}
 

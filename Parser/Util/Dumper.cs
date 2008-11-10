@@ -65,7 +65,7 @@ namespace Parser.Util
 				if (caller != null)
 				{
 					// TODO параметры
-					dumpResult.AppendFormat("({0})^{1}[]",caller.GetType(),caller.FuncName /*,caller.Parameters.Names.Length*/);
+					dumpResult.AppendFormat("({0})^{1}[]",caller.GetType(),Dump(caller.Name) /*,caller.Parameters.Names.Length*/);
 					DumpChilds(caller);
 				}
 				Variable variable = node as Variable;
