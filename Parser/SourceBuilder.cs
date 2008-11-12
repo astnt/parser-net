@@ -91,16 +91,29 @@ namespace Parser
 					(	 c == CharsInfo.FuncDeclarationStart
 					|| c == CharsInfo.CallerDeclarationStart
 					|| c == CharsInfo.VariableDeclarationStart);
-
-				if(c == CharsInfo.CallerDeclarationStart && source[index+1] == CharsInfo.CallerDeclarationStart)
+				// [^]^
+				// [^]$
+				if(c == CharsInfo.CallerDeclarationStart &&
+						(
+							source[index+1] == CharsInfo.CallerDeclarationStart
+							|| source[index+1] == CharsInfo.VariableDeclarationStart
+						)
+					)
 				{
-					CloseCurrentText(index);
+					CloseCurrentText(index-1);
 					IsInEscape = true;
 					continue;
 				}
-				if (c == CharsInfo.CallerDeclarationStart && source[index-1] == CharsInfo.CallerDeclarationStart)
+				// ^[^]
+				if (
+					(
+						c == CharsInfo.CallerDeclarationStart
+						|| c == CharsInfo.VariableDeclarationStart
+					)
+					&& source[index-1] == CharsInfo.CallerDeclarationStart)
 				{
-					CloseCurrentText(index);
+					CloseCurrentText(index - 1); // ^$var[] -> $var вместо ^var в текст
+					CurrentIndex -= 1; // для CreateText
 					IsInEscape = true;
 					IsDeclarationChar = false;
 				}
@@ -284,7 +297,6 @@ namespace Parser
 			else
 			{
 				currentText.Body = source.Substring(currentText.Start.Value, length);
-				Console.WriteLine("closed text node [{0}]", currentText.Body);
 			}
 			isInTextNode = false; // HACK по-идее нода должны быть именно закрыта
 		}
