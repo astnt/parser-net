@@ -94,7 +94,7 @@ namespace Parser
 				Caller caller = node as Caller;
 				if(caller != null)
 				{
-					Console.WriteLine("Run caller with name {0}", caller.Name[0]);
+//					Console.WriteLine("Run caller with name {0}", caller.Name[0]);
 					// Передаем управление найденной функции.
 					Function func = Call(root, caller);
 					if (func.RefObject != null)

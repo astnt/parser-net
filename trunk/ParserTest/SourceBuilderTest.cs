@@ -101,7 +101,7 @@ namespace ParserTest
 		{
 			string actual = Parse(@"
 @main[]
-	$table[^table::excel[select * from list1A1:H1;sample.xls]]
+	$table[^table::excel[select * from list1^$A1:H1;sample.xls]]
 	some text
 	^table.menu{
 		<cell>$table.0</cell>
@@ -166,6 +166,15 @@ namespace ParserTest
 			string actual = Parse(source);
 			Result(actual);
 			Assert.IsTrue(actual.Contains("select * from list$1A1:H1;sample.xls"));
+		}
+
+		[Test]
+		public void VarEscapingTest()
+		{
+			string source = @"@main[] ^$var";
+			string actual = Parse(source);
+			Result(actual);
+			Assert.AreEqual(" $var", actual);
 		}
 
 		/// <summary>
