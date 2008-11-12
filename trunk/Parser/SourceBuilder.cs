@@ -125,12 +125,7 @@ namespace Parser
 				}
 				c = source[index];
 				// если конец параметра ])}, то спуск вниз
-				if (
-					!IsInEscape &&
-					(	 c == CharsInfo.ParamsEnd
-					|| c == CharsInfo.ParamsEvalEnd
-					|| c == CharsInfo.ParamsCodeEnd)
-					)
+				if (!IsInEscape && CharsInfo.IsInParamsEndChars(c))
 				{
 					node = GoDown(index, node);
 				}
@@ -150,7 +145,7 @@ namespace Parser
 					currentText.Body = source.Substring(currentText.Start.Value); // TODO прерывание
 				}
 				// если пора заканчивать заэскейпливание
-				if(c == ' ' || c == (char)160) // TODO нужно добавить другие символы, вынести в фунцкию
+				if (c == ' ' || c == (char)160 || CharsInfo.IsInParamsEndChars(c)) // TODO нужно добавить другие символы, вынести в фунцкию
 				{
 					IsInEscape = false;
 				}
