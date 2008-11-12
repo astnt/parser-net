@@ -127,7 +127,6 @@ namespace Parser
 				// если конец параметра ])}, то спуск вниз
 				if (!IsInEscape && CharsInfo.IsInParamsEndChars(c))
 				{
-					Console.WriteLine("Go down {0} char'{1}'", index, c);
 					node = GoDown(index, node);
 				}
 				// если в параметре и ';', то разбиваем на новый параметр

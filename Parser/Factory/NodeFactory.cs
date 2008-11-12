@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Parser.Model;
 using Parser.Syntax;
 
@@ -116,12 +113,8 @@ namespace Parser.Factory
 					break;
 				}
 				char current = sb.source[index];
-				if(
-						 current == '\n' 
-					|| current == '\r' 
-					|| current == ' ' 
-					|| current == (char)160
-					)
+				if(CharsInfo.IsInSpaceChars(current)
+					||	current == '<') // TODO добавить остальные символы
 				{
 					hasParams = false;
 					isCreated = IfVarThenCreate(index, c, defIndex, out name);

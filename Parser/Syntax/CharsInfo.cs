@@ -27,5 +27,18 @@ namespace Parser.Syntax
 					|| c == ParamsCodeEnd;
 		}
 
+		/// <summary>
+		/// В пробельных символах \r\n\t (char)160
+		/// </summary>
+		/// <param name="c"></param>
+		/// <returns></returns>
+		public static bool IsInSpaceChars(char c)
+		{
+			return c == '\n'
+					|| c == '\r'
+					|| c == ' '
+					|| c == (char) 160;
+		}
+
 	}
 }
