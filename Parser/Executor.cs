@@ -200,8 +200,9 @@ namespace Parser
 			}
 			else
 			{
-				throw new NullReferenceException(
-					String.Format(@"Function with name ""{0}"" not found.", caller.Name));
+//				throw new NullReferenceException(
+//					String.Format(@"Function with name ""{0}"" not found.", caller.Name));
+				Console.WriteLine(@"Function with name ""{0}"" not found.", caller.Name);
 			}
 			return func;
 		}
