@@ -156,9 +156,7 @@ namespace ParserTest
 			Console.WriteLine(@"SOURCE{{{0}}}", source);
 			string actual = Parse(source);
 			Result(actual);
-			Assert.AreEqual(@"
-	^test[] text
-", actual);
+			Assert.AreEqual(@" ^test[] text", actual);
 		}
 
 		[Test]
