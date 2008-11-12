@@ -183,6 +183,7 @@ namespace Parser
 		{
 			Function func = null;
 			Boolean hasFuncLikeInCaller = false;
+			// поиск функции с таким именем
 			foreach (AbstractNode child in node.Childs)
 			{
 				func = child as Function;
@@ -192,10 +193,13 @@ namespace Parser
 					break;
 				}
 			}
+			// поиск переменной с таким именем -> вызов ее метода(ов)
+			// TODO вызов метода объекта
+			
 			if (hasFuncLikeInCaller)
 			{
 				List<object> vars = ExtractVars(caller);
-				// кладем в контекст
+				// кладем в контекст найденной функции
 				contextManager.AddVars(vars, func, caller);
 			}
 			else
