@@ -105,7 +105,7 @@ namespace Parser
 					index = TryCreateNode(index, c, ref node);
 				}
 				c = source[index];
-				// если конец параметра, то спуск вниз
+				// если конец параметра ])}, то спуск вниз
 				if (
 						 c == CharsInfo.ParamsEnd
 					|| c == CharsInfo.ParamsEvalEnd
@@ -144,7 +144,6 @@ namespace Parser
 			Node parametr = new Parametr();
 			node.Add(parametr); // добавляем новый
 			node = parametr; // перемещаем указатель на него
-			isInTextNode = false; // подготовим открытие текстовой ноды
 			return node;
 		}
 
@@ -157,7 +156,6 @@ namespace Parser
 		private Node GoDown(int index, Node node)
 		{
 			CloseCurrentText(index);
-			isInTextNode = false;
 			if(IsInParametr)
 			{
 				node = node.Parent; // спускаемся из параметра
@@ -186,7 +184,6 @@ namespace Parser
 			{
 				// новая нода создана, закрываем текст
 				CloseCurrentText(index);
-				isInTextNode = false;
 				// смещаем на отпарсенный позицию
 				index = CurrentIndex.Value;
 				c = source[index]; // update
@@ -276,6 +273,7 @@ namespace Parser
 				currentText.Body = source.Substring(currentText.Start.Value, length);
 				Console.WriteLine("closed text node [{0}]", currentText.Body);
 			}
+			isInTextNode = false; // HACK по-идее нода должны быть именно закрыта
 		}
 
 		#region Vars

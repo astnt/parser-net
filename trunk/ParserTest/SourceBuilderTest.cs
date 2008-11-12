@@ -161,6 +161,15 @@ namespace ParserTest
 ", actual);
 		}
 
+		[Test]
+		public void SimpleEscapingTest()
+		{
+			string source = @"@main[] $var[select * from list$1A1:H1;sample.xls] $var";
+			string actual = Parse(source);
+			Result(actual);
+			Assert.IsTrue(actual.Contains("select * from list$1A1:H1;sample.xls"));
+		}
+
 		/// <summary>
 		/// Тест переприсваивания.
 		/// </summary>
