@@ -17,6 +17,12 @@ namespace Parser
 		/// В параметре или нет.
 		/// </summary>
 		public bool IsInParametr = false;
+		/// <summary>
+		/// В заэскейплинном месте.
+		/// ^^something.in.escape 
+		/// По-идее разрывается пробельным или еще каким символом.
+		/// </summary>
+		public bool IsInEscape = false;
 
 		/// <summary>
 		/// Start of building source code.
@@ -88,14 +94,14 @@ namespace Parser
 
 				if(c == CharsInfo.CallerDeclarationStart && source[index+1] == CharsInfo.CallerDeclarationStart)
 				{
-//					index += 1;
 					CloseCurrentText(index);
+					IsInEscape = true;
 					continue;
 				}
 				if (c == CharsInfo.CallerDeclarationStart && source[index-1] == CharsInfo.CallerDeclarationStart)
 				{
-//					continue;
 					CloseCurrentText(index);
+					IsInEscape = true;
 					IsDeclarationChar = false;
 				}
 
@@ -107,9 +113,11 @@ namespace Parser
 				c = source[index];
 				// если конец параметра ])}, то спуск вниз
 				if (
-						 c == CharsInfo.ParamsEnd
+					!IsInEscape &&
+					(	 c == CharsInfo.ParamsEnd
 					|| c == CharsInfo.ParamsEvalEnd
 					|| c == CharsInfo.ParamsCodeEnd)
+					)
 				{
 					node = GoDown(index, node);
 				}
@@ -127,6 +135,11 @@ namespace Parser
 				if (index == lastCharIndex)
 				{
 					currentText.Body = source.Substring(currentText.Start.Value); // TODO прерывание
+				}
+				// если пора заканчивать заэскейпливание
+				if(c == ' ' || c == (char)160) // TODO нужно добавить другие символы, вынести в фунцкию
+				{
+					IsInEscape = false;
 				}
 			}
 		}
