@@ -14,5 +14,18 @@ namespace Parser.Syntax
 		public static Char CallerDeclarationStart = '^';
 		public static Char VariableDeclarationStart = '$';
 		public static Char ParametrSeparator = ';';
+
+		/// <summary>
+		/// В символах ]})
+		/// </summary>
+		/// <param name="c"></param>
+		/// <returns></returns>
+		public static bool IsInParamsEndChars(char c)
+		{
+			return c == ParamsEnd
+					|| c == ParamsEvalEnd
+					|| c == ParamsCodeEnd;
+		}
+
 	}
 }
