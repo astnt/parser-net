@@ -105,6 +105,7 @@ namespace Parser
 					continue;
 				}
 				// ^[^]
+				// ^[$]
 				if (
 					(
 						c == CharsInfo.CallerDeclarationStart
@@ -117,7 +118,6 @@ namespace Parser
 					IsInEscape = true;
 					IsDeclarationChar = false;
 				}
-
 				// если объявление чего-нибудь, если синтаксически верно
 				if (IsDeclarationChar)
 				{
@@ -127,6 +127,7 @@ namespace Parser
 				// если конец параметра ])}, то спуск вниз
 				if (!IsInEscape && CharsInfo.IsInParamsEndChars(c))
 				{
+					Console.WriteLine("Go down {0} char'{1}'", index, c);
 					node = GoDown(index, node);
 				}
 				// если в параметре и ';', то разбиваем на новый параметр
@@ -177,10 +178,14 @@ namespace Parser
 		private Node GoDown(int index, Node node)
 		{
 			CloseCurrentText(index);
-			if(IsInParametr)
+			if(IsInParametr) // TODO наверно можно понять по родителю?
 			{
 				node = node.Parent; // спускаемся из параметра
 				IsInParametr = false; // закрываем параметр
+			}
+			if(node as Parametr != null)
+			{
+				node = node.Parent;
 			}
 			// если не корень, спускаемся на ноду ниже
 			if (node.Parent as RootNode == null)
