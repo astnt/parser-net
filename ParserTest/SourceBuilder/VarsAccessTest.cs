@@ -1,10 +1,5 @@
-﻿using System.Text;
-using NUnit.Framework;
-using Parser;
+﻿using NUnit.Framework;
 using Parser.Facade;
-using Parser.Model;
-using Parser.Util;
-using ParserTest;
 
 namespace ParserTest.SourceBuilderTests
 {
@@ -29,6 +24,7 @@ namespace ParserTest.SourceBuilderTests
 			Result(actual);
 			// содержит описание типа, если указана только сама переменная
 			Assert.IsTrue(actual.Contains(new TestModel().GetType().ToString()));
+			Assert.IsTrue(actual.Contains(new TestModel().testMethod()));
 		}
 
 		public class TestModel
