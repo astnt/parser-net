@@ -26,10 +26,12 @@ namespace ParserTest.SourceBuilderTests
 			Assert.IsTrue(actual.Contains(new TestModel().GetType().ToString()));
 			Assert.IsTrue(actual.Contains(new TestModel().testMethod()));
 		}
-
+		/// <summary>
+		/// Тестовая модель для проверки доступа к свойствам.
+		/// </summary>
 		public class TestModel
 		{
-			private string someValue = "text-from-test-model";
+			private string someValue = "text-from-test-model-field";
 			public string SomeValue
 			{
 				get { return someValue; }
@@ -39,6 +41,20 @@ namespace ParserTest.SourceBuilderTests
 			{
 				return "text-from-test-method";
 			}
+		}
+		[Test]
+		public void PropertyAccessingTest()
+		{
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(@"
+@main[]
+	значение $model.SomeValue из поля
+");
+			Model(pf.Dump());
+			pf.AddVar("model", new TestModel());
+			string actual = pf.Run();
+			Result(actual);
+			Assert.IsTrue(actual.Contains((new TestModel()).SomeValue));
 		}
 
 	}

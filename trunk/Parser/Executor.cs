@@ -149,10 +149,21 @@ namespace Parser
 					return;
 				}
 				// когда нет текстового значения выводим текстовое название типа
-				else if(varCall.Name.Length == 1 && variable.Value != null)
+				if(varCall.Name.Length == 1 && variable.Value != null)
 				{
 					String typeName = variable.Value.GetType().ToString();
 					Output.Append(typeName);
+				}
+				if(varCall.Name.Length > 1)
+				{
+					Type type = variable.Value.GetType();
+					// ищем поле
+					PropertyInfo propertyInfo = type.GetProperty(varCall.Name[1]);
+					if (propertyInfo != null)
+					{
+						object getResult = propertyInfo.GetGetMethod().Invoke(variable.Value, null);
+						Output.Append(getResult);
+					}
 				}
 //				else // достаем из контекста если нет value и выполняем (?)
 //				{
@@ -225,10 +236,14 @@ namespace Parser
 				if(var != null && var.Value != null)
 				{
 					Type type = var.Value.GetType();
+					// ищем метод
 					MethodInfo methodInfo = type.GetMethod(caller.Name[1]);
-					object methodResult = methodInfo.Invoke(var.Value, null);
-					Output.Append(methodResult);
-					hasFuncLikeInVar = true;
+					if (methodInfo != null)
+					{
+						object methodResult = methodInfo.Invoke(var.Value, null);
+						Output.Append(methodResult);
+						hasFuncLikeInVar = true;
+					}
 				}
 			}
 			// если есть функции с таким именем как в caller
