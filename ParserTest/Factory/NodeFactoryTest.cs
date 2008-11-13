@@ -78,7 +78,7 @@ namespace ParserTest.Factory
 		{
 			NodeFactory factory;
 			RootNode root;
-			SourceBuilder sb = CreateBaseVars(out factory, out root);
+			Parser.SourceBuilder sb = CreateBaseVars(out factory, out root);
 			sb.source = @"$var";
 			CheckName(sb, factory, root, "var");
 
@@ -87,7 +87,7 @@ namespace ParserTest.Factory
 			CheckName(sb, factory, root, "something");
 		}
 
-		private void CheckName(SourceBuilder sb, NodeFactory factory, RootNode root
+		private void CheckName(Parser.SourceBuilder sb, NodeFactory factory, RootNode root
 			, string expected)
 		{
 			AbstractNode variable;
@@ -103,7 +103,7 @@ namespace ParserTest.Factory
 			}
 		}
 
-		private static SourceBuilder CreateBaseVars(out NodeFactory factory, out RootNode root)
+		private static Parser.SourceBuilder CreateBaseVars(out NodeFactory factory, out RootNode root)
 		{
 			factory = new NodeFactory();
 			SourceBuilder sb = new SourceBuilder();

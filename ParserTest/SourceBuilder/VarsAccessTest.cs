@@ -1,33 +1,49 @@
-﻿using NUnit.Framework;
+﻿using System.Text;
+using NUnit.Framework;
+using Parser;
+using Parser.Facade;
 using Parser.Model;
 using Parser.Util;
 using ParserTest;
 
-namespace Parser.NETTest.SourceBuilder
+namespace ParserTest.SourceBuilderTests
 {
 	[TestFixture]
 	public class VarsAccessTest : AbstractParserTest
 	{
 		[Test]
-		public void SimpleVarTest()
+		public void GenericAccessTest()
 		{
 			string source = @"
 @main[]
-	$sb.ToString()
+	модель - $something вызов метода:
+	^something.testMethod()
 ";
-			Parser.SourceBuilder builder = new Parser.SourceBuilder();
-			builder.Parse(source);
-			Dumper d = new Dumper();
-			Model(d.Dump((RootNode)builder.RootNode));
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(source);
+			Model(pf.Dump());
 
-			Executor exec = new Executor();
-			exec.Run((RootNode)builder.RootNode);
-			string actual = exec.Output.ToString();
+			pf.AddVar("something", new TestModel());
+			string actual = pf.Run();
 
 			Result(actual);
+			// содержит описание типа, если указана только сама переменная
+			Assert.IsTrue(actual.Contains(new TestModel().GetType().ToString()));
 		}
 
-
+		public class TestModel
+		{
+			private string someValue = "text-from-test-model";
+			public string SomeValue
+			{
+				get { return someValue; }
+				set { someValue = value; }
+			}
+			public string testMethod()
+			{
+				return "text-from-test-method";
+			}
+		}
 
 	}
 }

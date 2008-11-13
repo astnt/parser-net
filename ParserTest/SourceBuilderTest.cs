@@ -139,7 +139,7 @@ namespace ParserTest
 
 		private string Parse(string source)
 		{
-			SourceBuilder builder = new SourceBuilder();
+			Parser.SourceBuilder builder = new Parser.SourceBuilder();
 			builder.Parse(source);
 			Dumper d = new Dumper();
 			Model(d.Dump((RootNode)builder.RootNode));
