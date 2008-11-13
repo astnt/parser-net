@@ -154,6 +154,7 @@ namespace Parser
 					String typeName = variable.Value.GetType().ToString();
 					Output.Append(typeName);
 				}
+				// $some.thing.here
 				if(varCall.Name.Length > 1)
 				{
 					Type type = variable.Value.GetType();
@@ -256,7 +257,7 @@ namespace Parser
 			if(!hasFuncLikeInCaller && !hasFuncLikeInVar) // 
 			{
 				throw new NullReferenceException(
-					String.Format(@"Function with name ""{0}"" not found.", caller.Name));
+					String.Format(@"Function or method with name ""{0}"" not found.", caller.Name));
 //				Console.WriteLine(@"Function with name ""{0}"" not found.", caller.Name);
 			}
 			return func;
