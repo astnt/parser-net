@@ -49,6 +49,7 @@
     <Compile Include="BuiltIn\Function\ParserNameAttribute.cs" />
     <Compile Include="Context\ContextManager.cs" />
     <Compile Include="Executor.cs" />
+    <Compile Include="Facade\ParserFacade.cs" />
     <Compile Include="Factory\NodeFactory.cs" />
     <Compile Include="Model\Caller.cs" />
     <Compile Include="Model\MathElement.cs" />

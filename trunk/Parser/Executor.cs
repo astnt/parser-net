@@ -30,6 +30,10 @@ namespace Parser
 		/// Глобальный контекст.
 		/// </summary>
 		private ContextManager contextManager = new ContextManager();
+		public ContextManager ContextManager
+		{
+			get { return contextManager; }
+		}
 		#endregion
 
 		/// <summary>
@@ -97,11 +101,10 @@ namespace Parser
 //					Console.WriteLine("Run caller with name {0}", caller.Name[0]);
 					// Передаем управление найденной функции.
 					Function func = Call(root, caller);
-					if (func.RefObject != null)
+					if (func != null)
 					{
-						Run(func, caller);
+						Run(caller, func);
 					}
-					Run(func.Childs);
 				}
 				Variable variable = node as Variable;
 				if(variable != null)
@@ -114,6 +117,15 @@ namespace Parser
 					Run(variableCall);
 				}
 			}
+		}
+
+		private void Run(Caller caller, Function func)
+		{
+			if (func.RefObject != null)
+			{
+				Run(func, caller);
+			}
+			Run(func.Childs);
 		}
 
 		/// <summary>
@@ -133,12 +145,19 @@ namespace Parser
 				if (stringBuilder != null || stringValue != null)
 				{
 					Output.Append(variable.Value);
+					return;
 				}
-				else // достаем из контекста если нет value
+				// когда нет текстового значения выводим текстовое название типа
+				else if(varCall.Name.Length == 1 && variable.Value != null)
 				{
-					Variable contextVar = contextManager.GetVar(varCall);
-					Run(contextVar);
+					String typeName = variable.Value.GetType().ToString();
+					Output.Append(typeName);
 				}
+//				else // достаем из контекста если нет value и выполняем (?)
+//				{
+//					Variable contextVar = contextManager.GetVar(varCall);
+//					Run(contextVar);
+//				}
 				
 			}
 		}
@@ -184,25 +203,29 @@ namespace Parser
 			Function func = null;
 			Boolean hasFuncLikeInCaller = false;
 			// поиск функции с таким именем
-			foreach (AbstractNode child in node.Childs)
+			if (caller.Name.Length == 1)
 			{
-				func = child as Function;
-				if(func != null && func.Name == caller.Name[0])
+				foreach (AbstractNode child in node.Childs)
 				{
-					hasFuncLikeInCaller = true;
-					break;
+					func = child as Function;
+					if (func != null && func.Name == caller.Name[0])
+					{
+						hasFuncLikeInCaller = true;
+						break;
+					}
 				}
 			}
 			// поиск переменной с таким именем -> вызов ее метода(ов)
 			// TODO вызов метода объекта
 			
+			// если есть функции с таким именем как в caller
 			if (hasFuncLikeInCaller)
 			{
 				List<object> vars = ExtractVars(caller);
 				// кладем в контекст найденной функции
 				contextManager.AddVars(vars, func, caller);
 			}
-			else
+			if(!hasFuncLikeInCaller) // 
 			{
 //				throw new NullReferenceException(
 //					String.Format(@"Function with name ""{0}"" not found.", caller.Name));

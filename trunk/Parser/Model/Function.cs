@@ -4,6 +4,9 @@ using Parser.BuiltIn.Function;
 
 namespace Parser.Model
 {
+	/// <summary>
+	/// Назвал функции, но ближе к "ветке" кода.
+	/// </summary>
 	public class Function : Node
 	{
 
