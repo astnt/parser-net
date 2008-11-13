@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Parser.BuiltIn.Function;
 using Parser.Context;
@@ -8,7 +9,7 @@ using Parser.Model;
 namespace Parser
 {
 	/// <summary>
-	/// Выполняет чтение и исполнение из потокобезопасного
+	/// Выполняет чтение и исполнение из
 	/// дерева-исходника парсера.
 	/// </summary>
 	public class Executor
@@ -202,6 +203,7 @@ namespace Parser
 		{
 			Function func = null;
 			Boolean hasFuncLikeInCaller = false;
+			Boolean hasFuncLikeInVar = false;
 			// поиск функции с таким именем
 			if (caller.Name.Length == 1)
 			{
@@ -217,7 +219,18 @@ namespace Parser
 			}
 			// поиск переменной с таким именем -> вызов ее метода(ов)
 			// TODO вызов метода объекта
-			
+			if(caller.Name.Length > 1)
+			{
+				Variable var = contextManager.GetVar(caller.Name[0]);
+				if(var != null && var.Value != null)
+				{
+					Type type = var.Value.GetType();
+					MethodInfo methodInfo = type.GetMethod(caller.Name[1]);
+					object methodResult = methodInfo.Invoke(var.Value, null);
+					Output.Append(methodResult);
+					hasFuncLikeInVar = true;
+				}
+			}
 			// если есть функции с таким именем как в caller
 			if (hasFuncLikeInCaller)
 			{
@@ -225,11 +238,11 @@ namespace Parser
 				// кладем в контекст найденной функции
 				contextManager.AddVars(vars, func, caller);
 			}
-			if(!hasFuncLikeInCaller) // 
+			if(!hasFuncLikeInCaller && !hasFuncLikeInVar) // 
 			{
-//				throw new NullReferenceException(
-//					String.Format(@"Function with name ""{0}"" not found.", caller.Name));
-				Console.WriteLine(@"Function with name ""{0}"" not found.", caller.Name);
+				throw new NullReferenceException(
+					String.Format(@"Function with name ""{0}"" not found.", caller.Name));
+//				Console.WriteLine(@"Function with name ""{0}"" not found.", caller.Name);
 			}
 			return func;
 		}

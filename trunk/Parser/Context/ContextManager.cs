@@ -5,7 +5,7 @@ using Parser.Model;
 namespace Parser.Context
 {
 	/// <summary>
-	/// Управление контекстом.
+	/// Управление контекстом переменых.
 	/// </summary>
 	public class ContextManager
 	{
@@ -39,7 +39,15 @@ namespace Parser.Context
 				contexts[GLOBAL].Add(variable.Name, variable);
 			}
 		}
-
+		public Variable GetVar(string name)
+		{
+			Variable var = null;
+			if (contexts[GLOBAL].ContainsKey(name))
+			{
+				var = contexts[GLOBAL][name];
+			}
+			return var;
+		}
 		/// <summary>
 		/// Получить значение переменной.
 		/// </summary>
@@ -64,7 +72,6 @@ namespace Parser.Context
 			}
 			return null;
 		}
-
 		/// <summary>
 		/// Синхронизирует передаваемые параметры с принимаемыми,
 		/// добавляет в контекст функции переменные.
