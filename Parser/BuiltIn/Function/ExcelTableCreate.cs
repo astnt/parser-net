@@ -12,6 +12,12 @@ namespace Parser.BuiltIn.Function
 		public object Compute(List<object> vars)
 		{
 			// TODO
+			string s = "";
+			foreach (object o in vars)
+			{
+				s += ";"+o;
+			}
+			Console.WriteLine("table::excel[{0}]",s);
 			return String.Empty;
 		}
 	}
