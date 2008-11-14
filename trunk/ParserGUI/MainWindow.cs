@@ -15,13 +15,19 @@ namespace ParserGUI
 
 		private void MainWindow_Load(object sender, EventArgs e)
 		{
+//			textBoxSource.Text = @"
+//@main[]
+//	$myvar[xxx]
+//	test is ^test[what;777]
+//
+//@test[word;number]
+//	tested $word $number $myvar
+//";
 			textBoxSource.Text = @"
 @main[]
-	$myvar[xxx]
-	test is ^test[what;777]
-
-@test[word;number]
-	tested $word $number $myvar
+	$table[^table::excel[select * from list1^$A1:H1;sample.xls ]]
+	some text
+	$table
 ";
 		}
 
