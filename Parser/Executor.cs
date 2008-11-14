@@ -82,9 +82,11 @@ namespace Parser
 			{
 				// добавляем в текущий вывод
 				Output.Append(result);
+				return;
 			}
 			// UNDONE
 			// если что-то еще?
+			Output.Append(something.GetType().ToString());
 		}
 
 		/// <summary>

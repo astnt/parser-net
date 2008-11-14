@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Parser.NET.Util.Wrapper;
 
 namespace Parser.BuiltIn.Function
 {
+	/// <summary>
+	/// Конструктор таблицы из excel.
+	/// </summary>
 	[ParserName("table::excel")]
 	public class ExcelTableCreate : ICompute
 	{
@@ -20,7 +24,10 @@ namespace Parser.BuiltIn.Function
 				s += ";"+o;
 			}
 			Console.WriteLine("table::excel[{0}]",s);
-			return String.Empty;
+			ExcelWrapper ew = new ExcelWrapper();
+//			ew.
+			return new List<int>();
+//			return String.Empty;
 		}
 	}
 }
