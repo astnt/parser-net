@@ -25,7 +25,7 @@ namespace ParserGUI
 //";
 			textBoxSource.Text = @"
 @main[]
-	$table[^table::excel[select * from list1^$A1:H1;sample.xls ]]
+	$table[^table::excel[SELECT * FROM [Лист1^$A5:A7];../../../ParserTest/resources/sample.xls ]]
 	some text
 	$table
 ";
@@ -48,7 +48,8 @@ namespace ParserGUI
 			}
 			catch(Exception ex)
 			{
-				actual = ex.StackTrace;
+				actual = "<h1>" + ex.Message + "</h1>"
+				+ ex.StackTrace;
 			}
 			// System.Windows.Forms.WebBrowser
 			webBrowserOutPut.DocumentText =
