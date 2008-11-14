@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Parser;
 using Parser.Model;
 using Parser.NET.Model;
@@ -18,6 +19,12 @@ namespace Parser.BuiltIn.Function
 		{
 			// param.Names[0] - это "параметр" ^eval(45-45*12), то есть "45-45*12"
 			string expressionInText = vars[0] as string;
+			StringBuilder expressionIn = vars[0] as StringBuilder;
+			// TODO ниже - корявая конструкция
+			if (expressionIn != null)
+			{
+				expressionInText = expressionIn.ToString();
+			}
 			if(expressionInText != null)
 			{
 				return Compute(GetExpression(expressionInText)).ToString();

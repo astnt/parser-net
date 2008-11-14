@@ -74,13 +74,17 @@ namespace Parser
 			ICompute computeFunc = (ICompute) func.RefObject.Invoke(new object[0]);
 			// получаем переменные
 			List<object> vars = ExtractVars(caller);
-			// 
+			// что-то получаем,
 			object something = computeFunc.Compute(vars);
+			// если строка
 			string result = something as String;
 			if(result != null)
 			{
+				// добавляем в текущий вывод
 				Output.Append(result);
 			}
+			// UNDONE
+			// если что-то еще?
 		}
 
 		/// <summary>
@@ -286,15 +290,17 @@ namespace Parser
 
 		private object ExtractVar(IList<AbstractNode> childs)
 		{
+			StringBuilder textResult = new StringBuilder();
 			foreach (AbstractNode node in childs)
 			{
 				Text text = node as Text; // FIXME повторение
 				if (text != null)
 				{
-					return text.Body; // WARN возможно не правильно
+					textResult.Append(text.Body); // WARN возможно не правильно
 				}
 			}
-			return null;
+			// UNDONE результаты другого типа 
+			return textResult;
 		}
 	}
 }
