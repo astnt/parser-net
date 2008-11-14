@@ -101,7 +101,7 @@ namespace ParserTest
 		{
 			string actual = Parse(@"
 @main[]
-	$table[^table::excel[select * from list1^$A1:H1;sample.xls ]]
+	$table[^table::excel[SELECT * FROM [Лист1^$A5:A7];../../resources/sample.xls ]]
 	some text
 	^table.menu{
 		<cell>$table.0</cell>

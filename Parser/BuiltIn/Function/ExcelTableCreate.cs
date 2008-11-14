@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Parser.NET.Util.Wrapper;
 
 namespace Parser.BuiltIn.Function
@@ -21,12 +22,17 @@ namespace Parser.BuiltIn.Function
 			string s = "";
 			foreach (object o in vars)
 			{
-				s += ";"+o;
+				s += ";" + o.ToString().Trim();
 			}
 			Console.WriteLine("table::excel[{0}]",s);
+			Console.WriteLine("query '{0}'", vars[0]);
+			File.ReadAllText(vars[1].ToString().Trim());
 			ExcelWrapper ew = new ExcelWrapper();
-//			ew.
-			return new List<int>();
+			ew.Load(
+				vars[1].ToString()
+				, vars[0].ToString().Trim() // путь к файлу
+			);
+			return ew;
 //			return String.Empty;
 		}
 	}
