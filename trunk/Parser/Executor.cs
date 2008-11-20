@@ -260,7 +260,7 @@ namespace Parser
 					MethodInfo methodInfo = type.GetMethod(caller.Name[1]);
 					if (methodInfo != null)
 					{
-						object methodResult = methodInfo.Invoke(var.Value, null);
+						object methodResult = methodInfo.Invoke(var.Value, ExtractVars(caller).ToArray());
 						TextOutput.Append(methodResult);
 						hasFuncLikeInVar = true;
 					}
