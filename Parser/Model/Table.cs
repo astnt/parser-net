@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace Parser.Model
 {
@@ -42,9 +43,8 @@ namespace Parser.Model
 		///		$table.0
 		/// }
 		/// </summary>
-		/// <param name="param"></param>
 		/// <returns></returns>
-		public Row<T> menu(Parametr param)
+		public Row<T> menu(StringBuilder sb)
 		{
 			Row<T> row = Rows[currentRow];
 			return row;

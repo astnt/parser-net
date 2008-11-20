@@ -24,8 +24,8 @@ namespace ParserTest.Model
 			Console.WriteLine(t[1, 0]); Assert.AreEqual("third", t[1, 0]);
 			Console.WriteLine(t[1, 1]); Assert.AreEqual("fourth", t[1, 1]);
 			// TODO assert foreach
-			Parametr param = new Parametr();
-			t.menu(param);
+//			Parametr param = new Parametr();
+//			t.menu(param);
 		}
 	}
 }
