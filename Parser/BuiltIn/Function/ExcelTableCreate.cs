@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using Parser.Model;
 using Parser.NET.Util.Wrapper;
 
 namespace Parser.BuiltIn.Function
@@ -32,7 +34,19 @@ namespace Parser.BuiltIn.Function
 				vars[1].ToString()
 				, vars[0].ToString().Trim() // путь к файлу
 			);
-			return ew;
+
+			Table<string> table = new Table<string>();
+			foreach (DataRow row in ew.Table.Rows)
+			{
+				Row<string> r = new Row<string>();
+				foreach (object item in row.ItemArray)
+				{
+					r.Cells.Add((string) item);
+				}
+				table.Rows.Add(r);
+			}
+			return table;
+//			return ew;
 //			return String.Empty;
 		}
 	}

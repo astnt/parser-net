@@ -19,11 +19,13 @@ namespace ParserTest.Model
 			//{
 				
 			//}
-			Console.WriteLine(t[0, 0]);
-			Console.WriteLine(t[0, 1]);
-			Console.WriteLine(t[1, 0]);
-			Console.WriteLine(t[1, 1]);
+			Console.WriteLine(t[0, 0]); Assert.AreEqual("first", t[0, 0]);
+			Console.WriteLine(t[0, 1]); Assert.AreEqual("second", t[0, 1]);
+			Console.WriteLine(t[1, 0]); Assert.AreEqual("third", t[1, 0]);
+			Console.WriteLine(t[1, 1]); Assert.AreEqual("fourth", t[1, 1]);
 			// TODO assert foreach
+			Parametr param = new Parametr();
+			t.menu(param);
 		}
 	}
 }
