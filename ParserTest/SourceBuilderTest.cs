@@ -35,7 +35,7 @@ namespace ParserTest
 			// запускаем выполнение ноды
 			exec.Run((RootNode)builder.RootNode);
 			// полученые строковый результат
-			string actual = exec.Output.ToString();
+			string actual = exec.TextOutput.ToString();
 			// выводим результат
 			Result(actual);
 			Assert.AreEqual(@"
@@ -64,7 +64,7 @@ namespace ParserTest
 			// TODO Assert для структуры
 			Executor exec = new Executor();
 			exec.Run((RootNode) builder.RootNode);
-			string actual = exec.Output.ToString();
+			string actual = exec.TextOutput.ToString();
 			Result(actual);
 			Assert.AreEqual(@"
 	
@@ -89,7 +89,7 @@ namespace ParserTest
 
 			Executor exec = new Executor();
 			exec.Run((RootNode)builder.RootNode);
-			string actual = exec.Output.ToString();
+			string actual = exec.TextOutput.ToString();
 			Result(actual);
 			Assert.AreEqual(@"
 	2 + 2 = 4
@@ -146,7 +146,7 @@ namespace ParserTest
 
 			Executor exec = new Executor();
 			exec.Run((RootNode)builder.RootNode);
-			return exec.Output.ToString();
+			return exec.TextOutput.ToString();
 		}
 
 		[Test]

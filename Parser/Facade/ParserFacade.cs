@@ -51,7 +51,7 @@ namespace Parser.Facade
 		public string Run()
 		{
 			exec.Run((RootNode)builder.RootNode);
-			return exec.Output.ToString();
+			return exec.TextOutput.ToString();
 		}
 
 	}

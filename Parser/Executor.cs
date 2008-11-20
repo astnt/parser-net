@@ -22,10 +22,14 @@ namespace Parser
 		private StringBuilder defaultOutput = new StringBuilder();
 
 		/// <summary>
-		/// Текстовый результат.
+		/// Текстовый вывод.
 		/// TODO добавить getter и setter
 		/// </summary>
-		public StringBuilder Output;
+		public StringBuilder TextOutput;
+		/// <summary>
+		/// Объектный вывод.
+		/// </summary>
+		public object Output;
 		private RootNode root;
 		/// <summary>
 		/// Глобальный контекст.
@@ -43,7 +47,7 @@ namespace Parser
 		/// <param name="node">Корневая нода дерева.</param>
 		public void Run(RootNode node)
 		{
-			Output = defaultOutput;
+			TextOutput = defaultOutput;
 			root = node;
 			bool hasFunc = false;
 			foreach (AbstractNode child in node.Childs)
@@ -81,12 +85,14 @@ namespace Parser
 			if(result != null)
 			{
 				// добавляем в текущий вывод
-				Output.Append(result);
+				TextOutput.Append(result);
 				return;
 			}
 			// UNDONE
 			// если что-то еще?
-			Output.Append(something.GetType().ToString());
+			Output = something;
+			// вариант для отладки
+			// TextOutput.Append(something.GetType().ToString());
 		}
 
 		/// <summary>
@@ -100,7 +106,7 @@ namespace Parser
 				Text text = node as Text;
 				if(text != null)
 				{
-					Output.Append(text.Body);
+					TextOutput.Append(text.Body);
 				}
 				Caller caller = node as Caller;
 				if(caller != null)
@@ -151,14 +157,14 @@ namespace Parser
 				String stringValue = variable.Value as String;
 				if (stringBuilder != null || stringValue != null)
 				{
-					Output.Append(variable.Value);
+					TextOutput.Append(variable.Value);
 					return;
 				}
 				// когда нет текстового значения выводим текстовое название типа
 				if(varCall.Name.Length == 1 && variable.Value != null)
 				{
 					String typeName = variable.Value.GetType().ToString();
-					Output.Append(typeName);
+					TextOutput.Append(typeName);
 				}
 				// $some.thing.here
 				if(varCall.Name.Length > 1)
@@ -180,10 +186,10 @@ namespace Parser
 					}
 					if (!string.IsNullOrEmpty(result as String))
 					{
-						Output.Append(result);
+						TextOutput.Append(result);
 					}
 					else if (result != null) {
-						Output.Append(result.ToString());
+						TextOutput.Append(result.ToString());
 					}
 			}
 			}
@@ -208,12 +214,11 @@ namespace Parser
 				contextVariable.Name = variable.Name;
 				StringBuilder variableOutput = new StringBuilder();
 				
-				Output = variableOutput; // меняем "поток" вывода
-//				Run(variable.Childs); // пишется в "поток" переменной
+				TextOutput = variableOutput; // меняем "поток" вывода
 				Run((Parametr)variable.Childs[0]);
-				contextVariable.Value = variableOutput; // присваеваем значение пременной, кладем в контекст
-				
-				Output = defaultOutput; // возвращаем дефолтный поток вывода
+
+				contextVariable.Value = Output ?? TextOutput;
+				TextOutput = defaultOutput; // возвращаем дефолтный поток вывода				
 				contextManager.AddVar(contextVariable); // добавляем в контекст
 				// TODO VariableCall?
 			}
@@ -256,7 +261,7 @@ namespace Parser
 					if (methodInfo != null)
 					{
 						object methodResult = methodInfo.Invoke(var.Value, null);
-						Output.Append(methodResult);
+						TextOutput.Append(methodResult);
 						hasFuncLikeInVar = true;
 					}
 				}
