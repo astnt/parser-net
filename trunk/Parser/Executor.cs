@@ -163,21 +163,29 @@ namespace Parser
 				// $some.thing.here
 				if(varCall.Name.Length > 1)
 				{
+					object result = null;
 					Type type = variable.Value.GetType();
 					// ищем поле
-					PropertyInfo propertyInfo = type.GetProperty(varCall.Name[1]);
-					if (propertyInfo != null)
+					int index = 1;
+					foreach (string name in varCall.Name)
 					{
-						object getResult = propertyInfo.GetGetMethod().Invoke(variable.Value, null);
-						Output.Append(getResult);
+						PropertyInfo propertyInfo = type.GetProperty(name);
+						// если последний в цепочке
+						if (propertyInfo != null)
+						{
+							result = propertyInfo.GetGetMethod().Invoke(variable.Value, null);
+						}
+						if (result != null) type = result.GetType();
+						index += 1;
 					}
-				}
-//				else // достаем из контекста если нет value и выполняем (?)
-//				{
-//					Variable contextVar = contextManager.GetVar(varCall);
-//					Run(contextVar);
-//				}
-				
+					if (!string.IsNullOrEmpty(result as String))
+					{
+						Output.Append(result);
+					}
+					else if (result != null) {
+						Output.Append(result.ToString());
+					}
+			}
 			}
 		}
 

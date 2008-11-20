@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Parser.Facade;
 
 namespace ParserTest.SourceBuilderTests
@@ -37,6 +38,10 @@ namespace ParserTest.SourceBuilderTests
 				get { return someValue; }
 				set { someValue = value; }
 			}
+			public List<int> Some
+			{
+				get { return new List<int>(); }
+			}
 			public string testMethod()
 			{
 				return "text-from-test-method";
@@ -48,7 +53,8 @@ namespace ParserTest.SourceBuilderTests
 			ParserFacade pf = new ParserFacade();
 			pf.Parse(@"
 @main[]
-	значение $model.SomeValue из поля
+цепочка $model.Some.Length - длинна List 	
+значение $model.SomeValue из поля
 ");
 			Model(pf.Dump());
 			pf.AddVar("model", new TestModel());
