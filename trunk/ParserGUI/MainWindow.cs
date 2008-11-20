@@ -44,7 +44,7 @@ namespace ParserGUI
 			try
 			{
 				exec.Run((RootNode) builder.RootNode);
-				actual = exec.Output.ToString();
+				actual = exec.TextOutput.ToString();
 			}
 			catch(Exception ex)
 			{
