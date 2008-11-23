@@ -108,18 +108,9 @@ namespace ParserTest
 	}
 ");
 			Result(actual);
-			Assert.AreEqual(@"
-    
-	some text
-	
-		<cell>Москва / МО</cell>
-    
-		<cell>Спб / Область</cell>
-    
-		<cell>Регионы</cell>
-    
-
-", actual);
+			Assert.IsTrue(actual.Contains("<cell>Москва / МО</cell>"));
+			Assert.IsTrue(actual.Contains("<cell>Спб / Область</cell>"));
+			Assert.IsTrue(actual.Contains("<cell>Регионы</cell>"));
 		}
 
 		[Test]
