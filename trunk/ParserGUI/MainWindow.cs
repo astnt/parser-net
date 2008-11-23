@@ -58,20 +58,23 @@ namespace ParserGUI
 
 		private void buttonParse_Click(object sender, EventArgs e)
 		{
-
+			DateTime sourceBuildStart = DateTime.Now;
 			SourceBuilder builder = new SourceBuilder();
-			
 			builder.Parse(textBoxSource.Text);
-			Dumper d = new Dumper();
+			double sourceBuildEnd = DateTime.Now.Subtract(sourceBuildStart).TotalMilliseconds;
 
+			Dumper d = new Dumper();
 			string dump = d.Dump((RootNode)builder.RootNode).ToString();
 
-			Executor exec = new Executor();
+			double execEnd = 0;
 			string actual;
 			try
 			{
+				DateTime execStart = DateTime.Now;
+				Executor exec = new Executor();
 				exec.Run((RootNode) builder.RootNode);
 				actual = exec.TextOutput.ToString();
+				execEnd = DateTime.Now.Subtract(execStart).TotalMilliseconds;
 			}
 			catch(Exception ex)
 			{
@@ -80,7 +83,8 @@ namespace ParserGUI
 			}
 			// System.Windows.Forms.WebBrowser
 			webBrowserOutPut.DocumentText =
-				String.Format("{0}<hr/><pre>{1}</pre>", actual, dump);
+				String.Format("{0}<hr/>parse time {2} ms, exec time {3}<hr/><pre>{1}</pre>", actual, dump
+					, sourceBuildEnd, execEnd);
 			
 		}
 	}
