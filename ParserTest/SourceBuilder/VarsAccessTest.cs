@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 using NUnit.Framework;
 using Parser.Facade;
 using Parser.Model;
