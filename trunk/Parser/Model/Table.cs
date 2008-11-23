@@ -7,7 +7,7 @@ namespace Parser.Model
 	/// Обобщенное хранение в таблице.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class Table<T>
+	public class Table<T> : IExecutable
 	{
 		private List<Row<T>> rows = new List<Row<T>>();
 		public List<Row<T>> Rows
@@ -48,6 +48,12 @@ namespace Parser.Model
 		{
 			Row<T> row = Rows[currentRow];
 			return row;
+		}
+
+		private Executor exec;
+		public void AddExecutor(Executor executor)
+		{
+			exec = executor;
 		}
 	}
 	public class Row<T>
