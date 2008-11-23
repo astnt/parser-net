@@ -21,14 +21,14 @@ namespace Parser.BuiltIn.Function
 		public object Compute(List<object> vars)
 		{
 			// TODO
-			string s = "";
-			foreach (object o in vars)
-			{
-				s += ";" + o.ToString().Trim();
-			}
-			Console.WriteLine("table::excel[{0}]",s);
-			Console.WriteLine("query '{0}'", vars[0]);
-			File.ReadAllText(vars[1].ToString().Trim());
+//			string s = "";
+//			foreach (object o in vars)
+//			{
+//				s += ";" + o.ToString().Trim();
+//			}
+//			Console.WriteLine("table::excel[{0}]",s);
+//			Console.WriteLine("query '{0}'", vars[0]);
+//			File.ReadAllText(vars[1].ToString().Trim());
 			ExcelWrapper ew = new ExcelWrapper();
 			ew.Load(
 				vars[1].ToString()
