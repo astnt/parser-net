@@ -99,7 +99,7 @@ namespace Parser
 		/// Разбираем детей и выясняем, что с ними делать.
 		/// </summary>
 		/// <param name="childs"></param>
-		private void Run(IList<AbstractNode> childs)
+		internal void Run(IList<AbstractNode> childs)
 		{
 			foreach (AbstractNode node in childs)
 			{
@@ -172,17 +172,20 @@ namespace Parser
 					object result = null;
 					Type type = variable.Value.GetType();
 					// ищем поле
-					int index = 1;
 					foreach (string name in varCall.Name)
 					{
 						PropertyInfo propertyInfo = type.GetProperty(name);
-						// если последний в цепочке
 						if (propertyInfo != null)
 						{
 							result = propertyInfo.GetGetMethod().Invoke(variable.Value, null);
 						}
+//						int t = type.
+						if (type.GetDefaultMembers().Length > 0)
+						{
+							MemberInfo indexer = type.GetDefaultMembers()[0];
+//							indexer.ReflectedType.
+						}
 						if (result != null) type = result.GetType();
-						index += 1;
 					}
 					if (!string.IsNullOrEmpty(result as String))
 					{
@@ -220,6 +223,11 @@ namespace Parser
 				contextVariable.Value = Output ?? TextOutput;
 				TextOutput = defaultOutput; // возвращаем дефолтный поток вывода				
 				contextManager.AddVar(contextVariable); // добавляем в контекст
+				if(contextVariable.Value as IExecutable != null)
+				{
+					// добавляем ссылку на Executor, для дальнейшего выполнения дерева.
+					((IExecutable)contextVariable.Value).AddExecutor(this);
+				}
 				// TODO VariableCall?
 			}
 		}
@@ -257,10 +265,22 @@ namespace Parser
 				{
 					Type type = var.Value.GetType();
 					// ищем метод
+//					foreach(string name in caller.Name)
+//					{
+//						
+//					}
 					MethodInfo methodInfo = type.GetMethod(caller.Name[1]);
 					if (methodInfo != null)
 					{
-						object methodResult = methodInfo.Invoke(var.Value, ExtractVars(caller).ToArray());
+						object methodResult;
+						if (var.Value as IExecutable != null) // если относиться к типам выполняющим парсерное дерево,
+						{
+							methodResult = methodInfo.Invoke(var.Value, new object[] { caller.Childs[0] });
+						}
+						else // для остальных
+						{
+							methodResult = methodInfo.Invoke(var.Value, ExtractVars(caller).ToArray());
+						}
 						TextOutput.Append(methodResult);
 						hasFuncLikeInVar = true;
 					}

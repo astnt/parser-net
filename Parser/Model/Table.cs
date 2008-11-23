@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Parser.Model
@@ -28,15 +29,23 @@ namespace Parser.Model
 			}
 			Rows[row].Cells[col] = value;
 		}
-		public T this[int row, int col]
+		/// <summary>
+		/// TODO добраться до индексера из отражения.
+		/// </summary>
+		public T Row(Parametr parametr)
 		{
-			get { return Rows[row].Cells[col]; }
+			Text text = (Text) parametr.Childs[0];
+			return this[Int32.Parse(text.Body)];
 		}
 		public T this[int col]
 		{
 			get { return rows[currentRow].Cells[col]; }
 		}
-		private int currentRow = 0;
+		public T this[int row, int col]
+		{
+			get { return Rows[row].Cells[col]; }
+		}
+		private int currentRow;
 		/// <summary>
 		/// $table[^table::create[]]
 		/// ^table.menu{
@@ -44,10 +53,15 @@ namespace Parser.Model
 		/// }
 		/// </summary>
 		/// <returns></returns>
-		public Row<T> menu(StringBuilder sb)
+		public void menu(Parametr parametr)
 		{
-			Row<T> row = Rows[currentRow];
-			return row;
+			currentRow = 0;
+			foreach (Row<T> row in rows)
+			{
+				Row<T> selectedRow = row;
+				exec.Run(parametr.Childs);
+				currentRow += 1; // для индексера
+			}
 		}
 
 		private Executor exec;

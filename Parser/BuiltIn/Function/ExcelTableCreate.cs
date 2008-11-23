@@ -41,7 +41,7 @@ namespace Parser.BuiltIn.Function
 				Row<string> r = new Row<string>();
 				foreach (object item in row.ItemArray)
 				{
-					r.Cells.Add((string) item);
+					r.Cells.Add(item.ToString()); // HACK ? Возможно лучше как полученный объекто  хранить
 				}
 				table.Rows.Add(r);
 			}
