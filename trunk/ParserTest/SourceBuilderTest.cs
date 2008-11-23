@@ -101,17 +101,24 @@ namespace ParserTest
 		{
 			string actual = Parse(@"
 @main[]
-	$table[^table::excel[SELECT * FROM [Лист1^$A5:A7];../../resources/sample.xls ]]
+	$table[^table::excel[SELECT * FROM [Лист1^$A4:A7];../../resources/sample.xls ]]
 	some text
 	^table.menu{
-		<cell>$table.0</cell>
+		<cell>^table.Row(0)</cell>
 	}
 ");
 			Result(actual);
 			Assert.AreEqual(@"
-		<cell>one<cell>
-		<cell>two<cell>
-		<cell>three<cell>
+    
+	some text
+	
+		<cell>Москва / МО</cell>
+    
+		<cell>Спб / Область</cell>
+    
+		<cell>Регионы</cell>
+    
+
 ", actual);
 		}
 
