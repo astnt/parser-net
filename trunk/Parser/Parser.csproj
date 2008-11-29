@@ -8,8 +8,8 @@
     <ProjectGuid>{02EE715B-C8B1-40C0-9085-2D325F53081F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Parser.NET</RootNamespace>
-    <AssemblyName>Parser.NET</AssemblyName>
+    <RootNamespace>Parser</RootNamespace>
+    <AssemblyName>Parser</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,6 +46,7 @@
     <Compile Include="BuiltIn\Function\Eval.cs" />
     <Compile Include="BuiltIn\Function\ExcelTableCreate.cs" />
     <Compile Include="BuiltIn\Function\ICompute.cs" />
+    <Compile Include="BuiltIn\Function\IfCondition.cs" />
     <Compile Include="BuiltIn\Function\ParserNameAttribute.cs" />
     <Compile Include="Context\ContextManager.cs" />
     <Compile Include="Executor.cs" />

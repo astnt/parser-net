@@ -50,6 +50,7 @@ namespace Parser
 			Assembly assembly = Assembly.GetExecutingAssembly();
 			AddBuiltInMember("Parser.BuiltIn.Function.Eval", assembly);
 			AddBuiltInMember("Parser.BuiltIn.Function.ExcelTableCreate", assembly);
+			AddBuiltInMember("Parser.BuiltIn.Function.IfCondition", assembly);
 		}
 
 		private void AddBuiltInMember(string namespaceName, Assembly assembly){
