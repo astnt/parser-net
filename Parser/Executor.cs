@@ -75,11 +75,15 @@ namespace Parser
 		/// <param name="caller"></param>
 		private void Run(Function func, Caller caller)
 		{
-			ICompute computeFunc = (ICompute) func.RefObject.Invoke(new object[0]);
+			ICompute computeFunc = func.RefObject.Invoke(new object[0]) as ICompute;
 			// получаем переменные
 			List<object> vars = ExtractVars(caller);
-			// что-то получаем,
-			object something = computeFunc.Compute(vars);
+
+			object something = null;
+			if (computeFunc != null)
+			{
+				something = computeFunc.Compute(vars);
+			}
 			// если строка
 			string result = something as String;
 			if(result != null)
