@@ -78,18 +78,15 @@ namespace Parser
 			ICompute computeFunc = func.RefObject.Invoke(new object[0]) as ICompute;
 			// получаем переменные
 			List<object> vars = ExtractVars(caller);
-
 			object something = null;
 			if (computeFunc != null)
 			{
 				something = computeFunc.Compute(vars);
 			}
-			// если строка
-			string result = something as String;
-			if(result != null)
+			if(!string.IsNullOrEmpty(something as String))
 			{
 				// добавляем в текущий вывод
-				TextOutput.Append(result);
+				TextOutput.Append(something);
 				return;
 			}
 			// UNDONE
