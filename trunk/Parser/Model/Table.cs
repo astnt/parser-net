@@ -32,7 +32,7 @@ namespace Parser.Model
 		/// <summary>
 		/// TODO добраться до индексера из отражения.
 		/// </summary>
-		public T Row(Parametr parametr)
+		public T column(Parametr parametr)
 		{
 			Text text = (Text) parametr.Childs[0];
 			return this[Int32.Parse(text.Body)];
