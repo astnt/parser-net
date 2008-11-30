@@ -32,7 +32,7 @@ namespace ParserGUI
 <table border=""1"">
 ^table.menu{
 <tr>
-<td> ^table.Row(0) </td><td> ^table.Row(1) </td>
+<td>^table.column[0]</td><td>^table.column[1]</td>
 </tr>
 }
 </table>
@@ -46,7 +46,7 @@ namespace ParserGUI
 <table border=""1"">
 ^table2.menu{
 <tr>
-<td> ^table2.Row(0) </td>
+<td>^table2.column[0]</td>
 </tr>
 }
 </table>
@@ -64,7 +64,10 @@ namespace ParserGUI
 			double sourceBuildEnd = DateTime.Now.Subtract(sourceBuildStart).TotalMilliseconds;
 
 			Dumper d = new Dumper();
-			string dump = d.Dump((RootNode)builder.RootNode).ToString();
+			string dump = d.Dump((RootNode)builder.RootNode).ToString()
+				.Replace("<", @"&lt;")
+				.Replace(">", @"&gt;")
+				;
 
 			double execEnd = 0;
 			string actual;

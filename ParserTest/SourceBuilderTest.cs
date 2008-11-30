@@ -104,7 +104,7 @@ namespace ParserTest
 	$table[^table::excel[SELECT * FROM [Лист1^$A4:A7];../../resources/sample.xls ]]
 	some text
 	^table.menu{
-		<cell>^table.Row(0)</cell>
+		<cell>^table.column(0)</cell>
 	}
 ");
 			Result(actual);
