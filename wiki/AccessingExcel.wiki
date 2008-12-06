@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary via ADO.NET
 #labels Featured
 
 = Accessing excel via ADO.NET =
