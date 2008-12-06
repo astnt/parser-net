@@ -76,7 +76,7 @@ namespace Parser
 		private void Run(Function func, Caller caller)
 		{
 			ICompute computeFunc = func.RefObject.Invoke(new object[0]) as ICompute;
-			// получаем переменные
+			// получаем переменные // вызов исполняемой фунции
 			List<object> vars = ExtractVars(caller);
 			object something = null;
 			if (computeFunc != null)
@@ -280,6 +280,7 @@ namespace Parser
 						}
 						else // для остальных
 						{
+							// превращаем в стандартный объект для "вне" парсерных методов
 							methodResult = methodInfo.Invoke(var.Value, ExtractVars(caller).ToArray());
 						}
 						TextOutput.Append(methodResult);
@@ -288,8 +289,9 @@ namespace Parser
 				}
 			}
 			// если есть функции с таким именем как в caller
-			if (hasFuncLikeInCaller)
+			if (hasFuncLikeInCaller && func.RefObject == null)
 			{
+				// вызов когда добавляем в контекст
 				List<object> vars = ExtractVars(caller);
 				// кладем в контекст найденной функции
 				contextManager.AddVars(vars, func, caller);
@@ -326,17 +328,23 @@ namespace Parser
 
 		private object ExtractVar(IList<AbstractNode> childs)
 		{
-			StringBuilder textResult = new StringBuilder();
-			foreach (AbstractNode node in childs)
-			{
-				Text text = node as Text; // FIXME повторение
-				if (text != null)
-				{
-					textResult.Append(text.Body); // WARN возможно не правильно
-				}
-			}
+//			foreach (AbstractNode node in childs)
+//			{
+//				Text text = node as Text; // FIXME повторение
+//				if (text != null)
+//				{
+//					textResult.Append(text.Body); // WARN возможно не правильно
+//				}
+//			}
+			// обнулили
+			TextOutput = new StringBuilder();
+			Run(childs);
+			Console.WriteLine(">{0},parent[{1}]", TextOutput
+				, ((Caller)childs[0].Parent.Parent).Name[0]);
+			StringBuilder stringBuilder = new StringBuilder(TextOutput.ToString());
+			TextOutput = defaultOutput;
 			// UNDONE результаты другого типа 
-			return textResult;
+			return stringBuilder;
 		}
 	}
 }
