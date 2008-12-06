@@ -1,9 +1,10 @@
 #summary One-sentence summary of this page.
 #labels Featured
 
-= Introduction =
+= Accessing excel via ADO.NET =
 
-Accessing excel:
+Sample code is:
+
 {{{
 @main[]
 	$table[^table::excel[SELECT * FROM [Лист1^$A4:A7];../../resources/sample.xls ]]
@@ -12,4 +13,3 @@ Accessing excel:
 		<cell>^table.column[0]</cell>
 	}
 }}}
-
