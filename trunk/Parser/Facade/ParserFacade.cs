@@ -12,14 +12,21 @@ namespace Parser.Facade
 	{
 		private SourceBuilder builder;
 		private Executor exec;
+
+		public SourceBuilder Builder
+		{
+			get { return builder; }
+			set { builder = value; }
+		}
+
 		/// <summary>
 		/// Разбирает строку и создает из нее модель.
 		/// </summary>
 		/// <param name="source">Строка исходника.</param>
 		public void Parse(string source)
 		{
-			builder = new SourceBuilder();
-			builder.Parse(source);
+			Builder = new SourceBuilder();
+			Builder.Parse(source);
 			exec = new Executor();
 		}
 		/// <summary>
@@ -28,7 +35,7 @@ namespace Parser.Facade
 		/// <returns>И возвращает ее.</returns>
 		public StringBuilder Dump(){
 			Dumper d = new Dumper();
-			return d.Dump((RootNode) builder.RootNode);
+			return d.Dump((RootNode) Builder.RootNode);
 		}
 		/// <summary>
 		/// Добавить переменную.
@@ -50,7 +57,7 @@ namespace Parser.Facade
 		/// <returns>Результирующая строка.</returns>
 		public string Run()
 		{
-			exec.Run((RootNode)builder.RootNode);
+			exec.Run((RootNode)Builder.RootNode);
 			return exec.TextOutput.ToString();
 		}
 
