@@ -26,9 +26,11 @@ namespace ParserTest.SourceBuilderTests
 			ParserFacade pf = new ParserFacade();
 			pf.Parse(source);
 
+			Model((new Dumper()).Dump((RootNode)pf.Builder.RootNode));
+
 			string actual = pf.Run();
 			Result(actual);
-			Model((new Dumper()).Dump((RootNode) pf.Builder.RootNode));
+			Assert.IsTrue(!string.IsNullOrEmpty(actual));
 		}
 	}
 }

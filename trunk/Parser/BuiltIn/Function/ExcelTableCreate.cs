@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using Parser.Model;
 using Parser.NET.Util.Wrapper;
 
