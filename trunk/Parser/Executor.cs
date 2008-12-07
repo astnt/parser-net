@@ -264,7 +264,12 @@ namespace Parser
 						else // для остальных
 						{
 							// превращаем в стандартный объект для "вне" парсерных методов
-							methodResult = methodInfo.Invoke(var.Value, ExtractVars(caller).ToArray());
+							object[] vars = ExtractVars(caller).ToArray();
+							if(vars.Length == 1 && vars[0].ToString() == String.Empty)
+							{
+								vars = null;
+							}
+							methodResult = methodInfo.Invoke(var.Value, vars);
 						}
 						TextOutput.Append(methodResult);
 						hasFuncLikeInVar = true;
