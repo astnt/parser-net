@@ -1,15 +1,13 @@
 using System;
 
-namespace Parser.NET.Model
+namespace Parser.Model
 {
 	/// <summary>
 	/// Части мат. выражения.
 	/// </summary>
-	public class MathElement
+	public class Element
 	{
-
 		#region vars
-
 		private char operation;
 		public char Operation
 		{
@@ -22,10 +20,8 @@ namespace Parser.NET.Model
 			get { return value; }
 			set { this.value = value; }
 		}
-
 		#endregion
-
-		public MathElement(Double value, char operation)
+		public Element(Double value, char operation)
 		{
 			this.value = value;
 			this.operation = operation;

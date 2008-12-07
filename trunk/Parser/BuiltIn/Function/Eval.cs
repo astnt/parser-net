@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Parser;
 using Parser.Model;
-using Parser.NET.Model;
 
 namespace Parser.BuiltIn.Function
 {
@@ -43,12 +42,12 @@ namespace Parser.BuiltIn.Function
 		/// </summary>
 		/// <param name="expression">2+2</param>
 		/// <returns>=4</returns>
-		public MathExpression GetExpression(string expression)
+		public Expression GetExpression(string expression)
 		{
 			//Console.WriteLine(expression);
 			DigitMatch digitMatch = new DigitMatch();
 			digitMatch.Operation = '+';
-			MathExpression me = new MathExpression();
+			Expression me = new Expression();
 			for (int position = 0; position < expression.Length; position += 1)
 			{
 				char c = expression[position];
@@ -70,7 +69,7 @@ namespace Parser.BuiltIn.Function
 					//Console.WriteLine("digit {0}", digitToParse);
 					if (Double.TryParse(digitToParse, out digit))
 					{
-						MathElement element = new MathElement(digit, digitMatch.Operation);
+						Element element = new Element(digit, digitMatch.Operation);
 						//Console.WriteLine("digit {0} oper '{1}'", digit, digitMatch.Operation);
 						me.Left(element);
 						digitMatch = new DigitMatch();
@@ -84,10 +83,10 @@ namespace Parser.BuiltIn.Function
 			return me;
 		}
 
-		private double Compute(MathExpression me)
+		private double Compute(Expression me)
 		{
 			Double result = 0;
-			foreach (MathElement element in me)
+			foreach (Element element in me)
 			{
 				switch (element.Operation)
 				{

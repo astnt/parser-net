@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Parser.Model
+﻿namespace Parser.Model
 {
 	/// <summary>
 	/// Вызов переменной $var | $var.of.something
