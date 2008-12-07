@@ -103,7 +103,8 @@ namespace Parser
 				{
 					if(source.Length > index + 1 && source[index + 1] == CharsInfo.ParamsCodeStart)
 					{
-						SplitParametr(index, node);
+						CurrentIndex = index += 1;
+						node = SplitParametr(index, node);
 					}
 					else
 					{
