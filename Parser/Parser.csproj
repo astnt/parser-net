@@ -54,8 +54,8 @@
     <Compile Include="Factory\NodeFactory.cs" />
     <Compile Include="Model\Caller.cs" />
     <Compile Include="Model\IExecutable.cs" />
-    <Compile Include="Model\MathElement.cs" />
-    <Compile Include="Model\MathExpression.cs" />
+    <Compile Include="Model\Element.cs" />
+    <Compile Include="Model\Expression.cs" />
     <Compile Include="Model\Parametr.cs" />
     <Compile Include="Model\RootNode.cs" />
     <Compile Include="Model\Table.cs" />

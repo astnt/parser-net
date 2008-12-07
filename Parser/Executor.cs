@@ -67,7 +67,6 @@ namespace Parser
 				throw new NullReferenceException("Function's declaration is not found.");
 			}
 		}
-
 		/// <summary>
 		/// Спорный вызов некой "исполняемой" функции типа ^eval()
 		/// </summary>
@@ -95,7 +94,6 @@ namespace Parser
 			// вариант для отладки
 			// TextOutput.Append(something.GetType().ToString());
 		}
-
 		/// <summary>
 		/// Разбираем детей и выясняем, что с ними делать.
 		/// </summary>

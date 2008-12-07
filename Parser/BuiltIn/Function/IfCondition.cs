@@ -11,7 +11,6 @@ namespace Parser.BuiltIn.Function
 		{
 			exec = executor;
 		}
-
 		public object Compute(List<object> vars)
 		{
 

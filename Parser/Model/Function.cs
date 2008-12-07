@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Parser.BuiltIn.Function;
 
 namespace Parser.Model
 {
