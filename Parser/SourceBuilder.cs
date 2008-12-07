@@ -12,7 +12,6 @@ namespace Parser
 	/// </summary>
 	public class SourceBuilder
 	{
-
 		/// <summary>
 		/// В параметре или нет.
 		/// </summary>
@@ -23,7 +22,6 @@ namespace Parser
 		/// По-идее разрывается пробельным или еще каким символом.
 		/// </summary>
 		public bool IsInEscape = false;
-
 		/// <summary>
 		/// Start of building source code.
 		/// </summary>
@@ -41,7 +39,6 @@ namespace Parser
 			Parse(rootNode);
 			AddBuiltInMembers();
 		}
-
 		/// <summary>
 		/// Добавляет встроенные функции.
 		/// </summary>
@@ -52,7 +49,11 @@ namespace Parser
 			AddBuiltInMember("Parser.BuiltIn.Function.ExcelTableCreate", assembly);
 			AddBuiltInMember("Parser.BuiltIn.Function.IfCondition", assembly);
 		}
-
+		/// <summary>
+		/// Добавить встроенный метод.
+		/// </summary>
+		/// <param name="namespaceName">Неймспейс.</param>
+		/// <param name="assembly">Сборка.</param>
 		private void AddBuiltInMember(string namespaceName, Assembly assembly){
 			// TODO ниже временная запись
 			// будет добавлено добавление статичных объектов по неймспейсу
@@ -73,7 +74,6 @@ namespace Parser
 			// добавляем в дерево
 			rootNode.Add(builtInFunc);
 		}
-
 		/// <summary>
 		/// Обратываем ноду.
 		/// </summary>
@@ -125,15 +125,22 @@ namespace Parser
 					index = TryCreateNode(index, c, ref node);
 				}
 				c = source[index];
+				// если в параметре и ';', то разбиваем на новый параметр
+				if (IsInParametr && c == CharsInfo.ParametrSeparator)
+				{
+					node = SplitParametr(index, node);
+				}
 				// если конец параметра ])}, то спуск вниз
 				if (!IsInEscape && CharsInfo.IsInParamsEndChars(c))
 				{
-					node = GoDown(index, node);
-				}
-				// если в параметре и ';', то разбиваем на новый параметр
-				if(IsInParametr && c == CharsInfo.ParametrSeparator)
-				{
-					node = SplitParametr(index, node);
+					if(source.Length > index + 1 && source[index + 1] == CharsInfo.ParamsCodeStart)
+					{
+						SplitParametr(index, node);
+					}
+					else
+					{
+						node = GoDown(index, node);
+					}
 				}
 				// если не в текстовой ноде, то создаем
 				if (!isInTextNode)

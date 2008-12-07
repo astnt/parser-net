@@ -339,8 +339,6 @@ namespace Parser
 			// обнулили
 			TextOutput = new StringBuilder();
 			Run(childs);
-			Console.WriteLine(">{0},parent[{1}]", TextOutput
-				, ((Caller)childs[0].Parent.Parent).Name[0]);
 			StringBuilder stringBuilder = new StringBuilder(TextOutput.ToString());
 			TextOutput = defaultOutput;
 			// UNDONE результаты другого типа 
