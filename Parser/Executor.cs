@@ -14,13 +14,11 @@ namespace Parser
 	/// </summary>
 	public class Executor
 	{
-
 		#region vars
 		/// <summary>
 		/// Текстовы результат.
 		/// </summary>
 		private StringBuilder defaultOutput = new StringBuilder();
-
 		/// <summary>
 		/// Текстовый вывод.
 		/// TODO добавить getter и setter
@@ -40,7 +38,6 @@ namespace Parser
 			get { return contextManager; }
 		}
 		#endregion
-
 		/// <summary>
 		/// Запуск выполнения с корневой ноды.
 		/// </summary>
@@ -75,12 +72,10 @@ namespace Parser
 		private void Run(Function func, Caller caller)
 		{
 			ICompute computeFunc = func.RefObject.Invoke(new object[0]) as ICompute;
-			// получаем переменные // вызов исполняемой фунции
-			List<object> vars = ExtractVars(caller);
 			object something = null;
 			if (computeFunc != null)
 			{
-				something = computeFunc.Compute(vars);
+				something = computeFunc.Compute(caller, this);
 			}
 			if(!string.IsNullOrEmpty(something as String))
 			{
@@ -130,7 +125,6 @@ namespace Parser
 				}
 			}
 		}
-
 		private void Run(Caller caller, Function func)
 		{
 			if (func.RefObject != null)
@@ -139,7 +133,6 @@ namespace Parser
 			}
 			Run(func.Childs);
 		}
-
 		/// <summary>
 		/// Вызывает переменную
 		/// UNDONE
@@ -196,12 +189,10 @@ namespace Parser
 			}
 			}
 		}
-
 		private void Run(Parametr parametr)
 		{
 			Run(parametr.Childs);
 		}
-
 		/// <summary>
 		/// Вызов или помещение в контекст.
 		/// </summary>
@@ -230,7 +221,6 @@ namespace Parser
 				// TODO VariableCall?
 			}
 		}
-
 		/// <summary>
 		/// Возвращает нужную для обработки функцию.
 		/// </summary>
@@ -263,11 +253,6 @@ namespace Parser
 				if(var != null && var.Value != null)
 				{
 					Type type = var.Value.GetType();
-					// ищем метод
-//					foreach(string name in caller.Name)
-//					{
-//						
-//					}
 					MethodInfo methodInfo = type.GetMethod(caller.Name[1]);
 					if (methodInfo != null)
 					{
@@ -298,18 +283,16 @@ namespace Parser
 			{
 				throw new NullReferenceException(
 					String.Format(@"Function or method with name ""{0}"" not found.", caller.Name));
-//				Console.WriteLine(@"Function with name ""{0}"" not found.", caller.Name);
 			}
 			return func;
 		}
-
 		/// <summary>
 		/// Узнаем какие переменные (или строки есть в caller)
 		/// Возвращаем ввиду списка значений.
 		/// </summary>
 		/// <param name="caller"></param>
 		/// <returns></returns>
-		private List<object> ExtractVars(Caller caller)
+		public List<object> ExtractVars(Caller caller)
 		{
 			List<object> vars = new List<object>();
 			foreach (AbstractNode child in caller.Childs)
@@ -323,18 +306,8 @@ namespace Parser
 			}
 			return vars;
 		}
-
 		private object ExtractVar(IList<AbstractNode> childs)
 		{
-//			foreach (AbstractNode node in childs)
-//			{
-//				Text text = node as Text; // FIXME повторение
-//				if (text != null)
-//				{
-//					textResult.Append(text.Body); // WARN возможно не правильно
-//				}
-//			}
-			// обнулили
 			TextOutput = new StringBuilder();
 			Run(childs);
 			StringBuilder stringBuilder = new StringBuilder(TextOutput.ToString());

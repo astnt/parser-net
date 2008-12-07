@@ -14,11 +14,21 @@ namespace Parser.BuiltIn.Function
 	[ParserName("eval")]
 	public class Eval : ICompute
 	{
-		public object Compute(List<object> vars)
+		public object Compute(Caller caller, Executor exec)
 		{
+			Parametr param = caller.Childs[0] as Parametr;
+			if(param == null || param.Childs.Count == 0)
+			{
+				
+			}
 			// param.Names[0] - это "параметр" ^eval(45-45*12), то есть "45-45*12"
-			string expressionInText = vars[0] as string;
-			StringBuilder expressionIn = vars[0] as StringBuilder;
+			string expressionInText = null;
+			StringBuilder expressionIn = null;
+			Text abstractNode = param.Childs[0] as Text;
+			if (abstractNode != null)
+			{
+				expressionInText = abstractNode.Body;
+			}
 			// TODO ниже - корявая конструкция
 			if (expressionIn != null)
 			{
@@ -106,28 +116,35 @@ namespace Parser.BuiltIn.Function
 			}
 			return result;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
 		private static bool IsOperator(char c)
 		{
 			return "*+/-".Contains(c.ToString());
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static bool IsDigit(char c)
 		{
 			return 47 < c && c < 58;
 		}
-
+		/// <summary>
+		/// ? \r\n\t 160(char)
+		/// </summary>
 		public static bool IsSpacing(char c)
 		{
 			return (((char)160) + " \r\n\t").Contains(c.ToString());
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
 		private struct DigitMatch
 		{
 			public int Start;
 			public int Length;
 			public char Operation;
 		}
-
 	}
 }

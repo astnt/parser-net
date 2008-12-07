@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using Parser.Model;
+﻿using Parser.Model;
 
 namespace Parser.BuiltIn.Function
 {
 	/// <summary>
-	/// Интерфейс для вычислений.
+	/// Интерфейс для вычислений парсерных конструкций.
 	/// </summary>
 	public interface ICompute
 	{
-		object Compute(List<object> vars);
+		object Compute(Caller caller, Executor exec);
 	}
 }
