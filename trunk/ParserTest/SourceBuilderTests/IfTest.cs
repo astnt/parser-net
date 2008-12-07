@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using Parser;
 using Parser.BuiltIn.Function;
 using Parser.Facade;
+using Parser.Model;
 
 namespace ParserTest.SourceBuilderTests
 {
 	[TestFixture]
-	public class IfTest : AbstractParserTest, ICompute
+	public class IfTest : AbstractParserTest
 	{
 		[Test]
 		public void GenericIfTest()
@@ -26,11 +27,6 @@ namespace ParserTest.SourceBuilderTests
 			Assert.IsTrue(actual.Contains("something is equal"));
 			Assert.IsTrue(actual.Contains("value is val"));
 			Assert.IsTrue(!actual.Contains("{"));
-		}
-
-		public object Compute(List<object> vars)
-		{
-			throw new System.NotImplementedException();
 		}
 	}
 }
