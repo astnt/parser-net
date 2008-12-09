@@ -87,7 +87,8 @@ namespace Parser.Context
 			}
 			if(vars == null)
 			{
-				Console.WriteLine("Parameters in {0} is null.", func.Name);
+				// UNDONE
+//				Console.WriteLine("Parameters in {0} is null.", func.Name);
 				return;
 			}
 			for (int position = 0; position < vars.Count; position += 1)

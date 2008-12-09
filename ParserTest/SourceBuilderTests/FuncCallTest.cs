@@ -1,4 +1,4 @@
-using NUnit.Framework;
+Ôªøusing NUnit.Framework;
 using Parser.Facade;
 using Parser.Model;
 using Parser.Util;
@@ -13,7 +13,7 @@ namespace ParserTest.SourceBuilderTests
 		{
 			string source = @"
 @main[]
-	$table[^table::excel[SELECT * FROM [ÀËÒÚ1^$A4:A7];^path[]]]
+	$table[^table::excel[SELECT * FROM [–õ–∏—Å—Ç1^$A4:A7];^path[]]]
 	some text
 	^table.menu{
 		<cell>^table.column(0)</cell>

@@ -44,7 +44,7 @@ namespace Parser.Util
 		/// Перебирает детей, и добаляет их в строковый результат.
 		/// </summary>
 		/// <param name="childs">Дети ноды.</param>
-		private void DumpChilds(IEnumerable<AbstractNode> childs)
+		public void DumpChilds(IEnumerable<AbstractNode> childs)
 		{
 			foreach (AbstractNode node in childs)
 			{

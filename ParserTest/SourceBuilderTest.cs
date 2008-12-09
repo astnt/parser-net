@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Parser;
+using Parser.Facade;
 using Parser.Model;
 using Parser.Util;
 
@@ -111,6 +112,22 @@ namespace ParserTest
 			Assert.IsTrue(actual.Contains("<cell>Москва / МО</cell>"));
 			Assert.IsTrue(actual.Contains("<cell>Спб / Область</cell>"));
 			Assert.IsTrue(actual.Contains("<cell>Регионы</cell>"));
+		}
+
+		[Test]
+		public void ExcelTableCreate_WithPathFromFuncTest()
+		{
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(@"
+@main[]
+	$table[^table::excel[SELECT * FROM [Лист1^$A4:A7];^path[]]]
+
+@path[]
+../../resources/sample.xls
+");
+//			Model((RootNode) pf.Builder.RootNode);
+			string actual = pf.Run();
+
 		}
 
 		[Test]
