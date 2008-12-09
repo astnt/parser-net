@@ -28,5 +28,24 @@ namespace ParserTest.SourceBuilderTests
 			Assert.IsTrue(actual.Contains("value is val"));
 			Assert.IsTrue(!actual.Contains("{"));
 		}
+		[Test]
+		public void ElseTest()
+		{
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(@"
+@main[]
+	$somevar[458]
+	^if($somevar == 100){
+		true
+	}{
+		false
+	}
+");
+			Model(pf.Dump());
+			string actual = pf.Run();
+			Result(actual);
+			Assert.IsTrue(actual.Contains("false"));
+			Assert.IsTrue(!actual.Contains("true"));
+		}
 	}
 }

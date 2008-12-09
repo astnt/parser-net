@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reflection;
-using Parser.BuiltIn.Function;
 using Parser.Factory;
 using Parser.Model;
 using Parser.Syntax;
@@ -69,7 +67,7 @@ namespace Parser
 						)
 					)
 				{
-					CloseCurrentText(index-1);
+					CloseCurrentText(index - 1);
 					IsInEscape = true;
 					continue;
 				}
@@ -101,13 +99,16 @@ namespace Parser
 				// если конец параметра ])}, то спуск вниз
 				if (!IsInEscape && CharsInfo.IsInParamsEndChars(c))
 				{
+//					CloseCurrentText(index - 1);
 					if(source.Length > index + 1 && source[index + 1] == CharsInfo.ParamsCodeStart)
 					{
-						CurrentIndex = index += 1;
 						node = SplitParametr(index, node);
+						CurrentIndex = index += 1;
 					}
 					else
 					{
+//						CurrentIndex = index -= 1;
+//						Console.WriteLine(node);
 						node = GoDown(index, node);
 					}
 				}
