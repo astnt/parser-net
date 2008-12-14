@@ -2,6 +2,7 @@
 
 = If =
 
+
 Sample without 'else':
 
 {{{
@@ -11,6 +12,7 @@ Sample without 'else':
 	}
 }}}
 result is 'something is equal'.
+
 
 Sample with 'else':
 
