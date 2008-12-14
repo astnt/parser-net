@@ -43,7 +43,7 @@ namespace Parser.BuiltIn.Function
 				Operator op = node as Operator;
 				if(op != null)
 				{
-					if(op.Operation == Expressions.Equal)
+					if(op.Operation == Expressions.EqualString)
 					{
 						string left = GetValue(param.Childs[index - 1]);
 						string right = GetValue(param.Childs[index + 1]);
