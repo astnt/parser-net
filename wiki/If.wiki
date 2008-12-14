@@ -1,4 +1,4 @@
-#summary else.
+#summary ^if and 'else' samples.
 
 = If =
 
