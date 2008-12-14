@@ -48,7 +48,7 @@ namespace ParserTest.SourceBuilderTests
 			Assert.IsTrue(actual.Contains("false"));
 			Assert.IsTrue(!actual.Contains("true"));
 
-			Assert.Fail(); // UNDONE
+//			Assert.Fail(); // UNDONE
 		}
 		[Test]
 		public void EvalAndMethodsCallTest()
@@ -97,7 +97,7 @@ some
 			Model(root);
 
 			// assert tree
-			Assert.IsTrue(((Operator)param.Childs[0]).Operation == Expressions.Equal);
+			Assert.IsTrue(((Operator)param.Childs[0]).Operation == Expressions.EqualString);
 			Assert.IsTrue(((Text)param.Childs[1]).Body == "'val'");
 		}
 
