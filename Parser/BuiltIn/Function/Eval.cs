@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Parser;
 using Parser.Model;
+using Parser.Syntax;
 
 namespace Parser.BuiltIn.Function
 {
@@ -56,12 +57,12 @@ namespace Parser.BuiltIn.Function
 		{
 			//Console.WriteLine(expression);
 			DigitMatch digitMatch = new DigitMatch();
-			digitMatch.Operation = '+';
+			digitMatch.Operation = "+";
 			Expression me = new Expression();
 			for (int position = 0; position < expression.Length; position += 1)
 			{
 				char c = expression[position];
-				bool isDigit = IsDigit(c);
+				bool isDigit = CharsInfo.IsDigit(c);
 				if (isDigit)
 				{
 					if (digitMatch.Length == 0)
@@ -72,22 +73,22 @@ namespace Parser.BuiltIn.Function
 				}
 				bool isOperator = IsOperator(c);
 				// если прерывается пробельными символами
-				if (IsSpacing(c) || isOperator || position + 1 == expression.Length)
+				if (CharsInfo.IsInSpaceChars(c) || isOperator || position + 1 == expression.Length)
 				{
 					string digitToParse = expression.Substring(digitMatch.Start, digitMatch.Length);
 					double digit;
 					//Console.WriteLine("digit {0}", digitToParse);
 					if (Double.TryParse(digitToParse, out digit))
 					{
-						Element element = new Element(digit, digitMatch.Operation);
+						Operator @operator = new Operator(digit, digitMatch.Operation);
 						//Console.WriteLine("digit {0} oper '{1}'", digit, digitMatch.Operation);
-						me.Left(element);
+						me.Left(@operator);
 						digitMatch = new DigitMatch();
 					}
 				}
 				if (isOperator)
 				{
-					digitMatch.Operation = c;
+					digitMatch.Operation = c.ToString();
 				}
 			}
 			return me;
@@ -96,20 +97,20 @@ namespace Parser.BuiltIn.Function
 		private double Compute(Expression me)
 		{
 			Double result = 0;
-			foreach (Element element in me)
+			foreach (Operator element in me)
 			{
 				switch (element.Operation)
 				{
-					case '+':
+					case "+":
 						result += element.Value;
 						break;
-					case '*':
+					case "*":
 						result *= element.Value;
 						break;
-					case '-':
+					case "-":
 						result -= element.Value;
 						break;
-					case '/':
+					case "/":
 						result /= element.Value;
 						break;
 				}
@@ -126,25 +127,11 @@ namespace Parser.BuiltIn.Function
 		/// <summary>
 		/// 
 		/// </summary>
-		public static bool IsDigit(char c)
-		{
-			return 47 < c && c < 58;
-		}
-		/// <summary>
-		/// ? \r\n\t 160(char)
-		/// </summary>
-		public static bool IsSpacing(char c)
-		{
-			return (((char)160) + " \r\n\t").Contains(c.ToString());
-		}
-		/// <summary>
-		/// 
-		/// </summary>
 		private struct DigitMatch
 		{
 			public int Start;
 			public int Length;
-			public char Operation;
+			public String Operation;
 		}
 	}
 }

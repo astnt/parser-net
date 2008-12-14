@@ -3,14 +3,17 @@ using System.Collections.Generic;
 
 namespace Parser.Model
 {
-	public class Expression : IEnumerable<Element>
+	/// <summary>
+	/// deprecated
+	/// </summary>
+	public class Expression : IEnumerable<Operator>
 	{
-		private List<Element> items = new List<Element>();
+		private List<Operator> items = new List<Operator>();
 		/// <summary>
 		/// По приоритету влево (раньше)
 		/// </summary>
 		/// <param name="item"></param>
-		public void Left(Element item)
+		public void Left(Operator item)
 		{
 			items.Add(item);
 		}
@@ -18,17 +21,17 @@ namespace Parser.Model
 		/// По приоритету вправо (позже)
 		/// </summary>
 		/// <param name="item"></param>
-		public void Right(Element item)
+		public void Right(Operator item)
 		{
 			
 		}
-		IEnumerator<Element> IEnumerable<Element>.GetEnumerator()
+		IEnumerator<Operator> IEnumerable<Operator>.GetEnumerator()
 		{
 			return items.GetEnumerator();
 		}
 		public IEnumerator GetEnumerator()
 		{
-			return ((IEnumerable<Element>)this).GetEnumerator();
+			return ((IEnumerable<Operator>)this).GetEnumerator();
 		}
 	}
 }
