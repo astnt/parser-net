@@ -1,4 +1,5 @@
 ﻿using System;
+using Parser.BuiltIn.Function;
 using Parser.Factory;
 using Parser.Model;
 using Parser.Syntax;
@@ -53,6 +54,7 @@ namespace Parser
 				// задаем индексы и char
 				char c = source[index];
 				CurrentIndex = index;
+//				Console.WriteLine("char'{0}'", c);
 
 				bool IsDeclarationChar =
 					(	 c == CharsInfo.FuncDeclarationStart
@@ -120,7 +122,7 @@ namespace Parser
 				// если в конце строки "закрывам текстовую ноду"
 				if (index == lastCharIndex)
 				{
-					currentText.Body = source.Substring(currentText.Start.Value); // TODO прерывание
+					CurrentText.Body = source.Substring(CurrentText.Start.Value); // TODO прерывание
 				}
 				// если пора заканчивать заэскейпливание
 				if (c == ' ' || c == (char)160 || CharsInfo.IsInParamsEndChars(c)) // TODO нужно добавить другие символы, вынести в фунцкию
@@ -137,6 +139,11 @@ namespace Parser
 		/// <returns></returns>
 		private Node SplitParametr(int index, Node node)
 		{
+			// UNDONE поиск на выражения
+			if ((node.Parent as Caller) != null && ((Caller)node.Parent).Name[0] == IfCondition.SyntaxName)
+			{
+				index = SearchForExpressions(index, node);
+			}
 			CloseCurrentText(index); // закрываем текущую текстовую ноду
 			node = node.Parent; // спускаемся вниз
 			Node parametr = new Parametr();
@@ -144,6 +151,34 @@ namespace Parser
 			node = parametr; // перемещаем указатель на него
 			return node;
 		}
+
+		public int SearchForExpressions(int index, Node node)
+		{
+			int from = currentText.Start.Value;
+			int last = from;
+			for(int indexFrom = from; indexFrom < index; indexFrom += 1)
+			{
+//				Console.WriteLine("char'{0}'index'{1}'last'{2}'", source[indexFrom], indexFrom, last);
+				if(CharsInfo.IsInSpaceChars(source[indexFrom]))
+				{
+					string currentWord = source.Substring(last, indexFrom - last);
+					
+					if (Expressions.IfExpressions.Contains(currentWord.Trim()))
+					{
+						CloseCurrentText(last);
+						Operator op = new Operator(currentWord);
+						node.Childs.Remove(currentText);
+						node.Add(op);
+						node.Add(currentText);
+//						Console.WriteLine("currentWord[{0}]", currentWord);
+						currentText.Start = indexFrom + 1;
+					}
+					last = indexFrom + 1;
+				}
+			}
+			return index;
+		}
+
 		/// <summary>
 		/// Спускаемся ниже по дереву, если наткнулись на закрытие параметра.
 		/// </summary>
@@ -239,37 +274,43 @@ namespace Parser
 		/// <param name="node"></param>
 		private void CreateText(Node node)
 		{
-			currentText = new Text();
-			currentText.Start = CurrentIndex + 1;
-			if (source.Length <= currentText.Start.Value)
+			CurrentText = new Text();
+			CurrentText.Start = CurrentIndex + 1;
+			if (source.Length <= CurrentText.Start.Value)
 			{
 				return; // HACK
 			}
-			currentText.Parent = node;
-			node.Add(currentText);
+			CurrentText.Parent = node;
+			if(node != null)
+			{
+				node.Add(CurrentText);
+			}
+			else
+			{
+				Console.WriteLine("WARN: node for current text is null");
+			}
 			isInTextNode = true;
 		}
 		/// <summary>
 		/// Закрываем текущую текстовую ноду.
 		/// </summary>
 		/// <param name="index"></param>
-		private void CloseCurrentText(int index)
+		public void CloseCurrentText(int index)
 		{
-			if(currentText == null)
+			if (CurrentText != null)
 			{
-				return; // HACK
+				int length = index - CurrentText.Start.Value;
+				if (length <= 0)
+				{
+					//currentText.Body = String.Empty;
+					// TODO для оптимизации, такая текстовая нода должна быть удалена.
+				}
+				else
+				{
+					CurrentText.Body = source.Substring(CurrentText.Start.Value, length);
+				}
+				isInTextNode = false; // HACK по-идее нода должны быть именно закрыта
 			}
-			int length = index - currentText.Start.Value;
-			if (length <= 0)
-			{
-				//currentText.Body = String.Empty;
-				// TODO для оптимизации, такая текстовая нода должна быть удалена.
-			}
-			else
-			{
-				currentText.Body = source.Substring(currentText.Start.Value, length);
-			}
-			isInTextNode = false; // HACK по-идее нода должны быть именно закрыта
 		}
 
 		#region Vars
@@ -289,6 +330,12 @@ namespace Parser
 		{
 			get { return rootNode; }
 			set { rootNode = value; }
+		}
+
+		public Text CurrentText
+		{
+			get { return currentText; }
+			set { currentText = value; }
 		}
 
 		#endregion 

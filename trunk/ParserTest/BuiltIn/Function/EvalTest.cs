@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Parser.BuiltIn.Function;
-using Parser.Model;
+using Parser.Syntax;
 
 namespace ParserTest.BuiltIn.Function
 {
@@ -9,22 +9,13 @@ namespace ParserTest.BuiltIn.Function
 	public class EvalTest
 	{
 		[Test]
-		public void SpacingCharTest()
-		{
-			foreach (char c in ((char)160 + " \t\r\n").ToCharArray())
-			{
-				Assert.IsTrue(Eval.IsSpacing(c));
-			}
-		}
-		[Test]
 		public void IsDigitTest()
 		{
 			foreach (char c in ("1234567890").ToCharArray())
 			{
-				Assert.IsTrue(Eval.IsDigit(c));
+				Assert.IsTrue(CharsInfo.IsDigit(c));
 			}
 		}
-
 		private Eval e;
 		[Test]
 		public void ExpressionsTest()
@@ -34,7 +25,6 @@ namespace ParserTest.BuiltIn.Function
 			Assert.AreEqual(0, Try("2-2"));
 			Assert.AreEqual(4, Try("2 + 2"));
 		}
-
 		private double Try(string expression)
 		{
 			double result = e.Compute(expression);

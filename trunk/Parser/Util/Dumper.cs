@@ -93,6 +93,11 @@ namespace Parser.Util
 					dumpResult.AppendFormat("({0})", parametr.GetType());
 					DumpChilds(parametr);
 				}
+				Operator op = node as Operator;
+				if(op != null)
+				{
+					dumpResult.AppendFormat("({0}).{1}", op.GetType(), op.Operation);
+				}
 				dumpResult.Append('\n');
 			}
 		}

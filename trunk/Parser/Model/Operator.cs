@@ -3,13 +3,13 @@ using System;
 namespace Parser.Model
 {
 	/// <summary>
-	/// Части мат. выражения.
+	/// Части +-/* и true/false ("eq") выражения.
 	/// </summary>
-	public class Element
+	public class Operator : AbstractNode
 	{
 		#region vars
-		private char operation;
-		public char Operation
+		private string operation;
+		public string Operation
 		{
 			get { return operation; }
 			set { operation = value; }
@@ -21,9 +21,13 @@ namespace Parser.Model
 			set { this.value = value; }
 		}
 		#endregion
-		public Element(Double value, char operation)
+		public Operator(Double value, string operation)
 		{
 			this.value = value;
+			this.operation = operation;
+		}
+		public Operator(string operation)
+		{
 			this.operation = operation;
 		}
 	}

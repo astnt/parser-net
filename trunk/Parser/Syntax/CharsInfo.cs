@@ -2,7 +2,7 @@
 
 namespace Parser.Syntax
 {
-	static class CharsInfo
+	public static class CharsInfo
 	{
 		public static Char FuncDeclarationStart = '@';
 		public static Char ParamsStart = '[';
@@ -39,6 +39,12 @@ namespace Parser.Syntax
 					|| c == ' '
 					|| c == (char) 160;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public static bool IsDigit(char c)
+		{
+			return 47 < c && c < 58;
+		}
 	}
 }
