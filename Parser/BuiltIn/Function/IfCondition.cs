@@ -49,6 +49,13 @@ namespace Parser.BuiltIn.Function
 						string right = GetValue(param.Childs[index + 1]);
 						result = left == right;
 					}
+					if(op.Operation == Expressions.Equal)
+					{
+						object left = GetValue(param.Childs[index - 1]);
+						object right = GetValue(param.Childs[index + 1]);
+//						result = left == right;
+						result = left.Equals(right);
+					}
 				}
 				index += 1; 
 			}

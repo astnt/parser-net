@@ -47,8 +47,25 @@ namespace ParserTest.SourceBuilderTests
 			Result(actual);
 			Assert.IsTrue(actual.Contains("false"));
 			Assert.IsTrue(!actual.Contains("true"));
-
-//			Assert.Fail(); // UNDONE
+		}
+		[Test]
+		public void FloatEqTest()
+		{
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(@"
+@main[]
+	$somevar[100]
+	^if($somevar == 100){
+		false
+	}{
+		true
+	}
+");
+			Model(pf.Dump());
+			string actual = pf.Run();
+			Result(actual);
+			Assert.IsTrue(actual.Contains("false"));
+			Assert.IsTrue(!actual.Contains("true"));
 		}
 		[Test]
 		public void EvalAndMethodsCallTest()
