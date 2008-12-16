@@ -14,7 +14,7 @@ Example without 'else':
 result is 'something is equal'.
 
 
-Sample with 'else':
+Example with 'else':
 
 {{{
 @main[]
