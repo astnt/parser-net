@@ -1,7 +1,6 @@
-
 = Params and vars =
 
-Sample code:
+Example:
 {{{
 @main[]
 	$myvar[abc]
