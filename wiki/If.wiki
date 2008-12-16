@@ -3,7 +3,7 @@
 = If =
 
 
-Sample without 'else':
+Example without 'else':
 
 {{{
 	$something[val]
