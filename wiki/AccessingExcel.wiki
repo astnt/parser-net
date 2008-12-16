@@ -3,7 +3,7 @@
 
 = Accessing excel via ADO.NET =
 
-Sample code is:
+Example:
 
 {{{
 @main[]
