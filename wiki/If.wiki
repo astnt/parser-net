@@ -1,6 +1,6 @@
 #summary ^if and 'else' samples.
 
-= If =
+= If and Else =
 
 
 Example without 'else':
