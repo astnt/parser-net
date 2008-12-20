@@ -152,18 +152,6 @@ namespace ParserTest
 			Assert.AreEqual(" 2+2=4 3*9=27", actual);
 		}
 
-		private string Parse(string source)
-		{
-			Parser.SourceBuilder builder = new Parser.SourceBuilder();
-			builder.Parse(source);
-			Dumper d = new Dumper();
-			Model(d.Dump((RootNode)builder.RootNode));
-
-			Executor exec = new Executor();
-			exec.Run((RootNode)builder.RootNode);
-			return exec.TextOutput.ToString();
-		}
-
 		[Test]
 		public void EscapingTest()
 		{

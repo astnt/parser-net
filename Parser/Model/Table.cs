@@ -58,7 +58,7 @@ namespace Parser.Model
 			currentRow = 0;
 			foreach (Row<T> row in rows)
 			{
-				Row<T> selectedRow = row;
+//				Row<T> selectedRow = row;
 				exec.Run(parametr.Childs);
 				currentRow += 1; // для индексера
 			}

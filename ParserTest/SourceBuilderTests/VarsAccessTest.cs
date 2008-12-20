@@ -91,6 +91,8 @@ namespace ParserTest.SourceBuilderTests
 //				result = index.Invoke(table, new object[] { 0 });
 //			}
 //			Console.WriteLine("result is '{0}'", result);
+
+			Assert.Fail(); // UNDONE
 		}
 	}
 }
