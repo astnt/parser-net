@@ -211,6 +211,8 @@ namespace Parser
 				Run((Parametr)variable.Childs[0]);
 
 				contextVariable.Value = Output ?? TextOutput;
+				Output = null; // TODO Обнуляем HACK
+
 				TextOutput = defaultOutput; // возвращаем дефолтный поток вывода				
 				contextManager.AddVar(contextVariable); // добавляем в контекст
 				if(contextVariable.Value as IExecutable != null)
