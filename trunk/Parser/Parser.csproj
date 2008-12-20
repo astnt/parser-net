@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BuiltIn\Function\Eval.cs" />
     <Compile Include="BuiltIn\Function\ExcelTableCreate.cs" />
+    <Compile Include="BuiltIn\Function\HashCreate.cs" />
     <Compile Include="BuiltIn\Function\ICompute.cs" />
     <Compile Include="BuiltIn\Function\IfCondition.cs" />
     <Compile Include="BuiltIn\Function\ParserNameAttribute.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Facade\ParserFacade.cs" />
     <Compile Include="Factory\NodeFactory.cs" />
     <Compile Include="Model\Caller.cs" />
+    <Compile Include="Model\Hash.cs" />
     <Compile Include="Model\IExecutable.cs" />
     <Compile Include="Model\Operator.cs" />
     <Compile Include="Model\Expression.cs" />

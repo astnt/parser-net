@@ -102,7 +102,7 @@ namespace Parser.Util
 			}
 		}
 
-		private object Dump(string[] names)
+		public static object Dump(string[] names)
 		{
 			StringBuilder result = new StringBuilder();
 			foreach (string name in names)

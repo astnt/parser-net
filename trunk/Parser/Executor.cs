@@ -5,6 +5,7 @@ using System.Text;
 using Parser.BuiltIn.Function;
 using Parser.Context;
 using Parser.Model;
+using Parser.Util;
 
 namespace Parser
 {
@@ -289,7 +290,7 @@ namespace Parser
 			if(!hasFuncLikeInCaller && !hasFuncLikeInVar) // 
 			{
 				throw new NullReferenceException(
-					String.Format(@"Function or method with name ""{0}"" not found.", caller.Name));
+					String.Format(@"Function or method with name ""{0}"" not found.", Dumper.Dump(caller.Name)) );
 			}
 			return func;
 		}

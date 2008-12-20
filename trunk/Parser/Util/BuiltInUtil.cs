@@ -24,6 +24,7 @@ namespace Parser.Util
 			AddBuiltInMember("Parser.BuiltIn.Function.Eval", assembly);
 			AddBuiltInMember("Parser.BuiltIn.Function.ExcelTableCreate", assembly);
 			AddBuiltInMember("Parser.BuiltIn.Function.IfCondition", assembly);
+			AddBuiltInMember("Parser.BuiltIn.Function.HashCreate", assembly);
 		}
 		/// <summary>
 		/// Добавить встроенный метод.
