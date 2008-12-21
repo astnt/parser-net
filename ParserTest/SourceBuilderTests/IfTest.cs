@@ -117,6 +117,18 @@ some
 			Assert.IsTrue(((Operator)param.Childs[0]).Operation == Expressions.EqualString);
 			Assert.IsTrue(((Text)param.Childs[1]).Body == "'val'");
 		}
+		[Test]
+		public void FloatIfTest()
+		{
+			string actual = Parse(@"
+@main[]
+	$f[1]
+	^if($f eq '1' && ^test[] eq 'text'){true}{false}
+
+@test[]text");
+			Result(actual);
+			Assert.IsTrue(actual.Contains("true"));
+		}
 
 	}
 }

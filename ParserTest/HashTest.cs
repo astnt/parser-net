@@ -38,5 +38,25 @@ namespace ParserTest
 			Assert.IsTrue(actual.Contains("age=22"));
 			Assert.IsTrue(actual.Contains("sex=m"));
 		}
+		[Test]
+		public void EachTest()
+		{
+			string actual = Parse(
+@"
+@main[]
+	$man[^hash::create[]]
+
+	^man.addKey[name;Вася]
+	^man.addKey[age;22]
+	^man.addKey[sex;m]
+
+	^man.each[key;value]{
+		$key = $value
+	}
+
+");
+			Result(actual);
+
+		}
 	}
 }

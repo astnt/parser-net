@@ -32,8 +32,9 @@ namespace Parser.Model
 		/// <summary>
 		/// TODO добраться до индексера из отражения.
 		/// </summary>
-		public T column(Parametr parametr)
+		public T column(Caller caller)
 		{
+			Parametr parametr = caller.Childs[0] as Parametr; 
 			Text text = (Text) parametr.Childs[0];
 			return this[Int32.Parse(text.Body)];
 		}
@@ -53,8 +54,9 @@ namespace Parser.Model
 		/// }
 		/// </summary>
 		/// <returns></returns>
-		public void menu(Parametr parametr)
+		public void menu(Caller caller)
 		{
+			Parametr parametr = caller.Childs[0] as Parametr; 
 			currentRow = 0;
 			foreach (Row<T> row in rows)
 			{
