@@ -1,32 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Parser.Model
 {
-	public class Hash
+	public class Hash : IExecutable
 	{
-//		private Dictionary<StringBuilder, Object> dictionary = new  Dictionary<StringBuilder, Object>();
 		private Dictionary<String, Object> dictionary = new  Dictionary<String, Object>();
 		public Hash()
 		{
 			
 		}
-		public void addKey(StringBuilder key, StringBuilder value)
+		public void addKey(Caller caller)
 		{
-			if(dictionary.ContainsKey(key.ToString()))
+			string key = ((Text) ((Parametr) caller.Childs[0]).Childs[0]).Body;
+			string value = ((Text)((Parametr)caller.Childs[1]).Childs[0]).Body;
+			if(dictionary.ContainsKey(key))
 			{
-				dictionary[key.ToString()] = value;
+				dictionary[key] = value;
 			}
 			else
 			{
-				dictionary.Add(key.ToString(), value);
+				dictionary.Add(key, value);
 			}
 		}
-		public string getKey(StringBuilder key)
+		public string getKey(Caller caller)
 		{
+			StringBuilder key = new StringBuilder(((Text)((Parametr)caller.Childs[0]).Childs[0]).Body);
 			return dictionary[key.ToString()].ToString();
+		}
+		public void each(Caller caller)
+		{
+			string variableNameOfKey = ((Text)((Parametr)caller.Childs[0]).Childs[0]).Body; 
+			string variableNameOfValue = ((Text)((Parametr)caller.Childs[1]).Childs[0]).Body;
+			Parametr bodyOfEachCycle = ((Parametr)caller.Childs[2]);
+			foreach (KeyValuePair<string, object> pair in dictionary)
+			{
+				// update переменных в начале цикла.
+				exec.ContextManager.AddVar(variableNameOfKey, pair.Key);
+				exec.ContextManager.AddVar(variableNameOfValue, pair.Value);
+				// выполнение тела цикла.
+				exec.Run(bodyOfEachCycle.Childs);
+			}
+		}
+		private Executor exec;
+		public void AddExecutor(Executor executor)
+		{
+			exec = executor;
 		}
 	}
 }

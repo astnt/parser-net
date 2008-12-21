@@ -262,7 +262,7 @@ namespace Parser
 						object methodResult;
 						if (var.Value as IExecutable != null) // если относиться к типам выполняющим парсерное дерево,
 						{
-							methodResult = methodInfo.Invoke(var.Value, new object[] { caller.Childs[0] });
+							methodResult = methodInfo.Invoke(var.Value, new object[] { caller });
 						}
 						else // для остальных
 						{

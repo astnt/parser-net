@@ -8,6 +8,16 @@ namespace Parser.Model
 	public class Variable : Node
 	{
 
+		public Variable()
+		{
+			
+		}
+		public Variable(string name, object value)
+		{
+			this.name = name;
+			this.value = value;
+		}
+
 		#region vars
 
 		private string name;

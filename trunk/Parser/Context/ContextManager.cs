@@ -23,7 +23,16 @@ namespace Parser.Context
 		{
 			contexts.Add(GLOBAL, new Dictionary<string, Variable>());
 		}
-
+		/// <summary>
+		/// Сокращение для добаления переменной.
+		/// Добавляет в GLOBAL. TODO в контекст конкретной функции/тела цикла.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		public void AddVar(string name, object value)
+		{
+			AddVar(new Variable(name, value));
+		}
 		/// <summary>
 		/// Добавляет в глобальный контекст переменную.
 		/// </summary>
