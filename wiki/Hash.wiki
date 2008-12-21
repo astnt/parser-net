@@ -28,3 +28,25 @@ Output:
     sex=m
 }}}
 
+== Each (foreach) ==
+
+Example:
+{{{
+@main[]
+	$man[^hash::create[]]
+
+	^man.addKey[name;Вася]
+	^man.addKey[age;22]
+	^man.addKey[sex;m]
+
+	^man.each[key;value]{
+		$key = $value
+	}
+}}}
+
+Output:
+{{{
+        name = Вася
+        age = 22
+        sex = m
+}}}
