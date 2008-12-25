@@ -79,8 +79,10 @@ namespace Parser
 					(
 						c == CharsInfo.CallerDeclarationStart
 						|| c == CharsInfo.VariableDeclarationStart
+						|| CharsInfo.IsInParamsEndChars(c)
+//						(index == 0 || source[index - 1] != CharsInfo.CallerDeclarationStart)
 					)
-					&& source[index-1] == CharsInfo.CallerDeclarationStart)
+					&& source[index - 1] == CharsInfo.CallerDeclarationStart)
 				{
 					CloseCurrentText(index - 1); // ^$var[] -> $var вместо ^var в текст
 					CurrentIndex -= 1; // для CreateText
@@ -99,7 +101,9 @@ namespace Parser
 					node = SplitParametr(index, node);
 				}
 				// если конец параметра ])}, то спуск вниз
-				if (!IsInEscape && CharsInfo.IsInParamsEndChars(c))
+				if (!IsInEscape
+//					&& /* TODO move to boolean */ (index == 0 || source[index - 1] != CharsInfo.CallerDeclarationStart)
+					&& CharsInfo.IsInParamsEndChars(c))
 				{
 //					CloseCurrentText(index - 1);
 					if(source.Length > index + 1 && source[index + 1] == CharsInfo.ParamsCodeStart)

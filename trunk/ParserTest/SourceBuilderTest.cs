@@ -163,6 +163,16 @@ namespace ParserTest
 		}
 
 		[Test]
+		public void EscapingTestParamsCloseTest()
+		{
+			string source = @"@main[] ^] @text[]  ";
+			Console.WriteLine(@"SOURCE{{{0}}}", source);
+			string actual = Parse(source);
+			Result(actual);
+			Assert.AreEqual(@" ] ", actual);
+		}
+
+		[Test]
 		public void SimpleEscapingTest()
 		{
 			string source = @"@main[] $var[select * from list$1A1:H1;sample.xls] $var";
