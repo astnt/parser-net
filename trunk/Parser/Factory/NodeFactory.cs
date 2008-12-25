@@ -114,7 +114,9 @@ namespace Parser.Factory
 				}
 				char current = sb.source[index];
 				if(CharsInfo.IsInSpaceChars(current)
-					||	current == '<') // TODO добавить остальные символы
+					||	current == '<'
+					||	current == '"'
+					) // TODO добавить остальные символы
 				{
 					hasParams = false;
 					isCreated = IfVarThenCreate(index, c, defIndex, out name);
