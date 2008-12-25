@@ -16,6 +16,13 @@ namespace Parser.Model
 			get { return rows; }
 			set { rows = value; }
 		}
+
+		public int Index
+		{
+			get { return index; }
+			set { index = value; }
+		}
+
 		public void Add(int row, int col, T value)
 		{
 			if(rows.Count <= row)
@@ -58,13 +65,16 @@ namespace Parser.Model
 		{
 			Parametr parametr = caller.Childs[0] as Parametr; 
 			currentRow = 0;
+			index = 0;
 			foreach (Row<T> row in rows)
 			{
-//				Row<T> selectedRow = row;
+				index += 1;
 				exec.Run(parametr.Childs);
 				currentRow += 1; // для индексера
 			}
+			index = 0;
 		}
+		private Int32 index;
 
 		private Executor exec;
 		public void AddExecutor(Executor executor)
