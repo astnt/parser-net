@@ -63,6 +63,7 @@
     <Compile Include="SourceBuilderTest.cs" />
     <Compile Include="SourceBuilderTests\FuncCallTest.cs" />
     <Compile Include="SourceBuilderTests\IfTest.cs" />
+    <Compile Include="SourceBuilderTests\NamingTest.cs" />
     <Compile Include="SourceBuilderTests\VarsAccessTest.cs" />
   </ItemGroup>
   <ItemGroup>
