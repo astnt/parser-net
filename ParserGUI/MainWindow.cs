@@ -15,65 +15,65 @@ namespace ParserGUI
 
 		private void MainWindow_Load(object sender, EventArgs e)
 		{
-			textBoxSource.Text = @"
-@main[]
-<h3>Demo</h3>
-	$myvar[xxx]
-	test is ^test[what;777]
-
-@test[word;number]
-	tested $word $number $myvar
-<h4>Hash demo</h4>
-$varSample[&gt;]
-$h[^hash::create[]]
-^h.addKey[name;Вася]
-^h.addKey[age;26]
-^h.addKey[sex;m]
-
-^h.each[k;v]{
-$varSample  $k = $v 
-^if($k eq 'age'){<i>age field</i>}
-<br/>
-}
-
-<h4>Vars demo</h4>
-<code>varSample</code> updated $varSample[redef] $varSample
-
-$varSample[$varSample another text]
-
-<p>redefinition <code>varSample</code>: $varSample</p>
-";
 //			textBoxSource.Text = @"
-//
 //@main[]
-//	$table[^table::excel[SELECT * FROM [Лист1^$A4:B7];../../../ParserTest/resources/sample.xls ]]
-//	some text
-//	$table
-//<table border=""1"">
-//^table.menu{
-//<tr>
-//<td>^table.column[0]</td><td>^table.column[1]</td>
-//</tr>
+//<h3>Demo</h3>
+//	$myvar[xxx]
+//	test is ^test[what;777]
+//
+//@test[word;number]
+//	tested $word $number $myvar
+//<h4>Hash demo</h4>
+//$varSample[&gt;]
+//$h[^hash::create[]]
+//^h.addKey[name;Вася]
+//^h.addKey[age;26]
+//^h.addKey[sex;m]
+//
+//^h.each[k;v]{
+//$varSample  $k = $v 
+//^if($k eq 'age'){<i>age field</i>}
+//<br/>
 //}
-//</table>
 //
+//<h4>Vars demo</h4>
+//<code>varSample</code> updated $varSample[redef] $varSample
 //
-//	$table2[^table::excel[SELECT * FROM [Лист1^$C4:C7];../../../ParserTest/resources/sample.xls ]]
-//	another text
-// $table2
+//$varSample[$varSample another text]
 //
-//	$table2
-//<table border=""1"">
-//^table2.menu{
-//<tr>
-//<td>^table2.column[0]</td>
-//</tr>
-//}
-//</table>
-//
-//
-//
+//<p>redefinition <code>varSample</code>: $varSample</p>
 //";
+			textBoxSource.Text = @"
+
+@main[]
+	$table[^table::excel[SELECT * FROM [Лист1^$A4:B7];../../../ParserTest/resources/sample.xls ]]
+	some text
+	$table
+<table border=""1"">
+^table.menu{
+<tr>
+<td>^table.column[0]</td><td>^table.column[1]</td>
+</tr>
+}
+</table>
+
+
+	$table2[^table::excel[SELECT * FROM [Лист1^$C4:C7];../../../ParserTest/resources/sample.xls ]]
+	another text
+ $table2
+
+	$table2
+<table border=""1"">
+^table2.menu{
+<tr>
+<td>^table2.column[0]</td><td>$table2.Index</td>
+</tr>
+}
+</table>
+
+
+
+";
 		}
 
 		private void buttonParse_Click(object sender, EventArgs e)
