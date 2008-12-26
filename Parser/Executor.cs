@@ -256,7 +256,11 @@ namespace Parser
 				if(var != null && var.Value != null)
 				{
 					Type type = var.Value.GetType();
-					MethodInfo methodInfo = type.GetMethod(caller.Name[1]);
+					MethodInfo methodInfo = type.GetMethod(caller.Name[1], new Type[]{});
+					if (methodInfo == null) // попробуем еще раз получить метод
+					{
+						methodInfo = type.GetMethod(caller.Name[1]);
+					}
 					if (methodInfo != null)
 					{
 						object methodResult;

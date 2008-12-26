@@ -65,6 +65,7 @@
     <Compile Include="SourceBuilderTests\IfTest.cs" />
     <Compile Include="SourceBuilderTests\NamingTest.cs" />
     <Compile Include="SourceBuilderTests\VarsAccessTest.cs" />
+    <Compile Include="Util\ReflectionUtilTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Parser\Parser.csproj">

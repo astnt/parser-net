@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Text;
+using NUnit.Framework;
 
 namespace ParserTest.Bugs
 {
@@ -21,6 +22,27 @@ namespace ParserTest.Bugs
 ", true);
 			Result(actual);
 			Assert.IsTrue(actual.Contains("<cell>Москва / МО</cell><cell>some text</cell>"));
+		}
+		[Test]
+		public void TypesMethodsBugTest()
+		{
+			string source = @"
+@main[]
+$var[xxx]
+
+$var
+<br/>
+^var.GetType[]
+$str[^var.ToString[]]
+
+^str.GetType[]
+
+";
+			string actual = Parse(source);
+			Result(actual);
+
+//			StringBuilder sb = new StringBuilder();
+//			sb.Length
 		}
 	}
 }

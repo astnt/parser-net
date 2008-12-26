@@ -73,6 +73,7 @@
     <Compile Include="Syntax\Expressions.cs" />
     <Compile Include="Util\BuiltInUtil.cs" />
     <Compile Include="Util\Dumper.cs" />
+    <Compile Include="Util\ReflectionUtil.cs" />
     <Compile Include="Util\Wrapper\ExcelWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
