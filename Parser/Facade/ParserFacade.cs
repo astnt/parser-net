@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Parser.Model;
+using Parser.Model.Context;
 using Parser.Util;
 
 namespace Parser.Facade
@@ -46,7 +47,7 @@ namespace Parser.Facade
 			{
 				throw new ArgumentNullException("Can't add variable with empty name");
 			}
-			Variable var = new Variable();
+			ContextVariable var = new ContextVariable();
 			var.Name = name;
 			var.Value = value;
 			exec.ContextManager.AddVar(var);

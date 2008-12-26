@@ -5,6 +5,7 @@ using System.Text;
 using Parser.BuiltIn.Function;
 using Parser.Context;
 using Parser.Model;
+using Parser.Model.Context;
 using Parser.Util;
 
 namespace Parser
@@ -38,6 +39,7 @@ namespace Parser
 		{
 			get { return contextManager; }
 		}
+		private ReflectionUtil refUtil = new ReflectionUtil();
 		#endregion
 		/// <summary>
 		/// Запуск выполнения с корневой ноды.
@@ -136,9 +138,6 @@ namespace Parser
 		}
 		/// <summary>
 		/// Вызывает переменную
-		/// UNDONE
-		/// - сделать вызов по точкам
-		/// - значение переменной не обязательно строка
 		/// </summary>
 		/// <param name="varCall"></param>
 		private void Run(VariableCall varCall)
@@ -204,7 +203,7 @@ namespace Parser
 			if (variable.Childs.Count > 0)
 			{
 				// пишем в контекст
-				Variable contextVariable = new Variable();
+				ContextVariable contextVariable = new ContextVariable();
 				contextVariable.Name = variable.Name;
 				StringBuilder variableOutput = new StringBuilder();
 				
@@ -255,18 +254,14 @@ namespace Parser
 				Variable var = contextManager.GetVar(caller.Name[0]);
 				if(var != null && var.Value != null)
 				{
-					Type type = var.Value.GetType();
-					MethodInfo methodInfo = type.GetMethod(caller.Name[1], new Type[]{});
-					if (methodInfo == null) // попробуем еще раз получить метод
+
+					MethodInfo mi = refUtil.SearchMethod(var.Value, new String[] { caller.Name[1] });
+					if (mi != null)
 					{
-						methodInfo = type.GetMethod(caller.Name[1]);
-					}
-					if (methodInfo != null)
-					{
-						object methodResult;
+						object resultOfMethod;
 						if (var.Value as IExecutable != null) // если относиться к типам выполняющим парсерное дерево,
 						{
-							methodResult = methodInfo.Invoke(var.Value, new object[] { caller });
+							resultOfMethod = mi.Invoke(var.Value, new object[] { caller });
 						}
 						else // для остальных
 						{
@@ -274,11 +269,12 @@ namespace Parser
 							object[] vars = ExtractVars(caller).ToArray();
 							if(vars.Length == 1 && vars[0].ToString() == String.Empty)
 							{
+								// убиваем переменные, если это пустая строка, т.е. ^method[]
 								vars = null;
 							}
-							methodResult = methodInfo.Invoke(var.Value, vars);
+							resultOfMethod = mi.Invoke(var.Value, vars);
 						}
-						TextOutput.Append(methodResult);
+						TextOutput.Append(resultOfMethod);
 						hasFuncLikeInVar = true;
 					}
 				}
