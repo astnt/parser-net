@@ -19,8 +19,8 @@ namespace Parser.Model
 
 		public int Index
 		{
-			get { return index; }
-			set { index = value; }
+			get { return currentRow; }
+			set { currentRow = value; }
 		}
 
 		public void Add(int row, int col, T value)
@@ -65,16 +65,13 @@ namespace Parser.Model
 		{
 			Parametr parametr = caller.Childs[0] as Parametr; 
 			currentRow = 0;
-			index = 0;
 			foreach (Row<T> row in rows)
 			{
-				index += 1;
 				exec.Run(parametr.Childs);
 				currentRow += 1; // для индексера
 			}
-			index = 0;
+			currentRow = 0;
 		}
-		private Int32 index;
 
 		private Executor exec;
 		public void AddExecutor(Executor executor)
