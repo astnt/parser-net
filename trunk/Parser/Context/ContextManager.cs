@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Parser.Model;
+using Parser.Model.Context;
 
 namespace Parser.Context
 {
@@ -14,14 +15,15 @@ namespace Parser.Context
 		/// </summary>
 		private const string GLOBAL = "__GLOBAL__"; // (?)
 
-		private IDictionary<string, IDictionary<string, Variable>> contexts = new Dictionary<string, IDictionary<string, Variable>>();
+		private readonly IDictionary<string, IDictionary<string, ContextVariable>> contexts = 
+			new Dictionary<string, IDictionary<string, ContextVariable>>();
 
 		/// <summary>
 		/// Создает глобальный контекст.
 		/// </summary>
 		public ContextManager()
 		{
-			contexts.Add(GLOBAL, new Dictionary<string, Variable>());
+			contexts.Add(GLOBAL, new Dictionary<string, ContextVariable>());
 		}
 		/// <summary>
 		/// Сокращение для добаления переменной.
@@ -31,13 +33,13 @@ namespace Parser.Context
 		/// <param name="value"></param>
 		public void AddVar(string name, object value)
 		{
-			AddVar(new Variable(name, value));
+			AddVar(new ContextVariable(name, value));
 		}
 		/// <summary>
 		/// Добавляет в глобальный контекст переменную.
 		/// </summary>
 		/// <param name="variable">Описание переменной.</param>
-		public void AddVar(Variable variable)
+		public void AddVar(ContextVariable variable)
 		{
 			if (contexts[GLOBAL].ContainsKey(variable.Name))
 			{
@@ -92,7 +94,7 @@ namespace Parser.Context
 		{
 			if(!contexts.ContainsKey(func.Name))
 			{
-				contexts[func.Name] = new Dictionary<string, Variable>();
+				contexts[func.Name] = new Dictionary<string, ContextVariable>();
 			}
 			if(vars == null)
 			{
@@ -102,7 +104,7 @@ namespace Parser.Context
 			}
 			for (int position = 0; position < vars.Count; position += 1)
 			{
-				Variable variable = new Variable();
+				ContextVariable contextVariable = new ContextVariable();
 				if(func.Childs.Count <= position) // если детей (принемаемых значений) меньше чем передаваемых значений
 				{
 					break;
@@ -112,18 +114,18 @@ namespace Parser.Context
 				{
 					break;
 				}
-				variable.Name = name.Body; // FIXME в что-то понятнее
+				contextVariable.Name = name.Body; // FIXME в что-то понятнее
 				// TODO value как переменная
-				variable.Value = vars[position];
-				variable.Parent = func;
-				IDictionary<string, Variable> variables = contexts[func.Name];
-				if (!variables.ContainsKey(variable.Name))
+				contextVariable.Value = vars[position];
+				contextVariable.Parent = func;
+				IDictionary<string, ContextVariable> variables = contexts[func.Name];
+				if (!variables.ContainsKey(contextVariable.Name))
 				{
-					contexts[func.Name].Add(variable.Name, variable);
+					contexts[func.Name].Add(contextVariable.Name, contextVariable);
 				}
 				else
 				{
-					contexts[func.Name][variable.Name] = variable;
+					contexts[func.Name][contextVariable.Name] = contextVariable;
 					//throw new ArgumentException(String.Format(@"Variable with name ""{0}"" already exist in function ""{1}"".", variable.Name, func.Name));
 				}
 			}

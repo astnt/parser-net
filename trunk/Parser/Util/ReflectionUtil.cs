@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Parser.Util
 {
@@ -11,23 +8,15 @@ namespace Parser.Util
 	/// </summary>
 	public class ReflectionUtil
 	{
-		public void SearchMethod(String[] name)
+		public MethodInfo SearchMethod(Object value, String[] name)
 		{
-			Type t = typeof(StringBuilder);
-			Console.WriteLine("Type of class: " + t);
-			Console.WriteLine("Namespace: " + t.Namespace);
-			MethodInfo[] mi = t.GetMethods();
-			Console.WriteLine("Methods are:");
-
-			foreach (MethodInfo i in mi)
+			Type type = value.GetType();
+			MethodInfo methodInfo = type.GetMethod(name[0], new Type[] { });
+			if (methodInfo == null) // попробуем еще раз получить метод
 			{
-				Console.WriteLine("Name: " + i.Name);
-				ParameterInfo[] pif = i.GetParameters();
-				foreach (ParameterInfo p in pif)
-				{
-					Console.WriteLine("Type: " + p.ParameterType + " parameter name: " + p.Name);
-				}
+				methodInfo = type.GetMethod(name[0]);
 			}
+			return methodInfo;
 		}
 	}
 }
