@@ -74,7 +74,7 @@ namespace ParserTest.SourceBuilderTests
 			pf.Parse(@"
 @main[]
 	$somevar[458]
-	^if($somevar == 458 (^eval(2+2) == 2 && ^text[] eq 'some')){
+	^if($somevar == 458 || ^eval(2+2) == 2 && ^text[] eq 'some'){
 		true
 	}{
 		false
@@ -90,32 +90,6 @@ some
 //			Assert.IsTrue(actual.Contains("false"));
 //			Assert.IsTrue(!actual.Contains("true"));
 			Assert.Fail(); // UNDONE
-		}
-		/// <summary>
-		/// Тестирует правильный разбор выражений в if
-		/// </summary>
-		[Test]
-		public void SearchForExpressionsTest()
-		{
-			string source = "  eq 'val'";
-			SourceBuilder sb = new SourceBuilder();
-			RootNode root = new RootNode();
-			Caller caller = new Caller();
-			caller.Name = new string[]{ IfCondition.SyntaxName };
-			root.Add(caller);
-			Parametr param = new Parametr();
-			caller.Add(param);
-			sb.source = source;
-			sb.CurrentText = new Text();
-			sb.CurrentText.Start = 0;
-			param.Add(sb.CurrentText);
-			int index = sb.SearchForExpressions(source.Length, param);
-			sb.CloseCurrentText(index);
-			Model(root);
-
-			// assert tree
-			Assert.IsTrue(((Operator)param.Childs[0]).Operation == Expressions.EqualString);
-			Assert.IsTrue(((Text)param.Childs[1]).Body == "'val'");
 		}
 		[Test]
 		public void FloatIfTest()

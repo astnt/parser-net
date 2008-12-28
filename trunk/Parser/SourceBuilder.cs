@@ -55,6 +55,25 @@ namespace Parser
 				char c = source[index];
 				CurrentIndex = index;
 //				Console.WriteLine("char'{0}'", c);
+				// если символ соответствует одному из [e]q, [=]=, [&]&, [|]| и т.п.
+				if(Expressions.expressionFirstChar.ContainsKey(c))
+				{
+					// ести родитель ^if()
+					if ((node.Parent as Caller) != null && ((Caller)node.Parent).Name[0] == IfCondition.SyntaxName)
+					{
+						String expression = Expressions.expressionFirstChar[c];
+						if (IsExpression(index, expression))
+						{
+							CloseCurrentText(index);
+							RemoveTextNodeIfNotInExpression(node);
+							Operator op = new Operator(expression);
+							node.Add(op);
+							index += expression.Length - 1;
+							CurrentIndex = index;
+							continue;
+						}
+					}
+				}
 
 				bool IsDeclarationChar =
 					(	 c == CharsInfo.FuncDeclarationStart
@@ -135,6 +154,32 @@ namespace Parser
 				}
 			}
 		}
+
+		private void RemoveTextNodeIfNotInExpression(Node node)
+		{
+			String valueOfTextNode = currentText.Body.Trim();
+			if (String.IsNullOrEmpty(valueOfTextNode)
+				||
+				// проверяем не соотвествует ли 'string value', то есть [']string value[']
+				(valueOfTextNode[0] != CharsInfo.StringInExpressionDeclaration
+				&& valueOfTextNode[valueOfTextNode.Length-1] != CharsInfo.StringInExpressionDeclaration
+				// если это не число
+				&& !CharsInfo.IsDigit(valueOfTextNode[0])
+				)
+			)
+			{
+				node.Childs.Remove(currentText);
+			}
+		}
+
+		private bool IsExpression(Int32 index, String expression)
+		{
+			return CharsInfo.IsInSpaceChars(source[index - 1])
+				&& CharsInfo.IsInSpaceChars(source[index + expression.Length])
+				&& source.Substring(index, expression.Length) == expression
+				;
+		}
+
 		/// <summary>
 		/// Разбиваем параметры.
 		/// </summary>
@@ -143,11 +188,6 @@ namespace Parser
 		/// <returns></returns>
 		private Node SplitParametr(int index, Node node)
 		{
-			// UNDONE поиск на выражения
-			if ((node.Parent as Caller) != null && ((Caller)node.Parent).Name[0] == IfCondition.SyntaxName)
-			{
-				index = SearchForExpressions(index, node);
-			}
 			CloseCurrentText(index); // закрываем текущую текстовую ноду
 			node = node.Parent; // спускаемся вниз
 			Node parametr = new Parametr();
@@ -155,34 +195,6 @@ namespace Parser
 			node = parametr; // перемещаем указатель на него
 			return node;
 		}
-
-		public int SearchForExpressions(int index, Node node)
-		{
-			int from = currentText.Start.Value;
-			int last = from;
-			for(int indexFrom = from; indexFrom < index; indexFrom += 1)
-			{
-//				Console.WriteLine("char'{0}'index'{1}'last'{2}'", source[indexFrom], indexFrom, last);
-				if(CharsInfo.IsInSpaceChars(source[indexFrom]))
-				{
-					string currentWord = source.Substring(last, indexFrom - last);
-					
-					if (Expressions.IfExpressions.Contains(currentWord.Trim()))
-					{
-						CloseCurrentText(last);
-						Operator op = new Operator(currentWord);
-						node.Childs.Remove(currentText);
-						node.Add(op);
-						node.Add(currentText);
-//						Console.WriteLine("currentWord[{0}]", currentWord);
-						currentText.Start = indexFrom + 1;
-					}
-					last = indexFrom + 1;
-				}
-			}
-			return index;
-		}
-
 		/// <summary>
 		/// Спускаемся ниже по дереву, если наткнулись на закрытие параметра.
 		/// </summary>

@@ -14,6 +14,10 @@ namespace Parser.Syntax
 		public static Char CallerDeclarationStart = '^';
 		public static Char VariableDeclarationStart = '$';
 		public static Char ParametrSeparator = ';';
+		/// <summary>
+		/// ^if('string value' eq $anyVar){ ... }
+		/// </summary>
+		public static Char StringInExpressionDeclaration = '\'';
 
 		/// <summary>
 		/// В символах ]})
