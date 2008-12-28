@@ -227,7 +227,8 @@ namespace Parser
 			// TODO вызов метода объекта
 			if(caller.Name.Length > 1)
 			{
-				Variable var = contextManager.GetVar(caller.Name[0]);
+				Object result = contextManager.GetVar(caller.Name[0]);
+				ContextVariable var = result as ContextVariable;
 				if(var != null && var.Value != null)
 				{
 
