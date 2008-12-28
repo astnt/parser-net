@@ -34,11 +34,6 @@ namespace Parser.BuiltIn.Function
 			int index = 0;
 			foreach (AbstractNode node in param.Childs)
 			{
-//				Text text = node as Text;
-//				if(text != null && String.IsNullOrEmpty(text.Body))
-//				{
-//					continue;
-//				}
 				Operator op = node as Operator;
 				if(op != null)
 				{
@@ -52,7 +47,6 @@ namespace Parser.BuiltIn.Function
 					{
 						object left = GetValue(param.Childs[index - 1]);
 						object right = GetValue(param.Childs[index + 1]);
-//						result = left == right;
 						result = left != null && left.Equals(right);
 					}
 				}

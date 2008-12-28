@@ -323,6 +323,7 @@ namespace Parser
 				{
 					//currentText.Body = String.Empty;
 					// TODO для оптимизации, такая текстовая нода должна быть удалена.
+					currentText.Parent.Childs.Remove(currentText);
 				}
 				else
 				{
