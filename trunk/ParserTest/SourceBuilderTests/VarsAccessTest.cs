@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using NUnit.Framework;
 using Parser.Facade;
 using Parser.Model;
@@ -57,13 +56,16 @@ namespace ParserTest.SourceBuilderTests
 			ParserFacade pf = new ParserFacade();
 			pf.Parse(@"
 @main[]
-цепочка $model.Some.Length - длинна List 	
+цепочка $model.Some.Count - длинна List 	
 значение $model.SomeValue из поля
 ");
+//			TestModel m = new TestModel();
+//			m.Some.Count
 			Model(pf.Dump());
 			pf.AddVar("model", new TestModel());
 			string actual = pf.Run();
 			Result(actual);
+			Assert.IsTrue(actual.Contains((new TestModel()).Some.Count.ToString()));
 			Assert.IsTrue(actual.Contains((new TestModel()).SomeValue));
 		}
 		[Test]
@@ -81,7 +83,7 @@ namespace ParserTest.SourceBuilderTests
 			Console.WriteLine("0, {0}", myType.GetDefaultMembers()[0].ToString());
 			// UNDONE дописать остальную логику и Assert
 			Table<string> table = new Table<string>();
-			MemberInfo indexer = myType.GetDefaultMembers()[0];
+//			MemberInfo indexer = myType.GetDefaultMembers()[0];
 			table.Add(0, 0, "value-from-indexer");
 //			Console.WriteLine(indexer.);
 //			MethodInfo index = indexer as MethodInfo;

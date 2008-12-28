@@ -34,12 +34,25 @@ namespace Parser
 		/// <summary>
 		/// Глобальный контекст.
 		/// </summary>
-		private ContextManager contextManager = new ContextManager();
+		private ContextManager contextManager;
 		public ContextManager ContextManager
 		{
 			get { return contextManager; }
 		}
+
+		public ReflectionUtil RefUtil
+		{
+			get { return refUtil; }
+			set { refUtil = value; }
+		}
+
 		private ReflectionUtil refUtil = new ReflectionUtil();
+
+		public Executor()
+		{
+			contextManager = new ContextManager(this);
+		}
+
 		#endregion
 		/// <summary>
 		/// Запуск выполнения с корневой ноды.
@@ -142,51 +155,14 @@ namespace Parser
 		/// <param name="varCall"></param>
 		private void Run(VariableCall varCall)
 		{
-			Variable variable = contextManager.GetVar(varCall);
-			if (variable != null) // переменной может и не быть, в этом случае ничего не делаем
-			{
-				StringBuilder stringBuilder = variable.Value as StringBuilder;
-				String stringValue = variable.Value as String;
-				if (stringBuilder != null || stringValue != null)
-				{
-					TextOutput.Append(variable.Value);
-					return;
-				}
-				// когда нет текстового значения выводим текстовое название типа
-				if(varCall.Name.Length == 1 && variable.Value != null)
-				{
-					String typeName = variable.Value.GetType().ToString();
-					TextOutput.Append(typeName);
-				}
-				// $some.thing.here
-				if(varCall.Name.Length > 1)
-				{
-					object result = null;
-					Type type = variable.Value.GetType();
-					// ищем поле
-					foreach (string name in varCall.Name)
-					{
-						PropertyInfo propertyInfo = type.GetProperty(name);
-						if (propertyInfo != null)
-						{
-							result = propertyInfo.GetGetMethod().Invoke(variable.Value, null);
-						}
-//						int t = type.
-						if (type.GetDefaultMembers().Length > 0)
-						{
-							MemberInfo indexer = type.GetDefaultMembers()[0];
-//							indexer.ReflectedType.
-						}
-						if (result != null) type = result.GetType();
-					}
-					if (!string.IsNullOrEmpty(result as String))
-					{
-						TextOutput.Append(result);
-					}
-					else if (result != null) {
-						TextOutput.Append(result.ToString());
-					}
+			Object result = contextManager.GetVar(varCall);
+			ContextVariable variable = result as ContextVariable;
+			if (variable != null && variable.Value != null){
+				TextOutput.Append(variable.Value);
 			}
+			else if(result != null)
+			{
+				TextOutput.Append(result);
 			}
 		}
 		private void Run(Parametr parametr)
@@ -255,7 +231,7 @@ namespace Parser
 				if(var != null && var.Value != null)
 				{
 
-					MethodInfo mi = refUtil.SearchMethod(var.Value, new String[] { caller.Name[1] });
+					MethodInfo mi = RefUtil.SearchMethod(var.Value, new String[] { caller.Name[1] });
 					if (mi != null)
 					{
 						object resultOfMethod;

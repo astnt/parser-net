@@ -154,7 +154,10 @@ namespace Parser
 				}
 			}
 		}
-
+		/// <summary>
+		/// Удалить лишнюю текстовую ноду, если не входит в boolean-выражение.
+		/// </summary>
+		/// <param name="node"></param>
 		private void RemoveTextNodeIfNotInExpression(Node node)
 		{
 			String valueOfTextNode = currentText.Body.Trim();
