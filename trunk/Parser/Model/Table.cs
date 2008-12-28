@@ -45,7 +45,11 @@ namespace Parser.Model
 			Text text = (Text) parametr.Childs[0];
 			return this[Int32.Parse(text.Body)];
 		}
-		public T this[int col]
+		public T this[String col]
+		{
+			get { return rows[currentRow].Cells[Convert.ToInt32(col)]; }
+		}
+		public T this[Int32 col]
 		{
 			get { return rows[currentRow].Cells[col]; }
 		}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Text;
 using Parser.Model.Context;
 
 namespace Parser.Util
@@ -32,6 +33,17 @@ namespace Parser.Util
 					result = propertyInfo.GetGetMethod().Invoke(value, null);
 					type = result.GetType();
 					value = result;
+				}
+				else
+				{
+					PropertyInfo indexer = type.GetProperty("Item", new Type[] {typeof (String)});
+//					PropertyInfo p2 = type.GetProperty("Item", new Type[] {typeof (Int32)});
+					if(indexer != null)
+					{
+						result = indexer.GetGetMethod().Invoke(value, new Object[]{ name[i] });
+						type = result.GetType();
+						value = result;					
+					}
 				}
 			}
 			return result;
