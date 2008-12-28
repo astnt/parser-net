@@ -4,6 +4,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Parser.Facade;
 using Parser.Model;
+using Parser.Util;
 
 namespace ParserTest.SourceBuilderTests
 {
@@ -71,30 +72,14 @@ namespace ParserTest.SourceBuilderTests
 		[Test]
 		public void IndexerAccessTest()
 		{
-			Type myType = typeof(Table<int>);
-			MemberInfo[] memberInfoArray = myType.GetDefaultMembers();
-			if (memberInfoArray.Length > 0)
-			{
-				foreach (MemberInfo memberInfoObj in memberInfoArray)
-				{
-					Console.WriteLine("The default member name is: " + memberInfoObj.ToString());
-				}
-			}
-			Console.WriteLine("0, {0}", myType.GetDefaultMembers()[0].ToString());
 			// UNDONE дописать остальную логику и Assert
 			Table<string> table = new Table<string>();
 //			MemberInfo indexer = myType.GetDefaultMembers()[0];
 			table.Add(0, 0, "value-from-indexer");
-//			Console.WriteLine(indexer.);
-//			MethodInfo index = indexer as MethodInfo;
-//			object result = null;
-//			if (index != null)
-//			{
-//				result = index.Invoke(table, new object[] { 0 });
-//			}
-//			Console.WriteLine("result is '{0}'", result);
-
-			Assert.Fail(); // UNDONE
+			ReflectionUtil ru = new ReflectionUtil();
+			Object result = ru.SearchValue(table, new String[] { "0" });
+			Console.WriteLine("value is '{0}'", result);
+			Assert.AreEqual("value-from-indexer", result); // UNDONE
 		}
 	}
 }
