@@ -231,7 +231,6 @@ namespace Parser
 				ContextVariable var = result as ContextVariable;
 				if(var != null && var.Value != null)
 				{
-
 					MethodInfo mi = RefUtil.SearchMethod(var.Value, new String[] { caller.Name[1] });
 					if (mi != null)
 					{
