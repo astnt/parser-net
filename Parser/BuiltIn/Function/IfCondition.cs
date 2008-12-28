@@ -1,4 +1,6 @@
-﻿using Parser.Model;
+﻿using System;
+using Parser.Model;
+using Parser.Model.Context;
 using Parser.Syntax;
 
 namespace Parser.BuiltIn.Function
@@ -51,7 +53,7 @@ namespace Parser.BuiltIn.Function
 						object left = GetValue(param.Childs[index - 1]);
 						object right = GetValue(param.Childs[index + 1]);
 //						result = left == right;
-						result = left.Equals(right);
+						result = left != null && left.Equals(right);
 					}
 				}
 				index += 1; 
@@ -59,7 +61,7 @@ namespace Parser.BuiltIn.Function
 			return result;
 		}
 
-		private string GetValue(AbstractNode node)
+		private String GetValue(AbstractNode node)
 		{
 			if((node as Text) != null)
 			{
@@ -67,8 +69,15 @@ namespace Parser.BuiltIn.Function
 			}
 			if((node as VariableCall) != null)
 			{
-				Variable variable = executor.ContextManager.GetVar((VariableCall)node);
-				return variable.Value.ToString();
+				Object variable = executor.ContextManager.GetVar((VariableCall)node);
+				if(variable as ContextVariable != null)
+				{
+					return ((ContextVariable)variable).Value.ToString();
+				}
+				else
+				{
+					return variable.ToString();
+				}
 			}
 			return null;
 		}

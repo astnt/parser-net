@@ -18,11 +18,14 @@ namespace Parser.Context
 		private readonly IDictionary<string, IDictionary<string, ContextVariable>> contexts = 
 			new Dictionary<string, IDictionary<string, ContextVariable>>();
 
+		private Executor exec;
+
 		/// <summary>
 		/// Создает глобальный контекст.
 		/// </summary>
-		public ContextManager()
+		public ContextManager(Executor executor)
 		{
+			exec = executor;
 			contexts.Add(GLOBAL, new Dictionary<string, ContextVariable>());
 		}
 		/// <summary>
@@ -64,7 +67,7 @@ namespace Parser.Context
 		/// </summary>
 		/// <param name="variable">Описание переменной.</param>
 		/// <returns>Переменная со значением.</returns>
-		public Variable GetVar(VariableCall variable)
+		public Object GetVar(VariableCall variable)
 		{
 			string key = variable.Name[0]; // TODO UNDONE
 			Function func = variable.Parent as Function;
@@ -79,7 +82,13 @@ namespace Parser.Context
 			// если не нашли в функции, то поищем в глобальном контексте
 			if (contexts[GLOBAL].ContainsKey(key))
 			{
-				return contexts[GLOBAL][key];
+				// UNDONE
+				ContextVariable contextVariable = contexts[GLOBAL][key];
+				if (variable.Name.Length > 1)
+				{
+					return exec.RefUtil.SearchValue(contextVariable.Value, variable.Name);
+				}
+				return contextVariable;
 			}
 			return null;
 		}
