@@ -102,7 +102,7 @@ namespace ParserGUI
 			catch(Exception ex)
 			{
 				actual = "<h1>" + ex.Message + "</h1>"
-				+ ex.StackTrace;
+				+ "<pre>" + ex.StackTrace + "</pre>";
 			}
 			// System.Windows.Forms.WebBrowser
 			webBrowserOutPut.DocumentText =

@@ -41,8 +41,11 @@ namespace Parser.Util
 					if(indexer != null)
 					{
 						result = indexer.GetGetMethod().Invoke(value, new Object[]{ name[i] });
-						type = result.GetType();
-						value = result;					
+						if (result != null)
+						{
+							type = result.GetType();
+							value = result;
+						}
 					}
 				}
 			}
