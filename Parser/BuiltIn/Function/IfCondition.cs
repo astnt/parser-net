@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Parser.Model;
-using System.Text;
+﻿using Parser.Model;
 using Parser.Syntax;
 
 namespace Parser.BuiltIn.Function
