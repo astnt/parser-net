@@ -159,7 +159,7 @@ namespace ParserTest
 			Console.WriteLine(@"SOURCE{{{0}}}", source);
 			string actual = Parse(source);
 			Result(actual);
-			Assert.AreEqual(@" ^test[] text", actual);
+			Assert.AreEqual(@"^test[] text", actual);
 		}
 
 		[Test]
@@ -187,7 +187,7 @@ namespace ParserTest
 			string source = @"@main[] ^$var";
 			string actual = Parse(source);
 			Result(actual);
-			Assert.AreEqual(" $var", actual);
+			Assert.AreEqual("$var", actual);
 		}
 
 		/// <summary>
