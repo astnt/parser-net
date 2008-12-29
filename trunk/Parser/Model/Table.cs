@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Parser.Util;
 
 namespace Parser.Model
 {
@@ -41,9 +42,14 @@ namespace Parser.Model
 		/// </summary>
 		public T column(Caller caller)
 		{
-			Parametr parametr = caller.Childs[0] as Parametr; 
+			Parametr parametr = caller.Childs[0] as Parametr;
+			if (parametr == null)
+			{
+				throw new Exception(String.Format(@"Parametr of caller '{0}' is null.", Dumper.Dump(caller.Name)));
+			}
 			Text text = (Text) parametr.Childs[0];
-			return this[Int32.Parse(text.Body)];
+				return this[Int32.Parse(text.Body)];
+			
 		}
 		public String this[String col] // HACK
 		{
@@ -79,7 +85,15 @@ namespace Parser.Model
 			currentRow = 0;
 			foreach (Row<T> row in rows)
 			{
-				exec.Run(parametr.Childs);
+				if (parametr != null)
+				{
+					 exec.Run(parametr.Childs);
+				}
+				else
+				{
+					throw new Exception(String.Format(@"Parametr of caller '{0}' is null.",
+						Dumper.Dump(caller.Name)));
+				}
 				currentRow += 1; // для индексера
 			}
 			currentRow = 0;

@@ -50,6 +50,10 @@ namespace Parser.Facade
 			ContextVariable var = new ContextVariable();
 			var.Name = name;
 			var.Value = value;
+			if(value as IExecutable != null)
+			{
+				((IExecutable)value).AddExecutor(exec);
+			}
 			exec.ContextManager.AddVar(var);
 		}
 		/// <summary>
