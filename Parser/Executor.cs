@@ -96,12 +96,12 @@ namespace Parser
 			if(!string.IsNullOrEmpty(something as String))
 			{
 				// добавляем в текущий вывод
-				TextOutput.Append(something);
+				TextOutput.Append(something); // TODO добавляется зачем-то в некий TextOutput если стока, нахуй?
 				return;
 			}
 			// UNDONE
 			// если что-то еще?
-			Output = something;
+			Output = something; // TODO если еще какая-то хуйня, то просто типа объект.
 			// вариант для отладки
 			// TextOutput.Append(something.GetType().ToString());
 		}
@@ -116,7 +116,7 @@ namespace Parser
 				Text text = node as Text;
 				if(text != null)
 				{
-					TextOutput.Append(text.Body);
+					TextOutput.Append(text.Body); // TODO если напоролись на текстовую ноду, то типа гоним ее в текст.
 				}
 				Caller caller = node as Caller;
 				if(caller != null)
@@ -158,11 +158,11 @@ namespace Parser
 			Object result = contextManager.GetVar(varCall);
 			ContextVariable variable = result as ContextVariable;
 			if (variable != null && variable.Value != null){
-				TextOutput.Append(variable.Value);
+				TextOutput.Append(variable.Value); // если напоролись на переменную, достаем и зачем-то шлепаем в текстовый контекст
 			}
 			else if(result != null)
 			{
-				TextOutput.Append(result);
+				TextOutput.Append(result); // если результат не контекстная переменная - суем в текстовый вывод зачем-то
 			}
 		}
 		private void Run(Parametr parametr)
@@ -181,15 +181,15 @@ namespace Parser
 				// пишем в контекст
 				ContextVariable contextVariable = new ContextVariable();
 				contextVariable.Name = variable.Name;
-				StringBuilder variableOutput = new StringBuilder();
+				StringBuilder variableOutput = new StringBuilder(); // если вывод переменной, то это обязательно почему-то String
 				
 				TextOutput = variableOutput; // меняем "поток" вывода
 				Run((Parametr)variable.Childs[0]);
 
-				contextVariable.Value = Output ?? TextOutput;
+				contextVariable.Value = Output ?? TextOutput; // какая-то хуйня
 				Output = null; // TODO Обнуляем HACK
 
-				TextOutput = defaultOutput; // возвращаем дефолтный поток вывода				
+				TextOutput = defaultOutput; // возвращаем дефолтный поток вывода
 				contextManager.AddVar(contextVariable); // добавляем в контекст
 				if(contextVariable.Value as IExecutable != null)
 				{
@@ -250,20 +250,20 @@ namespace Parser
 							}
 							resultOfMethod = mi.Invoke(var.Value, vars);
 						}
-						TextOutput.Append(resultOfMethod);
+						TextOutput.Append(resultOfMethod); // опять почему-то прихуячили к текстовомоу выводу результат метода
 						hasFuncLikeInVar = true;
 					}
 				}
 			}
 			// если есть функции с таким именем как в caller
-			if (hasFuncLikeInCaller && func.RefObject == null)
+			if (hasFuncLikeInCaller && func.RefObject == null) // наверно, это уебанство стоит поднять наверх уебанского метода
 			{
 				// вызов когда добавляем в контекст
 				List<object> vars = ExtractVars(caller);
 				// кладем в контекст найденной функции
 				contextManager.AddVars(vars, func, caller);
 			}
-			if(!hasFuncLikeInCaller && !hasFuncLikeInVar) // 
+			if(!hasFuncLikeInCaller && !hasFuncLikeInVar) // если нихуя не нашли бросаем исключение
 			{
 				throw new NullReferenceException(
 					String.Format(@"Function or method with name ""{0}"" not found.", Dumper.Dump(caller.Name)) );
