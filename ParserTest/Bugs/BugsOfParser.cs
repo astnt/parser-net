@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using NUnit.Framework;
+using Parser.Facade;
+using Parser.Model;
 
 namespace ParserTest.Bugs
 {
@@ -74,6 +77,23 @@ $str[^var.ToString[]]
 <tr>
 <td>20</td><td>2</td><td>20</td>
 </tr>"));
+		}
+		[Test]
+		public void EqualValuesIfBugTest()
+		{
+			Table<String> table = new Table<String>();
+			table.Add(0,0,"value-from-table");
+
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(@"@main[]
+	^table.menu{ $table.0 - $table.Index  ^if($table.Index == 1){error}{true} ^if($table.Index == 0){true}{error} }
+");
+			Model(pf.Dump());
+			pf.AddVar("table", table);
+			String actual = pf.Run();
+			Result(actual);
+			Assert.IsTrue(actual.Contains("true"));
+			Assert.IsTrue(!actual.Contains("error"));
 		}
 	}
 }
