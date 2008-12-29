@@ -118,7 +118,9 @@ namespace Parser.Context
 				{
 					break;
 				}
-				Text name = ((Parametr) func.Childs[position]).Childs[0] as Text;
+				Parametr parametr = ((Parametr) func.Childs[position]);
+				Text name = null;
+				if(parametr.Childs.Count > 0){ name = parametr.Childs[0] as Text; }
 				if(name == null || name.Body == null) // HACK
 				{
 					break;
