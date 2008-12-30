@@ -27,7 +27,7 @@ namespace Parser
 			foreach (AbstractNode child in node.Childs)
 			{
 				Function func = child as Function;
-				if(func != null)
+				if (func != null)
 				{
 					Run(func.Childs);
 					hasFunc = true;
@@ -36,11 +36,12 @@ namespace Parser
 					break;
 				}
 			}
-			if(!hasFunc)
+			if (!hasFunc)
 			{
 				throw new NullReferenceException("Function's declaration is not found.");
 			}
 		}
+
 		/// <summary>
 		/// Спорный вызов некой "исполняемой" функции типа ^eval()
 		/// </summary>
@@ -54,7 +55,7 @@ namespace Parser
 			{
 				something = computeFunc.Compute(caller, this);
 			}
-			if(!string.IsNullOrEmpty(something as String))
+			if (!string.IsNullOrEmpty(something as String))
 			{
 				// добавляем в текущий вывод
 				TextOutput.Append(something); // TODO добавляется зачем-то в некий TextOutput если стока, нахуй?
@@ -63,6 +64,7 @@ namespace Parser
 			// UNDONE
 			Output = something; // TODO если еще какая-то хуйня, то просто типа объект.
 		}
+
 		/// <summary>
 		/// Разбираем детей и выясняем, что с ними делать.
 		/// </summary>
@@ -72,12 +74,12 @@ namespace Parser
 			foreach (AbstractNode node in childs)
 			{
 				Text text = node as Text;
-				if(text != null)
+				if (text != null)
 				{
 					TextOutput.Append(text.Body); // TODO если напоролись на текстовую ноду, то типа гоним ее в текст.
 				}
 				Caller caller = node as Caller;
-				if(caller != null)
+				if (caller != null)
 				{
 					// Передаем управление найденной функции.
 					Function func = Call(root, caller);
@@ -87,7 +89,7 @@ namespace Parser
 					}
 				}
 				Variable variable = node as Variable;
-				if(variable != null)
+				if (variable != null)
 				{
 					Run(variable);
 				}
@@ -98,6 +100,7 @@ namespace Parser
 				}
 			}
 		}
+
 		private void Run(Caller caller, Function func)
 		{
 			if (func.RefObject != null)
@@ -106,6 +109,7 @@ namespace Parser
 			}
 			Run(func.Childs);
 		}
+
 		/// <summary>
 		/// Вызывает переменную
 		/// </summary>
@@ -114,18 +118,21 @@ namespace Parser
 		{
 			Object result = contextManager.GetVar(varCall);
 			ContextVariable variable = result as ContextVariable;
-			if (variable != null && variable.Value != null){
+			if (variable != null && variable.Value != null)
+			{
 				TextOutput.Append(variable.Value); // если напоролись на переменную, достаем и зачем-то шлепаем в текстовый контекст
 			}
-			else if(result != null)
+			else if (result != null)
 			{
 				TextOutput.Append(result); // если результат не контекстная переменная - суем в текстовый вывод зачем-то
 			}
 		}
+
 		private void Run(Parametr parametr)
 		{
 			Run(parametr.Childs);
 		}
+
 		/// <summary>
 		/// Вызов или помещение в контекст.
 		/// </summary>
@@ -139,23 +146,24 @@ namespace Parser
 				ContextVariable contextVariable = new ContextVariable();
 				contextVariable.Name = variable.Name;
 				StringBuilder variableOutput = new StringBuilder(); // если вывод переменной, то это обязательно почему-то String
-				
+
 				TextOutput = variableOutput; // меняем "поток" вывода
-				Run((Parametr)variable.Childs[0]);
+				Run((Parametr) variable.Childs[0]);
 
 				contextVariable.Value = Output ?? TextOutput; // какая-то хуйня
 				Output = null; // TODO Обнуляем HACK
 
 				TextOutput = defaultOutput; // возвращаем дефолтный поток вывода
 				contextManager.AddVar(contextVariable); // добавляем в контекст
-				if(contextVariable.Value as IExecutable != null)
+				if (contextVariable.Value as IExecutable != null)
 				{
 					// добавляем ссылку на Executor, для дальнейшего выполнения дерева.
-					((IExecutable)contextVariable.Value).AddExecutor(this);
+					((IExecutable) contextVariable.Value).AddExecutor(this);
 				}
 				// TODO VariableCall?
 			}
 		}
+
 		/// <summary>
 		/// Возвращает нужную для обработки функцию.
 		/// </summary>
@@ -166,7 +174,6 @@ namespace Parser
 		{
 			Function func = null;
 			Boolean hasFuncLikeInCaller = false;
-			Boolean hasFuncLikeInVar = false;
 			// поиск функции с таким именем
 			if (caller.Name.Length == 1)
 			{
@@ -179,14 +186,19 @@ namespace Parser
 						break;
 					}
 				}
+				if (!hasFuncLikeInCaller)
+				{
+					throw new NullReferenceException(
+						String.Format(@"Function or method with name ""{0}"" not found.", Dumper.Dump(caller.Name)));
+				}
 			}
 			// поиск переменной с таким именем -> вызов ее метода(ов)
 			// TODO вызов метода объекта
-			if(caller.Name.Length > 1)
+			if (caller.Name.Length > 1)
 			{
 				Object result = contextManager.GetVar(caller.Name[0]);
 				ContextVariable var = result as ContextVariable;
-				if(var != null && var.Value != null)
+				if (var != null && var.Value != null)
 				{
 					Object[] vars = null;
 					if (var.Value as IExecutable == null)
@@ -195,9 +207,7 @@ namespace Parser
 					}
 					object resultOfMethod = refUtil.GetObjectFromMethod(var, caller, vars);
 					TextOutput.Append(resultOfMethod); // опять почему-то прихуячили к текстовомоу выводу результат метода
-					hasFuncLikeInVar = true;
 				}
-				
 			}
 			// если есть функции с таким именем как в caller
 			if (hasFuncLikeInCaller && func.RefObject == null) // наверно, это уебанство стоит поднять наверх уебанского метода
@@ -207,13 +217,9 @@ namespace Parser
 				// кладем в контекст найденной функции
 				contextManager.AddVars(vars, func, caller);
 			}
-			if(!hasFuncLikeInCaller && !hasFuncLikeInVar) // если нихуя не нашли бросаем исключение
-			{
-				throw new NullReferenceException(
-					String.Format(@"Function or method with name ""{0}"" not found.", Dumper.Dump(caller.Name)) );
-			}
 			return func;
 		}
+
 		/// <summary>
 		/// Узнаем какие переменные (или строки есть в caller)
 		/// Возвращаем ввиду списка значений.
@@ -227,13 +233,14 @@ namespace Parser
 			{
 				Parametr parametr = child as Parametr;
 				// пробегаемся по детям, если параметр, то добавляем "значение"
-				if(parametr != null)
+				if (parametr != null)
 				{
 					vars.Add(ExtractVar(parametr.Childs));
 				}
 			}
 			return vars;
 		}
+
 		private object ExtractVar(IList<AbstractNode> childs)
 		{
 			TextOutput = new StringBuilder();
@@ -243,22 +250,28 @@ namespace Parser
 			// UNDONE результаты другого типа 
 			return stringBuilder;
 		}
+
 		#region vars
+
 		/// <summary>
 		/// Текстовый результат.
 		/// </summary>
 		private StringBuilder defaultOutput = new StringBuilder();
+
 		/// <summary>
 		/// Текстовый вывод. (мега хуйня, куда собирается весь текст для вывода)
 		/// TODO добавить getter и setter
 		/// </summary>
 		public StringBuilder TextOutput;
+
 		/// <summary>
 		/// Объектный вывод.
 		/// </summary>
 		public object Output;
+
 		private RootNode root;
 		private ContextManager contextManager;
+
 		/// <summary>
 		/// Глобальный контекст.
 		/// </summary>
@@ -266,6 +279,7 @@ namespace Parser
 		{
 			get { return contextManager; }
 		}
+
 		/// <summary>
 		/// Утилита объединяющая методы для работы с отражением.
 		/// </summary>
@@ -274,11 +288,14 @@ namespace Parser
 			get { return refUtil; }
 			set { refUtil = value; }
 		}
+
 		private ReflectionUtil refUtil = new ReflectionUtil();
+
 		public Executor()
 		{
 			contextManager = new ContextManager(this);
 		}
+
 		#endregion
 	}
 }
