@@ -20,5 +20,18 @@ namespace ParserTest.Model.Context
 			Assert.IsTrue(!actual.Contains("не включая"));
 			Assert.IsTrue(!actual.Contains("г. Барнаул"));
 		}
+		[Test]
+		public void ContainsTest()
+		{
+			string actual = Parse(@"
+@main[]
+	$var[г. Барнаул]
+	^if(^var.contains[г. ]){true}{error}
+	^if(^var.contains[fuck]){error}
+");
+			Result(actual);
+			Assert.IsTrue(actual.Contains("true"));
+			Assert.IsTrue(!actual.Contains("error"));
+		}
 	}
 }
