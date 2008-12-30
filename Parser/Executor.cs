@@ -217,7 +217,17 @@ namespace Parser
 						vars = ExtractVars(caller).ToArray();
 					}
 					object resultOfMethod = refUtil.GetObjectFromMethod(var, caller, vars);
-					TextOutput.Append(resultOfMethod); // опять почему-то прихуячили к текстовомоу выводу результат метода
+					if (resultOfMethod != null)
+					{
+						if (resultOfMethod.GetType() == typeof(StringBuilder) || resultOfMethod.GetType() == typeof(String))
+						{
+							TextOutput.Append(resultOfMethod); // опять почему-то прихуячили к текстовомоу выводу результат метода
+						}
+						if (resultOfMethod.GetType() == typeof (Boolean))
+						{
+							Output = resultOfMethod;
+						}
+					}
 				}
 			}
 			return func;

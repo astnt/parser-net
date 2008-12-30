@@ -21,6 +21,11 @@ namespace Parser.Model.Context
 		{
 			return value.ToString();
 		}
+		/// <summary>
+		/// Substring парсера.
+		/// </summary>
+		/// <param name="caller"></param>
+		/// <returns></returns>
 		public StringBuilder mid(Caller caller)
 		{
 //			$str[О, сколько нам открытий чудных!…]
@@ -30,7 +35,11 @@ namespace Parser.Model.Context
 
 			return new StringBuilder(value.ToString().Substring(startIndex, lenght));
 		}
-
+		public Boolean contains(Caller caller)
+		{
+			String valueFromParam = ((Text)((Parametr)caller.Childs[0]).Childs[0]).Body;
+			return value.ToString().Contains(valueFromParam);
+		}
 
 		#region vars
 

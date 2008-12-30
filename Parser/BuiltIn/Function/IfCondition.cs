@@ -37,20 +37,23 @@ namespace Parser.BuiltIn.Function
 				Operator op = node as Operator;
 				if(op != null)
 				{
+					String left = GetValue(param.Childs[index - 1]);
+					String right = GetValue(param.Childs[index + 1]);
 					if(op.Operation == Expressions.EqualString)
 					{
-						string left = GetValue(param.Childs[index - 1]);
-						string right = GetValue(param.Childs[index + 1]);
 						result = left == right;
 					}
 					if(op.Operation == Expressions.Equal)
 					{
-						object left = GetValue(param.Childs[index - 1]);
-						object right = GetValue(param.Childs[index + 1]);
 						result = left != null && left.Equals(right);
 					}
 				}
 				index += 1; 
+			}
+			if (param.Childs != null && param.Childs.Count == 1)
+			{
+				executor.Run(param.Childs);
+				return (Boolean) executor.Output;
 			}
 			return result;
 		}
