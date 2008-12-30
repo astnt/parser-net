@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using System.Text;
+using Parser.Model;
 using Parser.Model.Context;
 
 namespace Parser.Util
@@ -10,6 +10,12 @@ namespace Parser.Util
 	/// </summary>
 	public class ReflectionUtil
 	{
+		/// <summary>
+		/// Поиск метода.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public MethodInfo SearchMethod(Object value, String[] name)
 		{
 			Type type = value.GetType();
@@ -20,7 +26,12 @@ namespace Parser.Util
 			}
 			return methodInfo;
 		}
-
+		/// <summary>
+		/// Поиск значения.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public Object SearchValue(Object value, String[] name)
 		{
 			Type type = value.GetType();
@@ -50,6 +61,30 @@ namespace Parser.Util
 				}
 			}
 			return result;
+		}
+
+		public Object GetObjectFromMethod(ContextVariable var, Caller caller, Object[] vars)
+		{
+			Object resultOfMethod = null;
+			MethodInfo methodInfo = SearchMethod(var.Value, new String[] { caller.Name[1] });
+			if (methodInfo != null)
+			{
+				if (var.Value as IExecutable != null) // если относиться к типам выполняющим парсерное дерево,
+				{
+					resultOfMethod = methodInfo.Invoke(var.Value, new object[] { caller });
+				}
+				else // для остальных
+				{
+					// превращаем в стандартный объект для "вне" парсерных методов
+					if (vars != null && vars.Length == 1 && vars[0].ToString() == String.Empty)
+					{
+						// убиваем переменные, если это пустая строка, т.е. ^method[]
+						vars = null;
+					}
+					resultOfMethod = methodInfo.Invoke(var.Value, vars);
+				}
+			}
+			return resultOfMethod;
 		}
 	}
 }
