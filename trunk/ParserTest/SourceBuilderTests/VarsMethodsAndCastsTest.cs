@@ -11,7 +11,7 @@ namespace ParserTest.SourceBuilderTests
 			string actual = Parse(@"
 @main[]
 	$str[что-то там]
-	^str.split[6;3]
+	^str.mid[7;3]
 ");
 			Result(actual);
 			Assert.IsTrue(actual.Contains("там"));
