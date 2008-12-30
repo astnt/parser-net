@@ -33,5 +33,16 @@ namespace ParserTest.Model.Context
 			Assert.IsTrue(actual.Contains("true"));
 			Assert.IsTrue(!actual.Contains("error"));
 		}
+		[Test]
+		public void PositionIndexOfTest()
+		{
+			string actual = Parse(@"
+@main[]
+	$var[Алтайский край (не включая г. Барнаул, г. Бийск, г. Новоалтайск и г. Рубцовск)]
+	<pos>^var.pos[(не]</pos>
+");
+			Result(actual);
+			Assert.IsTrue(actual.Contains("<pos>15</pos>"));
+		}
 	}
 }
