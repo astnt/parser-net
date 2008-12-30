@@ -160,10 +160,8 @@ namespace Parser
 					// добавляем ссылку на Executor, для дальнейшего выполнения дерева.
 					((IExecutable) contextVariable.Value).AddExecutor(this);
 				}
-				// TODO VariableCall?
 			}
 		}
-
 		/// <summary>
 		/// Возвращает нужную для обработки функцию.
 		/// </summary>
@@ -186,6 +184,14 @@ namespace Parser
 						break;
 					}
 				}
+				// если есть функции с таким именем как в caller
+				if (hasFuncLikeInCaller && /* RefObject - функция другого типа TODO вынести наследованим? */ func.RefObject == null)
+				{
+					// вызов когда добавляем в контекст
+					List<object> vars = ExtractVars(caller);
+					// кладем в контекст найденной функции
+					contextManager.AddVars(vars, func, caller);
+				}
 				if (!hasFuncLikeInCaller)
 				{
 					throw new NullReferenceException(
@@ -193,7 +199,6 @@ namespace Parser
 				}
 			}
 			// поиск переменной с таким именем -> вызов ее метода(ов)
-			// TODO вызов метода объекта
 			if (caller.Name.Length > 1)
 			{
 				Object result = contextManager.GetVar(caller.Name[0]);
@@ -209,17 +214,8 @@ namespace Parser
 					TextOutput.Append(resultOfMethod); // опять почему-то прихуячили к текстовомоу выводу результат метода
 				}
 			}
-			// если есть функции с таким именем как в caller
-			if (hasFuncLikeInCaller && func.RefObject == null) // наверно, это уебанство стоит поднять наверх уебанского метода
-			{
-				// вызов когда добавляем в контекст
-				List<object> vars = ExtractVars(caller);
-				// кладем в контекст найденной функции
-				contextManager.AddVars(vars, func, caller);
-			}
 			return func;
 		}
-
 		/// <summary>
 		/// Узнаем какие переменные (или строки есть в caller)
 		/// Возвращаем ввиду списка значений.
