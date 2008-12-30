@@ -65,7 +65,7 @@ namespace Parser.Util
 
 		public Object GetObjectFromMethod(ContextVariable var, Caller caller, Object[] vars)
 		{
-			Object resultOfMethod = null;
+			Object resultOfMethod;
 			MethodInfo methodInfo = SearchMethod(var.Value, new String[] { caller.Name[1] });
 			if (methodInfo != null)
 			{
