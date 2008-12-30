@@ -50,6 +50,7 @@
     <Compile Include="BuiltIn\Function\EvalTest.cs" />
     <Compile Include="Factory\NodeFactoryTest.cs" />
     <Compile Include="HashTest.cs" />
+    <Compile Include="Model\Context\ParserStringTest.cs" />
     <Compile Include="Model\TableTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceBuilderTest.cs" />
