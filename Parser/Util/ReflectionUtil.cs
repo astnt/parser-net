@@ -71,7 +71,15 @@ namespace Parser.Util
 			{
 				if (var.Value as IExecutable != null) // если относиться к типам выполняющим парсерное дерево,
 				{
-					resultOfMethod = methodInfo.Invoke(var.Value, new object[] { caller });
+					try
+					{
+						resultOfMethod = methodInfo.Invoke(var.Value, new object[] {caller});
+					}
+					catch(TargetParameterCountException tpce)
+					{
+						throw new TargetParameterCountException(String.Format(@"Parameter count mismatch in method '{0}' of type '{1}'."
+							, caller.Name[1], var.Value.GetType()));
+					}
 				}
 				else // для остальных
 				{

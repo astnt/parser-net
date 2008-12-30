@@ -21,7 +21,7 @@ namespace Parser
 		/// <param name="node">Корневая нода дерева.</param>
 		public void Run(RootNode node)
 		{
-			TextOutput = defaultOutput;
+			TextOutput = defaultOutput; // при старте - вывод "по-молчанию"
 			root = node;
 			bool hasFunc = false;
 			foreach (AbstractNode child in node.Childs)
@@ -58,11 +58,13 @@ namespace Parser
 			if (!string.IsNullOrEmpty(something as String))
 			{
 				// добавляем в текущий вывод
-				TextOutput.Append(something); // TODO добавляется зачем-то в некий TextOutput если стока, нахуй?
-				return;
+				TextOutput.Append(something); // TODO если в результата "вычеслительной" функции получилась строка, добавляем ее 
 			}
-			// UNDONE
-			Output = something; // TODO если еще какая-то хуйня, то просто типа объект.
+			else
+			{
+				// UNDONE
+				Output = something; // TODO если еще какая-то хуйня, то просто типа объект.
+			}
 		}
 
 		/// <summary>
@@ -150,6 +152,10 @@ namespace Parser
 				TextOutput = variableOutput; // меняем "поток" вывода
 				Run((Parametr) variable.Childs[0]);
 
+				if(Output == null) // HACK типа если в Output не насралось,
+				{
+					Output = new ParserString(TextOutput);
+				}
 				contextVariable.Value = Output ?? TextOutput; // какая-то хуйня
 				Output = null; // TODO Обнуляем HACK
 
