@@ -42,6 +42,9 @@ $varSample  $k = $v
 $varSample[$varSample another text]
 
 <p>redefinition <code>varSample</code>: $varSample</p>
+
+<p>mid sample: ^varSample.mid[6;7]</p>
+
 ";
 //			textBoxSource.Text = @"
 //

@@ -75,7 +75,7 @@ namespace Parser.Util
 					{
 						resultOfMethod = methodInfo.Invoke(var.Value, new object[] {caller});
 					}
-					catch(TargetParameterCountException tpce)
+					catch(TargetParameterCountException tpce) // TODO
 					{
 						throw new TargetParameterCountException(String.Format(@"Parameter count mismatch in method '{0}' of type '{1}'."
 							, caller.Name[1], var.Value.GetType()));
