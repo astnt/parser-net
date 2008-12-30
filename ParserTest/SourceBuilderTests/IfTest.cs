@@ -103,6 +103,22 @@ some
 			Result(actual);
 			Assert.IsTrue(actual.Contains("true"));
 		}
+		[Test]
+		public void IfInHashTest()
+		{
+			string actual = Parse(@"
+@main[]
+	$h[^hash::create[]]
+	^h.addKey[name;Вася]
+	^h.addKey[age;26]
+	^h.addKey[sex;m]
 
+	^h.each[k;v]{
+		$k = $v ^if($k eq 'age'){<i>age field</i>} <br/>
+	}
+");
+			Result(actual);
+			Assert.IsTrue(actual.Contains("age = 26 <i>age field</i> <br/>"));
+		}
 	}
 }

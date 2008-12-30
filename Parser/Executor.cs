@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 using Parser.BuiltIn.Function;
 using Parser.Context;
@@ -16,44 +15,6 @@ namespace Parser
 	/// </summary>
 	public class Executor
 	{
-		#region vars
-		/// <summary>
-		/// Текстовы результат.
-		/// </summary>
-		private StringBuilder defaultOutput = new StringBuilder();
-		/// <summary>
-		/// Текстовый вывод.
-		/// TODO добавить getter и setter
-		/// </summary>
-		public StringBuilder TextOutput;
-		/// <summary>
-		/// Объектный вывод.
-		/// </summary>
-		public object Output;
-		private RootNode root;
-		/// <summary>
-		/// Глобальный контекст.
-		/// </summary>
-		private ContextManager contextManager;
-		public ContextManager ContextManager
-		{
-			get { return contextManager; }
-		}
-
-		public ReflectionUtil RefUtil
-		{
-			get { return refUtil; }
-			set { refUtil = value; }
-		}
-
-		private ReflectionUtil refUtil = new ReflectionUtil();
-
-		public Executor()
-		{
-			contextManager = new ContextManager(this);
-		}
-
-		#endregion
 		/// <summary>
 		/// Запуск выполнения с корневой ноды.
 		/// </summary>
@@ -100,10 +61,7 @@ namespace Parser
 				return;
 			}
 			// UNDONE
-			// если что-то еще?
 			Output = something; // TODO если еще какая-то хуйня, то просто типа объект.
-			// вариант для отладки
-			// TextOutput.Append(something.GetType().ToString());
 		}
 		/// <summary>
 		/// Разбираем детей и выясняем, что с ними делать.
@@ -121,7 +79,6 @@ namespace Parser
 				Caller caller = node as Caller;
 				if(caller != null)
 				{
-//					Console.WriteLine("Run caller with name {0}", caller.Name[0]);
 					// Передаем управление найденной функции.
 					Function func = Call(root, caller);
 					if (func != null)
@@ -231,29 +188,16 @@ namespace Parser
 				ContextVariable var = result as ContextVariable;
 				if(var != null && var.Value != null)
 				{
-					MethodInfo mi = RefUtil.SearchMethod(var.Value, new String[] { caller.Name[1] });
-					if (mi != null)
+					Object[] vars = null;
+					if (var.Value as IExecutable == null)
 					{
-						object resultOfMethod;
-						if (var.Value as IExecutable != null) // если относиться к типам выполняющим парсерное дерево,
-						{
-							resultOfMethod = mi.Invoke(var.Value, new object[] { caller });
-						}
-						else // для остальных
-						{
-							// превращаем в стандартный объект для "вне" парсерных методов
-							object[] vars = ExtractVars(caller).ToArray();
-							if(vars.Length == 1 && vars[0].ToString() == String.Empty)
-							{
-								// убиваем переменные, если это пустая строка, т.е. ^method[]
-								vars = null;
-							}
-							resultOfMethod = mi.Invoke(var.Value, vars);
-						}
-						TextOutput.Append(resultOfMethod); // опять почему-то прихуячили к текстовомоу выводу результат метода
-						hasFuncLikeInVar = true;
+						vars = ExtractVars(caller).ToArray();
 					}
+					object resultOfMethod = refUtil.GetObjectFromMethod(var, caller, vars);
+					TextOutput.Append(resultOfMethod); // опять почему-то прихуячили к текстовомоу выводу результат метода
+					hasFuncLikeInVar = true;
 				}
+				
 			}
 			// если есть функции с таким именем как в caller
 			if (hasFuncLikeInCaller && func.RefObject == null) // наверно, это уебанство стоит поднять наверх уебанского метода
@@ -299,5 +243,42 @@ namespace Parser
 			// UNDONE результаты другого типа 
 			return stringBuilder;
 		}
+		#region vars
+		/// <summary>
+		/// Текстовый результат.
+		/// </summary>
+		private StringBuilder defaultOutput = new StringBuilder();
+		/// <summary>
+		/// Текстовый вывод. (мега хуйня, куда собирается весь текст для вывода)
+		/// TODO добавить getter и setter
+		/// </summary>
+		public StringBuilder TextOutput;
+		/// <summary>
+		/// Объектный вывод.
+		/// </summary>
+		public object Output;
+		private RootNode root;
+		private ContextManager contextManager;
+		/// <summary>
+		/// Глобальный контекст.
+		/// </summary>
+		public ContextManager ContextManager
+		{
+			get { return contextManager; }
+		}
+		/// <summary>
+		/// Утилита объединяющая методы для работы с отражением.
+		/// </summary>
+		public ReflectionUtil RefUtil
+		{
+			get { return refUtil; }
+			set { refUtil = value; }
+		}
+		private ReflectionUtil refUtil = new ReflectionUtil();
+		public Executor()
+		{
+			contextManager = new ContextManager(this);
+		}
+		#endregion
 	}
 }

@@ -56,7 +56,6 @@ namespace ParserTest
 
 ");
 			Result(actual);
-
 		}
 	}
 }
