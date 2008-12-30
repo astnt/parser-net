@@ -84,6 +84,11 @@ namespace Parser.Util
 					resultOfMethod = methodInfo.Invoke(var.Value, vars);
 				}
 			}
+			else
+			{
+				throw new NullReferenceException(
+					String.Format(@"Function or method with name ""{0}"" not found.", Dumper.Dump(caller.Name)));
+			}
 			return resultOfMethod;
 		}
 	}
