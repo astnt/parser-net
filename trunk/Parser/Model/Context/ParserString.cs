@@ -40,6 +40,16 @@ namespace Parser.Model.Context
 			String valueFromParam = ((Text)((Parametr)caller.Childs[0]).Childs[0]).Body;
 			return value.ToString().Contains(valueFromParam);
 		}
+		/// <summary>
+		/// Позиция подстроки.
+		/// </summary>
+		/// <param name="caller"></param>
+		/// <returns></returns>
+		public StringBuilder pos(Caller caller)
+		{
+			String example = ((Text)((Parametr)caller.Childs[0]).Childs[0]).Body;
+			return new StringBuilder("" + value.ToString().IndexOf(example));
+		}
 
 		#region vars
 
