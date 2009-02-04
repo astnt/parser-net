@@ -55,6 +55,7 @@
     <Compile Include="Factory\NodeFactory.cs" />
     <Compile Include="Model\Caller.cs" />
     <Compile Include="Model\Context\ContextVariable.cs" />
+    <Compile Include="Model\Context\Enum.cs" />
     <Compile Include="Model\Context\ParserString.cs" />
     <Compile Include="Model\Hash.cs" />
     <Compile Include="Model\IExecutable.cs" />
