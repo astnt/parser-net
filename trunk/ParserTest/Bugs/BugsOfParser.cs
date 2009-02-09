@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using Parser.Facade;
@@ -94,6 +95,20 @@ $str[^var.ToString[]]
 			Result(actual);
 			Assert.IsTrue(actual.Contains("true"));
 			Assert.IsTrue(!actual.Contains("error"));
+		}
+		[Test]
+		public void VariableNameDefintionBugTest()
+		{
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(@"
+@main[]
+	<!--$test-->
+
+");
+			pf.AddVar("test", new List<String>());
+			String actual = pf.Run();
+			Result(actual);
+			Assert.IsTrue(actual.Contains(@"<!--System.Collections.Generic.List`1[System.String]-->"));
 		}
 	}
 }

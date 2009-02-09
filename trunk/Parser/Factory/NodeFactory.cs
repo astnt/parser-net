@@ -116,6 +116,7 @@ namespace Parser.Factory
 				if(CharsInfo.IsInSpaceChars(current)
 					||	current == '<'
 					||	current == '"'
+					||	current == '-'
 					) // TODO добавить остальные символы
 				{
 					hasParams = false;
