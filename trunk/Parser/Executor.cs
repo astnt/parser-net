@@ -41,7 +41,6 @@ namespace Parser
 				throw new NullReferenceException("Function's declaration is not found.");
 			}
 		}
-
 		/// <summary>
 		/// Спорный вызов некой "исполняемой" функции типа ^eval()
 		/// </summary>
@@ -66,7 +65,6 @@ namespace Parser
 				Output = something; // TODO если еще какая-то хуйня, то просто типа объект.
 			}
 		}
-
 		/// <summary>
 		/// Разбираем детей и выясняем, что с ними делать.
 		/// </summary>
@@ -102,7 +100,6 @@ namespace Parser
 				}
 			}
 		}
-
 		private void Run(Caller caller, Function func)
 		{
 			if (func.RefObject != null)
@@ -111,7 +108,6 @@ namespace Parser
 			}
 			Run(func.Childs);
 		}
-
 		/// <summary>
 		/// Вызывает переменную
 		/// </summary>
@@ -129,12 +125,10 @@ namespace Parser
 				TextOutput.Append(result); // если результат не контекстная переменная - суем в текстовый вывод зачем-то
 			}
 		}
-
 		private void Run(Parametr parametr)
 		{
 			Run(parametr.Childs);
 		}
-
 		/// <summary>
 		/// Вызов или помещение в контекст.
 		/// </summary>
@@ -252,7 +246,6 @@ namespace Parser
 			}
 			return vars;
 		}
-
 		private object ExtractVar(IList<AbstractNode> childs)
 		{
 			TextOutput = new StringBuilder();
@@ -262,9 +255,7 @@ namespace Parser
 			// UNDONE результаты другого типа 
 			return stringBuilder;
 		}
-
 		#region vars
-
 		/// <summary>
 		/// Текстовый результат.
 		/// </summary>

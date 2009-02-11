@@ -117,6 +117,7 @@ namespace Parser.Factory
 					||	current == '<'
 					||	current == '"'
 					||	current == '-'
+					||	CharsInfo.IsInParamsEndChars(current)
 					) // TODO добавить остальные символы
 				{
 					hasParams = false;
