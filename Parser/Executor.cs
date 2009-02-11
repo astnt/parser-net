@@ -217,7 +217,8 @@ namespace Parser
 						{
 							TextOutput.Append(resultOfMethod); // опять почему-то прихуячили к текстовомоу выводу результат метода
 						}
-						if (resultOfMethod.GetType() == typeof (Boolean))
+						if (resultOfMethod.GetType() == typeof (Boolean)
+							|| resultOfMethod.GetType() == typeof(ParserString))
 						{
 							Output = resultOfMethod;
 						}
