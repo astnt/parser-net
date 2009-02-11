@@ -44,5 +44,22 @@ namespace ParserTest.Model.Context
 			Result(actual);
 			Assert.IsTrue(actual.Contains("<pos>15</pos>"));
 		}
+		[Test]
+		public void ContainsVariableTest()
+		{
+			string actual =
+				Parse(
+					@"
+@main[]
+	$var[Алтайский край (не включая г. Барнаул, г. Бийск, г. Новоалтайск и г. Рубцовск)]
+	$var2[край]
+	^if(^var.contains[$var2]){true}{error}
+	
+
+");
+			Result(actual);
+			Assert.IsTrue(actual.Contains("true"));
+//			Assert.IsTrue(!actual.Contains("error"));
+		}
 	}
 }

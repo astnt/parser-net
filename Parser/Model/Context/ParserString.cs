@@ -37,8 +37,24 @@ namespace Parser.Model.Context
 		}
 		public Boolean contains(Caller caller)
 		{
-			String valueFromParam = ((Text)((Parametr)caller.Childs[0]).Childs[0]).Body;
-			return value.ToString().Contains(valueFromParam);
+			Text text = ((Parametr) caller.Childs[0]).Childs[0] as Text;
+			VariableCall variable = ((Parametr) caller.Childs[0]).Childs[0] as VariableCall;
+
+			String valueFromParam = String.Empty;
+			if (text != null) {
+				valueFromParam = text.Body;
+			}
+			if(variable != null)
+			{
+				valueFromParam = ((ContextVariable)exec.ContextManager.GetVar(variable)).Value.ToString();
+
+			}
+			Boolean result = false;
+			if(!String.IsNullOrEmpty(valueFromParam) && value.ToString().Contains(valueFromParam))
+			{
+				result = true;
+			}
+			return result;
 		}
 		/// <summary>
 		/// Позиция подстроки.
