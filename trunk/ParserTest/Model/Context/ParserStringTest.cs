@@ -1,4 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Text;
+using NUnit.Framework;
+using Parser.Facade;
+using Parser.Model.Context;
 
 namespace ParserTest.Model.Context
 {
@@ -60,6 +64,38 @@ namespace ParserTest.Model.Context
 			Result(actual);
 			Assert.IsTrue(actual.Contains("true"));
 //			Assert.IsTrue(!actual.Contains("error"));
+		}
+		[Test]
+		public void FromForeinVarTest()
+		{
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(@"
+@main[]
+	$this
+	$var[^this.test[get]]
+
+<value>$var</value>
+
+	^if($var eq 'test'){true}{error}
+	
+");
+			Model(pf.Dump());
+			pf.AddVar("this", new Test());
+			string actual = pf.Run();
+			Result(actual);
+			Assert.IsTrue(actual.Contains("<value>test</value>"));
+			Assert.IsTrue(actual.Contains("true"));
+			Assert.IsTrue(!actual.Contains("error"));
+			// TODO //Assert.IsTrue(!actual.Contains("ParserTest.Model.Context.ParserStringTest+Test"));
+		}
+		public class Test
+		{
+			public ParserString test(StringBuilder value)
+			{
+				Console.WriteLine("Test.test() called");
+				ParserString t = new ParserString("test");
+				return t;
+			}
 		}
 	}
 }

@@ -5,6 +5,10 @@ namespace Parser.Model.Context
 {
 	public class ParserString : IExecutable
 	{
+		public ParserString(String source)
+		{
+			value = new StringBuilder(source);
+		}
 		public ParserString(StringBuilder source)
 		{
 			value = source;
@@ -66,7 +70,6 @@ namespace Parser.Model.Context
 			String example = ((Text)((Parametr)caller.Childs[0]).Childs[0]).Body;
 			return new StringBuilder("" + value.ToString().IndexOf(example));
 		}
-
 		#region vars
 
 		private StringBuilder value;
