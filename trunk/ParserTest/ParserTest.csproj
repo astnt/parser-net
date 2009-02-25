@@ -68,9 +68,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Model\resources\sample.xls" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="SharedBinaresTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
