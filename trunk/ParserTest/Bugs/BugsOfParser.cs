@@ -110,5 +110,42 @@ $str[^var.ToString[]]
 			Result(actual);
 			Assert.IsTrue(actual.Contains(@"<!--System.Collections.Generic.List`1[System.String]-->"));
 		}
+		[Test]
+		public void IfVariableBugTest()
+		{
+			ParserFacade pf = new ParserFacade();
+			pf.Parse(@"@main[]
+
+	$hasMail[false]
+  $hasAddr[true]
+	
+	$office[129]
+	$mailto[^table::excel[select * from [Лист1^$A410:L413];../../resources/mailto.test.xls]]
+	^mailto.menu{
+	$var[^mailto.column[6]]
+	$email[^mailto.column[11]]
+	<to if-name=""office"" is=""^mailto.column[6]"" var=""$var"">$email</to>
+	^if($var eq $office){ ^if(^email.contains[@]){ $hasMail[true] <cc>kn_kommersant@vtb24.ru</cc><!-- адрес для копий заявок сводного почтового ящика -->  } }
+	}
+
+	<!--<to>Oshutkova.DI@vtb24.ru</to>--> <!-- адрес в случае отсутствия получателя в точке продажи -->
+	<to if-name=""office"" is=""null"">ast@design.ru</to>
+
+	<subject>^if($hasMail eq 'false'){[! нет получателя в ТП^]} ВТБ24: Предварительная заявка на оформление кредита</subject>
+	<body>
+		^if($hasMail eq 'false'){
+		   ^if($office eq 'null'){ }{ <p>Нет получателя в точке продажи, указанной в заявке. Заявка выслана только на данный адрес.</p> }
+		}
+		^if($office eq 'null'){
+<p>В заявке не указана точка продажи. Заявка выслана только на данный адрес.</p>
+		}
+	</body>
+office is $office $hasMail
+");
+			String actual = pf.Run();
+			Result(actual);
+
+			Assert.IsTrue(actual.Contains(@"office is 129 false"));
+		}
 	}
 }
