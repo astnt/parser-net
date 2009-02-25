@@ -68,7 +68,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\sample.xls" />
+    <None Include="Model\resources\sample.xls" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SharedBinaresTests\" />
